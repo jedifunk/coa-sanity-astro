@@ -1,0 +1,45 @@
+body {
+  font-family: var(--body-font);
+  font-weight: 400;
+  font-size: 1.125rem;
+  color: var(--off-black);
+  line-height: 1.75;
+}
+h1,h2,h3,h4,h5,h6 {
+  font-family: var(--headline-font);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 1rem;
+}
+p {
+	margin-bottom: 1.5em;
+}
+blockquote {
+  font-family: var(--headline-font);
+  font-size: 1.2rem;
+  white-space: pre-wrap;
+}
+a {
+  color: var(--off-black);
+  text-decoration: none;
+  background-image: linear-gradient(to top, var(--main-color), var(--main-color));
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: 100% 2px;
+  transition: all var(--base-transition);
+}
+a:hover {
+  background-image: linear-gradient(to top, hsla(var(--h) var(--s) var(--l) / .5), hsla(var(--h) var(--s) var(--l) / .5));
+  background-size: 100% 50%;
+  transition: all var(--base-transition);
+}
+hr {
+  width: 75%;
+  text-align: center;
+  border: none;
+  border-bottom: 1px solid var(--off-black);
+  margin-bottom: 1.5em;
+}
+hr.sm {
+  width: 25%;
+}

@@ -1,0 +1,18 @@
+---
+import { client } from '../lib/sanityClient.js'
+import { RecentPosts } from '../lib/queries.js'
+
+const posts = await client.fetch(RecentPosts)
+//console.log(posts)
+---
+
+<section class="widget recent-articles">
+  <h3 class="widget-title">Recent Articles</h3>
+  <ul>
+    {posts && posts.map(post => (
+    <li>
+      <a href={`/${post.slug.current}`}>{post.title}</a>
+    </li>
+    ))}
+  </ul>
+</section>

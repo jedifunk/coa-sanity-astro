@@ -1,0 +1,32 @@
+.entry-header img {
+  aspect-ratio: 16 / 9;
+}
+.post .entry-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.entry-title {
+	font-weight: 700;
+	margin: 0;
+}
+.post .entry-title {
+  font-size: 2em;
+}
+.entry-title a,
+.entry-title a:visited {
+  text-decoration: none;
+  background: none;
+}
+.entry-meta {
+	display: flex;
+	flex-direction: column;
+	gap: .25rem;
+	font-size: .9rem;
+}
+.excerpt {
+  margin-top: 1.5rem;
+}
+/* .post ul li {
+  line-height: 1.7;
+} */

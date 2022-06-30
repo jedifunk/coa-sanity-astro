@@ -1,0 +1,76 @@
+embed,
+iframe,
+object {
+	max-width: 100%;
+}
+video {
+	width: 100%;
+}
+img:not(.hero img) {
+  border-radius: 5px;
+}
+figure {
+	width: 100%;
+}
+figcaption {
+	font-size: .9rem;
+	font-style: italic;
+}
+figure.embed iframe {
+	border: none;
+	border-radius: 5px;
+}
+figure.img-full,
+figure.yt-embed,
+figure.spotify-embed,
+figure.video-block {
+	position: relative;
+	margin-bottom: 1.5rem;
+}
+.img-full button {
+	border: none;
+	background: none;
+	padding: 0;
+}
+.img-full button figcaption {
+	font-family: var(--body-font);
+	font-weight: 300;
+	text-align: left;
+}
+/* .img-full svg {
+	position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+  fill: var(--gold);
+  background-color: rgba(0,0,0,.25);
+  border-radius: 5px;
+  padding: 5px;
+} */
+svg.enlarge {
+	position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+  fill: rgba(255 255 255 / .75);
+  background-color: hsla(var(--h) var(--s) var(--l) / .5);
+	border-radius: 5px;
+  padding: 5px;
+}
+.img-full img {
+	cursor: pointer;
+	transition: filter var(--base-transition);
+}
+.img-full:hover img {
+	filter: brightness(.75);
+}
+figure.yt-embed iframe,
+figure.vimeo-embed iframe {
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 16 / 9;
+}

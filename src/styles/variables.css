@@ -1,0 +1,20 @@
+:root {
+  /* Colors */
+  --off-black: rgba(64, 64, 64, 1);
+  --black: var(--off-black);
+
+  --h: 199;
+  --s: 100%; 
+  --l: 30%;
+  --a: 1;
+  --alt-l: 35%;
+  --alt-a: .5;
+  --main-color: hsla(var(--h) var(--s) var(--l) / var(--a));
+
+  /* Typography */
+  --body-font: 'Merriweather', serif;
+  --headline-font: 'Fira Sans', sans-serif;
+
+  /* Animation */
+  --base-transition: 0.33s ease-in-out;
+}

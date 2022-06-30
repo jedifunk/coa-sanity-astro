@@ -1,0 +1,32 @@
+.site-header .menu-wrapper {
+  position: fixed;
+  justify-content: center;
+  top: 44px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh - 44px);
+  width: 100vw;
+  padding: 2rem;
+  background-color: white;
+  -webkit-backface-visibility: hidden;
+  z-index: 100;
+  transform: translateX(100%);
+  transition: var(--base-transition);
+  transition-delay: 0s;
+}
+.site-header .menu-wrapper.active {
+  transform: translateX(0);
+  transition-delay: 0.2s;
+}
+@media (min-width: 1025px) {
+  .site-header .menu-wrapper {
+    position: relative;
+    top: auto;
+    height: unset;
+    width: unset;
+    padding: 0;
+    background-color: transparent;
+    transform: none;
+  }
+}

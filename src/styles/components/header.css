@@ -1,0 +1,43 @@
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+	width: 100%;
+  height: 44px;
+	z-index: 3;
+	background-color: white;
+  box-shadow: 0 0 5px -3px var(--black);
+  margin-bottom: 2rem;
+}
+.site-header > div {
+  display: flex;
+  justify-content: space-between;
+}
+.site-branding {
+  align-self: center;
+}
+.site-title {
+	margin: 0;
+	line-height: 1;
+}
+.home .site-header {
+	margin-bottom: 0;
+}
+header .flex-wrapper {
+	align-items: baseline;
+	justify-content: space-between;
+}
+.site-title a {
+  display: block;
+	font-weight: 900;
+	font-size: 1.25rem;
+	text-decoration: none;
+	color: var(--off-black);
+	background: none;
+}
+.site-title a:visited,
+.site-title a:hover,
+.site-title a:active {
+	color: var(--off-black);
+	background: none;
+}

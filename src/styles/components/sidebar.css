@@ -1,0 +1,37 @@
+/* Sidebar */
+.sidebar .widget {
+	padding: 0;
+}
+.sidebar h3 {
+	font-weight: 500;
+	border-bottom: 1px solid rgba(0 0 0 / .5);
+}
+.widget {
+	margin: 0 0 1.5em;
+}
+.widget-ig .grid-thirds {
+	grid-template-columns: repeat(3, 1fr);
+}
+.recent-articles ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.recent-articles li + li {
+  margin-top: .5rem;
+}
+.recent-articles a {
+  font-size: .97rem;
+}
+/* .widget_categories ul,
+.widget_cloud ul {
+	display: flex;
+	flex-wrap: wrap;
+}
+.widget_categories ul li,
+.widget_cloud ul li {
+	margin: 2px;
+}
+.widget_instagram .grid-thirds {
+	grid-template-columns: repeat(3, 1fr);
+} */
