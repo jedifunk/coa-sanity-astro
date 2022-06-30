@@ -1,5 +1,5 @@
 {
-  "name": "@example/basics",
+  "name": "coa-sanity-astro",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,6 +9,12 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "astro": "^1.0.0-beta.59"
+    "astro": "^1.0.0-beta.59",
+    "@sanity/image-url": "^1.0.1",
+    "date-fns": "^2.23.0",
+    "dotenv": "^10.0.0"
+  },
+  "dependencies": {
+    "@sanity/client": "^2.23.2"
   }
 }

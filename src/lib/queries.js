@@ -1,0 +1,1 @@
+export const allPosts = `*[_type == 'article'] | order(publishDate desc)`
