@@ -1,0 +1,18 @@
+---
+import { client } from '../lib/sanityClient.js'
+import { countryList } from '../lib/queries.js'
+
+const data = await client.fetch(countryList)
+const countries = data.filter(x => x.menu)
+---
+
+<section class="widget widget-countries">
+  <h3 class="widget-title">Countries</h3>
+  <ul class="cat-links">
+    {countries && countries.map(country => (
+      <li>
+        <a class="pill" href={`/${country.slug.current}`}>{country.name}</a>
+      </li>
+    ))}
+  </ul>
+</section>

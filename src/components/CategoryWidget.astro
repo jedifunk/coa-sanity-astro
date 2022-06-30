@@ -1,0 +1,17 @@
+---
+import { client } from '../lib/sanityClient.js'
+import { categoryList } from '../lib/queries.js'
+
+const categories = await client.fetch(categoryList)
+---
+
+<section class="widget widget-categories">
+  <h3 class="widget-title">Categories</h3>
+  <ul class="cat-links">
+    {categories && categories.map(category => (
+    <li>
+      <a class="pill" href={`/${category.slug.current}`}>{category.title}</a>
+    </li>
+    ))}
+  </ul>
+</section>
