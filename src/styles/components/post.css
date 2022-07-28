@@ -10,6 +10,13 @@
 	font-weight: 700;
 	margin: 0;
 }
+.post-entry figcaption {
+  font-style: normal;
+  font-size: unset;
+}
+.post-entry .entry-title {
+  font-size: 1.25em;
+}
 .post .entry-title {
   font-size: 2em;
 }
@@ -25,8 +32,6 @@
 	font-size: .9rem;
 }
 .excerpt {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  font-size: 1rem;
 }
-/* .post ul li {
-  line-height: 1.7;
-} */

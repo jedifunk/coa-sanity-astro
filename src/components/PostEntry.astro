@@ -1,4 +1,6 @@
 ---
+import { getSanityImageUrl } from '../lib/helpers.js'
+//import { Image } from '@astrojs/image/components'
 import PostMeta from './PostMeta.astro'
 export interface Props {
   article: any
@@ -7,12 +9,18 @@ const { article } = Astro.props
 ---
 
 <article class="post-entry" >
-  <header class="entry-header">
+  <figure>
+    <a href={`/${article.slug.current}`}>
+      <!-- {article.featuredImage && <Image src={getSanityImageUrl(article.featuredImage).width(347).height(296).url()} width={[347]} aspectRatio='16/9' />} -->
+      {article.featuredImage && <img width="347" loading="lazy" src={getSanityImageUrl(article.featuredImage).width(347).height(296).url()} />}
+    </a>
+    <figcaption>
       <h2 class="entry-title">
-          <a href={`/${article.slug.current}`}>{article.title}</a>
+        <a href={`/${article.slug.current}`}>{article.title}</a>
       </h2>
       <PostMeta article={article} />
-  </header>
 
-  <div class="excerpt">{article.excerpt}</div>
+      <div class="excerpt">{article.excerpt}</div>
+    </figcaption>
+  </figure>
 </article>

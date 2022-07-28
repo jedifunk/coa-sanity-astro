@@ -8,24 +8,29 @@
 	position: relative;
 }
 .featured-item figure img {
+	aspect-ratio: 16 / 9;
 	transition: filter var(--base-transition);
 }
 .featured-item figure:hover img {
 	filter: brightness(.75);
 }
 .featured-item figure figcaption {
-	position: absolute;
-	bottom: 15px;
-	margin: 0 30px 0px 0;
-	padding: 10px 15px;
-	background-color: rgba(0, 0, 0, 0.4);
-	color: white;
 	font-style: normal;
 	font-size: unset;
 }
-.featured-item .entry-title a,
-.featured-item .entry-title a:visited,
-.featured-item .entry-meta a,
-.featured-item .entry-meta a:visited {
-	color: white;
+@media (min-width: 811px) {
+	.featured-item figure figcaption {
+		position: absolute;
+		bottom: 15px;
+		margin: 0 30px 0px 0;
+		padding: 10px 15px;
+		background-color: rgba(0, 0, 0, 0.4);
+		color: white;
+	}
+	.featured-item .entry-title a,
+	.featured-item .entry-title a:visited,
+	.featured-item .entry-meta a,
+	.featured-item .entry-meta a:visited {
+		color: white;
+	}
 }
