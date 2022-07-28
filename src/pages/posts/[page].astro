@@ -1,0 +1,34 @@
+---
+import { Debug } from 'astro/components'
+import Layout from '../../layouts/Layout.astro'
+import Hero from '../../components/Hero.astro'
+import FeaturedPost from '../../components/FeaturedPost.astro'
+import PostEntry from '../../components/PostEntry.astro'
+import Sidebar from '../../components/Sidebar.astro'
+
+import { client } from '../../lib/sanityClient.js'
+import { allPosts, pagedPosts } from '../../lib/queries.js'
+
+export async function getStaticPaths({ paginate }) {
+  const allPostData = await client.fetch(allPosts)
+	const paths = allPostData.map((item)=>{
+		return {post:item}
+	})
+	
+  return paginate(paths, { pageSize: 10 })
+}
+//const allPostData = await client.fetch(allPosts)
+
+const { page } = Astro.props
+const { data } = page
+---
+<Layout title="COA Astro">
+	<div class="grid-wrapper grid-main">
+		<div>
+			<div class="content grid-wrapper grid-halves">
+				{data.map(({post}) => <PostEntry article={post} />)}
+			</div>
+		</div>
+		<Sidebar />
+	</div>
+</Layout>

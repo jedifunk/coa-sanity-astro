@@ -11,8 +11,9 @@ import { allPosts } from '../lib/queries.js'
 
 export async function getStaticPaths() {
   const allBlogPosts = await client.fetch(allPosts)
-
-  return allBlogPosts.map(post => ({params: { slug: post.slug.current }, props: {post}}))
+  const paths = allBlogPosts.map((post) => ({ params: { post: post.slug.current },props:{post}}))
+  console.log(paths)
+  return paths
 }
 
 const { post } = Astro.props
