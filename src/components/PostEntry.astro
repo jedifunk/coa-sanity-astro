@@ -9,8 +9,10 @@ const { article } = Astro.props
 ---
 
 <article class="post-entry" >
+  	<!-- <Fragment set:text={JSON.stringify(article)}/> -->
+
   <figure>
-    <a href={`/${article.slug.current}`}>
+    <a href={`/`}>
       <!-- {article.featuredImage && <Image src={getSanityImageUrl(article.featuredImage).width(347).height(296).url()} width={[347]} aspectRatio='16/9' />} -->
       {article.featuredImage && <img width="347" loading="lazy" src={getSanityImageUrl(article.featuredImage).width(347).height(296).url()} />}
     </a>
