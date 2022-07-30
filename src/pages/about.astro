@@ -17,7 +17,7 @@ const page = query[0]
 // const { page } = Astro.props
 
 ---
-<Layout title={page.title} >
+<Layout title={page.title} type={page._type}>
   <div class="content-area wrapper grid-wrapper grid-main">
     <main id="main" class="site-main" role="main">
       <article>
