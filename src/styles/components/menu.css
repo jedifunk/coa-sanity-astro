@@ -1,4 +1,4 @@
-.site-header .menu-wrapper {
+/* .site-header .menu-wrapper {
   position: fixed;
   justify-content: center;
   top: 44px;
@@ -18,8 +18,8 @@
 .site-header .menu-wrapper.active {
   transform: translateX(0);
   transition-delay: 0.2s;
-}
-@media (min-width: 1025px) {
+} */
+/* @media (min-width: 1025px) { */
   .site-header .menu-wrapper {
     position: relative;
     top: auto;
@@ -29,4 +29,4 @@
     background-color: transparent;
     transform: none;
   }
-}
+/* } */

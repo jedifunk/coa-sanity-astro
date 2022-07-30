@@ -1,13 +1,15 @@
 ---
+import {client} from '../lib/sanityClient'
+import {siteNav} from '../lib/queries'
 
+const nav = await client.fetch(siteNav)
 ---
-
-<!-- <button className={`burger ${active ? "active" : ""}`} aria-label="Menu Button" onClick={() => {setActive(!active)}}>
-  <span></span>
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-<div className={`menu-wrapper flex flex-column ${active ? "active" : ""}`}>
-  <Nav />
-</div> -->
+<nav class="main-navigation" role="navigation" aria-label="Primary Menu">
+  <ul class="menu">
+    {nav.siteNav.menuItems && nav.siteNav.menuItems.map((item) => (
+      <li class="menu-item menu-item-has-children">
+        <a href={item.page.slug.current}>{item.name}</a>
+      </li>
+    ))}
+  </ul>
+</nav>

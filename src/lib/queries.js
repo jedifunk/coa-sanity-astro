@@ -10,3 +10,4 @@ export const categoryList = `*[_type == "category"] | order(title asc) {title, s
 export const aboutPageQuery = `*[_type == 'page' && title == 'About']{..., content[]{..., asset->}}`
 
 export const siteSettings = `*[_type == 'siteSettings']`
+export const siteNav = `*[_type == 'siteSettings'][0]{siteNav{menuItems[]{name, page->{slug}}}}`
