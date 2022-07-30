@@ -1,5 +1,6 @@
 ---
 import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
 import '@fontsource/merriweather/300.css'
 import '@fontsource/merriweather/400.css'
 import '@fontsource/merriweather/400-italic.css'
@@ -27,12 +28,14 @@ const { title } = Astro.props as Props;
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 	<title>{title}</title>
 </head>
-<body class="home">
+<body class={``}>
   <Header />
 
-  <main class="content-area wrapper">
+  <div class="site-content">
     <slot />
-  </main>
+  </div>
+
+  <Footer />
 
 </body>
 </html>

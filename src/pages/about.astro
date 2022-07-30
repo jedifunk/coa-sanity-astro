@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Sidebar from '../components/Sidebar.astro'
+import PortableText from '../components/PortableText.jsx'
+import {client} from '../lib/sanityClient.js'
+
+import { aboutPageQuery, allPagesQuery } from '../lib/queries.js'
+
+const query = await client.fetch(aboutPageQuery)
+const page = query[0]
+
+// export async function getStaticPaths() {
+//   const allPages = await client.fetch(allPagesQuery)
+
+//   return allPages.map(page => ({params: { slug: page.slug.current }, props: {page}}))
+// }
+// const { page } = Astro.props
+
+---
+<Layout title={page.title} >
+  <div id="primary" class="content-area wrapper grid-wrapper grid-main">
+    <main id="main" class="site-main" role="main">
+      <article>
+        <header class="entry-header">
+          <h1 class="entry-title">{page.title}</h1>
+        </header>
+
+        <div class="entry-content">
+          <PortableText blocks={page.content} client:load/>
+        </div>
+
+      </article>
+    </main>
+    <Sidebar />
+  </div>
+</Layout>

@@ -1,9 +1,9 @@
-const Quotation = ({ node }) => {
+const Quotation = ({ value }) => {
 
   return (
     <figure className='quotation'>
-      <blockquote>{node.quote}</blockquote>
-      {node.author || node.source ? <figcaption>{node.author && node.author}{node.author && node.source ? `, ` : ''}{node.source && <cite>{node.url ? (<a href={node.url}>{node.source}</a>) : node.source}</cite>}</figcaption> : ''}
+      <blockquote>{value.quote}</blockquote>
+      {value.author || value.source ? <figcaption>{value.author && value.author}{value.author && value.source ? `, ` : ''}{value.source && <cite>{value.url ? (<a href={value.url}>{value.source}</a>) : value.source}</cite>}</figcaption> : ''}
     </figure>
   )
 

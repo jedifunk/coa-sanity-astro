@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import Sidebar from '../components/Sidebar.astro'
 import PostMeta from '../components/PostMeta.astro'
-import PortableText from '../components/BlockContent.jsx'
+import PortableText from '../components/PortableText.jsx'
 import {client} from '../lib/sanityClient.js'
 import { getSanityImageUrl } from '../lib/helpers.js'
 //import { Picture, Image } from '@astrojs/image/components'
@@ -18,39 +18,38 @@ export async function getStaticPaths() {
 const { post } = Astro.props
 ---
 <Layout title={post.title}>
-  <div id="primary" class="content-area wrapper">
-    <div class="grid-wrapper grid-main">
-      <main id="main" class="site-main" role="main">
-        <article
-          class={`post type-post status-publish format-standard hentry category-react tag-accessibility tag-gatsby entry`}
-        >
-          <header class="entry-header">
-            
-            <PostMeta article={post} />
-            <h2 class="entry-title">{post.title}</h2>
-            <!-- {post.featuredImage && <Image src={getSanityImageUrl(post.featuredImage).url()} width={[726]} aspectRatio={`16/9`} />} -->
-            {post.featuredImage && <img width="726" loading="lazy" src={getSanityImageUrl(post.featuredImage).width(726).height(408).url()} />}
-          </header>
-  
-          <PortableText blocks={post.content}/>
-  
-          {/* <SocialShare
-            socialConfig={{
-              config: {
-                url: `/${data.sanityArticle.slug.current}`,
-              },
-            }}
-            title={data.sanityArticle.title}
-            featuredImage={data.sanityArticle.featuredImage && data.sanityArticle.featuredImage}
-            twitterHandle={Config.social.twitterHandle}
-          /> */}
-  
-        </article>
-  
-        <!-- <PostPagination previous={previous} next={next} /> -->
+  <div class="content-area wrapper grid-wrapper grid-main">
+    <main id="main" class="site-main" role="main">
+      <article
+        class={`post type-post status-publish format-standard hentry category-react tag-accessibility tag-gatsby entry`}
+      >
+        <header class="entry-header">
+          
+          <PostMeta article={post} />
+          <h2 class="entry-title">{post.title}</h2>
+          <!-- {post.featuredImage && <Image src={getSanityImageUrl(post.featuredImage).url()} width={[726]} aspectRatio={`16/9`} />} -->
+          {post.featuredImage && <img width="726" loading="lazy" src={getSanityImageUrl(post.featuredImage).width(726).height(408).url()} />}
+        </header>
         
-      </main>
-      <Sidebar />
-    </div>
+        <PortableText blocks={post.content} client:load />
+        
+
+        {/* <SocialShare
+          socialConfig={{
+            config: {
+              url: `/${data.sanityArticle.slug.current}`,
+            },
+          }}
+          title={data.sanityArticle.title}
+          featuredImage={data.sanityArticle.featuredImage && data.sanityArticle.featuredImage}
+          twitterHandle={Config.social.twitterHandle}
+        /> */}
+
+      </article>
+
+      <!-- <PostPagination previous={previous} next={next} /> -->
+      
+    </main>
+    <Sidebar />
   </div>
 </Layout>

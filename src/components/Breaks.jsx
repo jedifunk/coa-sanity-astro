@@ -1,6 +1,6 @@
-const Break = ({ node }) => {
+const Break = ({ value }) => {
 
-  if (node.horizontal === 'small break') {
+  if (value.horizontal === 'small break') {
     return <hr className='sm' />
   } else {
     return <hr />

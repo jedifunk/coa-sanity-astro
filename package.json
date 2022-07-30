@@ -9,10 +9,10 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/image": "^0.2.0",
+    "@astrojs/image": "^0.3.0",
     "@astrojs/react": "^0.4.2",
     "@sanity/image-url": "^1.0.1",
-    "astro": "^1.0.0-beta.59",
+    "astro": "^1.0.0-rc.2",
     "date-fns": "^2.29.1",
     "dotenv": "^10.0.0",
     "react": "^18.2.0",
@@ -21,7 +21,9 @@
   "dependencies": {
     "@fontsource/fira-sans": "^4.5.8",
     "@fontsource/merriweather": "^4.5.12",
-    "@sanity/block-content-to-react": "^3.0.0",
-    "@sanity/client": "^3.3.2"
+    "@portabletext/react": "^1.0.6",
+    "@sanity/client": "^3.3.2",
+    "get-video-id": "^3.6.4",
+    "yet-another-react-lightbox": "^1.10.0"
   }
 }

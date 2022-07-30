@@ -13,17 +13,19 @@ const allPostData = await client.fetch(allPosts)
 ---
 <Layout title="COA Astro">
 	<Hero />
-	<div class="featured grid-wrapper grid-halves">
-		{allPostData && allPostData.slice(0, 2).map((article) => <FeaturedPost article={article} />)}
-	</div>
-	
-	<div class="grid-wrapper grid-main">
-		<div>
-			<div class="content grid-wrapper grid-halves">
-				{allPostData && allPostData.slice(2).map((article) => <PostEntry article={article} />)}
-			</div>
-
+	<div class="content-area wrapper">
+		<div class="featured grid-wrapper grid-halves">
+			{allPostData && allPostData.slice(0, 2).map((article) => <FeaturedPost article={article} />)}
 		</div>
-		<Sidebar />
+		
+		<div class="grid-wrapper grid-main">
+			<main>
+				<div class="content grid-wrapper grid-halves">
+					{allPostData && allPostData.slice(2).map((article) => <PostEntry article={article} />)}
+				</div>
+
+			</main>
+			<Sidebar />
+		</div>
 	</div>
 </Layout>

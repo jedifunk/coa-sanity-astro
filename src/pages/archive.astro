@@ -21,12 +21,11 @@ const { page } = Astro.props
 <Layout title="COA Astro">
 	<!-- <Debug {page} /> -->
 	<div class="grid-wrapper grid-main">
-		<div>
+		<main>
 			<div class="content grid-wrapper grid-halves">
 				{page.data.map((article) => <PostEntry article={article} />)}
 			</div>
-
-		</div>
+		</main>
 		<Sidebar />
 	</div>
 </Layout>
