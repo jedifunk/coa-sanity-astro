@@ -11,7 +11,7 @@ const countries = data.filter(x => x.menu)
   <ul class="cat-links">
     {countries && countries.map(country => (
       <li>
-        <a class="pill" href={`/${country.slug.current}`}>{country.name}</a>
+        <a class="pill" href={`/country/${country.slug.current}`}>{country.name}</a>
       </li>
     ))}
   </ul>

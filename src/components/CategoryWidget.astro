@@ -10,7 +10,7 @@ const categories = await client.fetch(categoryList)
   <ul class="cat-links">
     {categories && categories.map(category => (
     <li>
-      <a class="pill" href={`/${category.slug.current}`}>{category.title}</a>
+      <a class="pill" href={`/category/${category.slug.current}`}>{category.title}</a>
     </li>
     ))}
   </ul>

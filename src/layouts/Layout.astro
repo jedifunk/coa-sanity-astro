@@ -17,7 +17,8 @@ export interface Props {
 	title: string;
 }
 
-const { title } = Astro.props as Props;
+const { title, type } = Astro.props as Props
+const pageType = type != 'article' ? 'archive' : ''
 ---
 
 <!DOCTYPE html>
@@ -28,12 +29,10 @@ const { title } = Astro.props as Props;
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 	<title>{title}</title>
 </head>
-<body class={``}>
+<body class={`${pageType} ${type}`}>
   <Header />
-
-  <div class="site-content">
-    <slot />
-  </div>
+  
+  <slot />
 
   <Footer />
 

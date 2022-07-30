@@ -5,7 +5,7 @@ import PostMeta from '../components/PostMeta.astro'
 import PortableText from '../components/PortableText.jsx'
 import {client} from '../lib/sanityClient.js'
 import { getSanityImageUrl } from '../lib/helpers.js'
-//import { Picture, Image } from '@astrojs/image/components'
+import { Picture, Image } from '@astrojs/image/components'
 
 import { allPosts } from '../lib/queries.js'
 
@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props
 ---
-<Layout title={post.title}>
+<Layout title={post.title} type={post._type}>
   <div class="content-area wrapper grid-wrapper grid-main">
     <main id="main" class="site-main" role="main">
       <article
@@ -27,8 +27,8 @@ const { post } = Astro.props
           
           <PostMeta article={post} />
           <h2 class="entry-title">{post.title}</h2>
-          <!-- {post.featuredImage && <Image src={getSanityImageUrl(post.featuredImage).url()} width={[726]} aspectRatio={`16/9`} />} -->
-          {post.featuredImage && <img width="726" loading="lazy" src={getSanityImageUrl(post.featuredImage).width(726).height(408).url()} />}
+          {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).url()} widths={[726]} aspectRatio={16/9} />}
+          <!-- {post.featuredImage && <img width="726" loading="lazy" src={getSanityImageUrl(post.featuredImage).width(726).height(408).url()} />} -->
         </header>
         
         <PortableText blocks={post.content} client:load />

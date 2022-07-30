@@ -1,4 +1,3 @@
-//import React from 'react'
 import getVideoId from 'get-video-id'
 
 const Embed = ({ value }) => {

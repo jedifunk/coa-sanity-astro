@@ -11,7 +11,7 @@ import { allPosts } from '../lib/queries.js'
 
 const allPostData = await client.fetch(allPosts)
 ---
-<Layout title="COA Astro">
+<Layout title="COA Astro" type={`home`}>
 	<Hero />
 	<div class="content-area wrapper">
 		<div class="featured grid-wrapper grid-halves">

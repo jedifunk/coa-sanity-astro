@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import Sidebar from '../../components/Sidebar.astro'
+import PostEntry from '../../components/PostEntry.astro'
+import {client} from '../../lib/sanityClient.js'
+
+import { allCountryPostsQuery, countryList } from '../../lib/queries.js'
+
+export async function getStaticPaths() {
+  const allCountries = await client.fetch(allCountryPostsQuery)
+
+  return allCountries.map((post) => {
+    return {
+      params: { slug: post.slug.current },
+      props: { post }
+    }
+  })
+}
+
+const { post } = Astro.props
+---
+<Layout title={post.name} type={post._type}>
+  <div class="content-area wrapper">
+    <header class="page-header">
+      <h1 class="page-title">{post.name}</h1>
+    </header>
+    <div class="grid-wrapper grid-main">
+      <main>
+        <div class="content grid-wrapper grid-halves">
+          {post.relatedArticles.map((article) => <PostEntry article={article} />)}
+        </div>
+      </main>
+      <Sidebar />
+    </div>
+  </div>
+</Layout>

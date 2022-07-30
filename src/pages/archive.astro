@@ -7,14 +7,13 @@ import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
 
 import { client } from '../lib/sanityClient.js'
-import { allPosts, pagedPosts } from '../lib/queries.js'
+import { allPosts } from '../lib/queries.js'
 
 export async function getStaticPaths({ paginate }) {
   const allPostData = await client.fetch(allPosts)
 
   return paginate(allPostData, { pageSize: 10 })
 }
-//const allPostData = await client.fetch(allPosts)
 
 const { page } = Astro.props
 ---

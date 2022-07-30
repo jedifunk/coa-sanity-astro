@@ -11,9 +11,9 @@ const { article } = Astro.props
   <span class="posted-on"><time class="entry-date">{formatBlogPostDate(article.publishDate)}</time></span>
   <div>
     <ul class="cat-links">
-      {article.country && <li><a class="pill" href={`/${article.country.slug.current}`}>{article.country.name}</a></li>}
+      {article.country && <li><a class="pill" href={`/country/${article.country.slug.current}`}>{article.country.name}</a></li>}
       {article.categories && article.categories.map(cat => (
-        <li><a class="pill" href={`/${cat.slug.current}`}>{cat.title}</a></li>
+        <li><a class="pill" href={`/category/${cat.slug.current}`}>{cat.title}</a></li>
       ))}
       </ul>
   </div>
