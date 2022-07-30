@@ -34,7 +34,7 @@ const GalleryBlock = ({ value }) => {
             <figure key={index} className="blocks-gallery-item">
               <button onClick={updateOnClick}>
                 {/* <BiExpandAlt className='enlarge'/> */}
-                <img src={getSanityImageUrl(img).width(500).url()} />
+                <img src={getSanityImageUrl(img).width(500).url()} loading="lazy" width={`500`} height={`667`} alt={img.alt}/>
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </button>
             </figure>

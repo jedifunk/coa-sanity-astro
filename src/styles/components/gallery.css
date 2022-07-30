@@ -39,6 +39,7 @@ transition: filter var(--base-transition);
 .blocks-gallery-item button img {
 height: 100%;
 object-fit: cover;
+aspect-ratio: 3 / 4;
 transition: filter var(--base-transition);
 }
 .blocks-gallery-item:hover button img {
