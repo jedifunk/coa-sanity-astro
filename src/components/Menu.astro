@@ -8,7 +8,7 @@ const nav = await client.fetch(siteNav)
   <ul class="menu">
     {nav.siteNav.menuItems && nav.siteNav.menuItems.map((item) => (
       <li class="menu-item menu-item-has-children">
-        <a href={item.page.slug.current}>{item.name}</a>
+        <a href={`/${item.page.slug.current}`}>{item.name}</a>
       </li>
     ))}
   </ul>
