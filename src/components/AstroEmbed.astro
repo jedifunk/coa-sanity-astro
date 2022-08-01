@@ -1,0 +1,10 @@
+---
+const props = Astro.props
+
+const link = props.node.url
+let spotifyItem = link.split('https://open.spotify.com/')[1].split('?si')[0]
+---
+<figure className={`embed spotify-embed`}>
+  <iframe src={`https://open.spotify.com/embed/${spotifyItem}?utm_source=generator&theme=0`} width="100%" height="380" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+  {props.node.caption && <figcaption>{props.node.caption}</figcaption>}
+</figure>

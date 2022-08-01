@@ -1,0 +1,8 @@
+---
+const props = Astro.props
+let classes = ''
+if (props.node.horizontal == 'small break') {
+  classes = 'sm'
+}
+---
+<hr class={`${classes}`} />

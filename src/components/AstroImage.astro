@@ -1,0 +1,11 @@
+---
+import { getSanityImageUrl } from "../lib/helpers"
+
+const props = Astro.props
+---
+<figure class={`img-full`}>
+  <button >
+    <img src={getSanityImageUrl(props.node.asset).width(700).url()} loading="lazy" />
+    {props.caption && <figcaption>{props.caption}</figcaption>}
+  </button>
+</figure>

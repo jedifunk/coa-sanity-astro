@@ -1,0 +1,7 @@
+---
+const props = Astro.props
+---
+<figure class='quotation'>
+  <blockquote>{props.node.quote}</blockquote>
+  {props.node.author || props.node.source ? <figcaption>{props.node.author && props.node.author}{props.node.author && props.node.source ? `, ` : ''}{props.node.source && <cite>{props.node.url ? (<a href={props.node.url}>{props.node.source}</a>) : props.node.source}</cite>}</figcaption> : ''}
+</figure>
