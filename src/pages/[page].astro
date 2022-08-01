@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 const { page } = Astro.props
 
 ---
-<Layout title={page.title} type={page._type}>
+<Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage} pathname={page.slug.current}>
   <div class="content-area wrapper grid-wrapper grid-main">
     <main id="main" class="site-main" role="main">
       <article>

@@ -1,0 +1,42 @@
+---
+import { client } from '../lib/sanityClient.js'
+import { siteSettings } from '../lib/queries.js'
+import { getSanityImageUrl } from '../lib/helpers.js'
+
+const settings = await client.fetch(siteSettings)
+
+export interface Props {
+  title: string
+  description: string
+  image: string
+}
+const props = Astro.props
+const defaultImage = getSanityImageUrl(settings[0].hpHero).width(1200).url()
+
+if (props.image === undefined) {
+  props.image = settings[0].hpHero
+}
+if (props.title === undefined) {
+  props.title = settings[0].siteTitle
+}
+if (props.description === undefined) {
+  props.description = settings[0].metaDescription
+}
+
+---
+<title>{`${props.title} | ${settings[0].siteTitle}`}</title>
+
+<link rel="canonical" href={props.url} />
+<meta property='og:type' content='website' />
+<meta name='apple-mobile-web-app-title' content={settings[0].siteTitle} />
+
+<meta property='og:site_name' content={settings[0].siteTitle} />
+<meta property='og:url' content={props.url} />
+<meta property='og:title' content={props.title} />
+<meta property='og:image' content={getSanityImageUrl(props.image).width(1200).url()} />
+<meta name='description' property='og:description' content={props.description} />
+
+<meta name='twitter:title' content={props.title} />
+<meta name='twitter:image:src' content={getSanityImageUrl(props.image).width(1200).url()} />
+<meta name='twitter:card' content={'summary_large_image'} />
+<meta name='twitter:description' content={props.description} />

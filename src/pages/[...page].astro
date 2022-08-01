@@ -14,7 +14,7 @@ export async function getStaticPaths({ paginate }) {
 
 const { page } = Astro.props
 ---
-<Layout title="COA Astro">
+<Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage}>
 	<div class="content-area wrapper">
 		<div class="grid-wrapper grid-main">
 			<main>

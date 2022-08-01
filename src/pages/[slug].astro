@@ -22,7 +22,7 @@ const thisDate = post.publishDate
 const nextPage = await client.fetch(`*[_type == "article" && publishDate > "${thisDate}"] | order(publishDate) [0] {title, publishDate, slug}`)
 const prevPage = await client.fetch(`*[_type == 'article' && publishDate < "${thisDate}"] | order(publishDate desc) [0] {title, publishDate, slug}`)
 ---
-<Layout title={post.title} type={post._type}>
+<Layout title={post.title} type={post._type} description={post.excerpt} image={post.featuredImage} pathname={post.slug.current}>
   <div class="content-area wrapper grid-wrapper grid-main">
     <main id="main" class="site-main" role="main">
       <article
