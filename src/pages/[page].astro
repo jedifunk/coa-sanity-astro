@@ -1,14 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Sidebar from '../components/Sidebar.astro'
-//import PortableText from '../components/PortableText.jsx'
-import { PortableText } from 'astro-portabletext'
 import {client} from '../lib/sanityClient.js'
-//import Q2 from '@component/Q2'
-import Image from '../components/Image.jsx'
+import Handler from '../components/Handler.astro'
 
 import { aboutPageQuery, allPagesQuery } from '../lib/queries.js'
-import AstroImage from '../components/AstroImage.astro'
 
 // const query = await client.fetch(aboutPageQuery)
 // const page = query[0]
@@ -30,25 +26,7 @@ const { page } = Astro.props
         </header>
 
         <div class="entry-content">
-          <PortableText 
-            value={page.content}
-            components={{
-              type: {
-                //imageFull: Image,
-                image: AstroImage,
-                //video: VideoBlock,
-                //gallery: GalleryBlock,
-                //googleMyMap: MapBlock,
-                //instagramPost: InstagramBlock,
-                //videoEmbed: VideoEmbedBlock,
-                //mapbox: Mapbox,
-                //quotation: Q2,
-                //break: Break,
-                //embed: Embed,
-              }
-            }}
-          />
-          <!-- <PortableText blocks={page.content} client:load/> -->
+          <Handler value={page.content} />
         </div>
 
       </article>

@@ -1,0 +1,25 @@
+---
+import AstroImage from "./AstroImage.astro"
+import AstroQuotation from "./AstroQuotation.astro"
+import AstroBreak from "./AstroBreak.astro"
+import AstroEmbed from "./AstroEmbed.astro"
+import { PortableText } from "astro-portabletext"
+---
+<PortableText 
+  {...Astro.props} 
+  components={{
+    type: {
+      //imageFull: Image,
+      image: AstroImage,
+      //video: VideoBlock,
+      //gallery: GalleryBlock,
+      //googleMyMap: MapBlock,
+      //instagramPost: InstagramBlock,
+      //videoEmbed: VideoEmbedBlock,
+      //mapbox: Mapbox,
+      quotation: AstroQuotation,
+      break: AstroBreak,
+      embed: AstroEmbed,
+    }
+  }}
+/>

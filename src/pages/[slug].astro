@@ -2,17 +2,12 @@
 import Layout from '../layouts/Layout.astro'
 import Sidebar from '../components/Sidebar.astro'
 import PostMeta from '../components/PostMeta.astro'
-//import PortableText from '../components/PortableText.jsx'
-import { PortableText } from 'astro-portabletext'
 import PostPagination from '../components/PostPagination.astro'
 import {client} from '../lib/sanityClient.js'
 import { getSanityImageUrl } from '../lib/helpers.js'
 import { Picture } from '@astrojs/image/components'
 
-import AstroImage from '../components/AstroImage.astro'
-import AstroQuotation from '../components/AstroQuotation.astro'
-import AstroEmbed from '../components/AstroEmbed.astro'
-import AstroBreak from '../components/AstroBreak.astro'
+import Handler from '../components/Handler.astro'
 
 import { allPosts } from '../lib/queries.js'
 
@@ -41,27 +36,7 @@ const prevPage = await client.fetch(`*[_type == 'article' && publishDate < "${th
           {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).url()} widths={[726]} aspectRatio={16/9} alt={post.featuredImage.alt} />}
         </header>
 
-        <PortableText
-          value={post.content}
-          components={{
-            type: {
-              //imageFull: Image,
-              image: AstroImage,
-              //video: VideoBlock,
-              //gallery: GalleryBlock,
-              //googleMyMap: MapBlock,
-              //instagramPost: InstagramBlock,
-              //videoEmbed: VideoEmbedBlock,
-              //mapbox: Mapbox,
-              quotation: AstroQuotation,
-              break: AstroBreak,
-              embed: AstroEmbed,
-            }
-          }}
-        />
-        
-        <!-- <PortableText blocks={post.content} client:load /> -->
-        
+        <Handler value={post.content} />
 
         {/* <SocialShare
           socialConfig={{
