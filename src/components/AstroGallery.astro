@@ -1,3 +1,6 @@
 ---
+import GalleryBlock from "./GalleryBlock"
 
+const props = Astro.props
 ---
+<GalleryBlock value={props.node} client:load />

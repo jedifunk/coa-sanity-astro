@@ -1,0 +1,11 @@
+---
+const props = Astro.props
+console.log(props.node.asset)
+// if (!props.node || !props.node.asset || !props.node.asset._id) {
+//   <pre>Oops, video</pre>
+// }
+---
+<figure class="video-block">
+  <video src={props.node.asset.url} controls></video>
+  {props.node.caption && <figcaption>{props.node.caption}</figcaption>}
+</figure>

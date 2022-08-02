@@ -3,18 +3,22 @@ import AstroImage from "./AstroImage.astro"
 import AstroQuotation from "./AstroQuotation.astro"
 import AstroBreak from "./AstroBreak.astro"
 import AstroEmbed from "./AstroEmbed.astro"
+import AstroGallery from "./AstroGallery.astro"
+import AstroIGEmbedBlock from "./AstroIGEmbedBlock.astro"
+import AstroMapBlock from "./AstroMapBlock.astro"
+import AstroVideoBlock from "./AstroVideoBlock.astro"
 import { PortableText } from "astro-portabletext"
 ---
 <PortableText 
-  {...Astro.props} 
+  {...Astro.props}
   components={{
     type: {
-      //imageFull: Image,
+      imageFull: AstroImage,
       image: AstroImage,
-      //video: VideoBlock,
-      //gallery: GalleryBlock,
-      //googleMyMap: MapBlock,
-      //instagramPost: InstagramBlock,
+      video: AstroVideoBlock,
+      gallery: AstroGallery,
+      googleMyMap: AstroMapBlock,
+      instagramPost: AstroIGEmbedBlock,
       //videoEmbed: VideoEmbedBlock,
       //mapbox: Mapbox,
       quotation: AstroQuotation,
