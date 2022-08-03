@@ -68,8 +68,7 @@ svg.enlarge {
 .img-full:hover img {
 	filter: brightness(.75);
 }
-figure.yt-embed iframe,
-figure.vimeo-embed iframe {
+figure.embed iframe {
 	width: 100%;
 	height: 100%;
 	aspect-ratio: 16 / 9;
