@@ -1,4 +1,4 @@
-export const allPosts = `*[_type == 'article']{..., categories[] ->, country ->, content[]{..., images[]{..., asset->}}} | order(publishDate desc)`
+export const allPosts = `*[_type == 'article']{..., categories[] ->, country ->, content[]{..., asset->, images[]{..., asset->}}} | order(publishDate desc)`
 export const allPagesQuery = `*[_type == 'page']`
 export const allCountryPostsQuery = `*[_type == 'country']{..., 'relatedArticles': *[_type == 'article' && references(^._id)]{..., country ->, categories[] ->} | order(publishDate desc)}`
 export const allCategoryPostsQuery = `*[_type == 'category']{..., 'relatedArticles': *[_type == 'article' && references(^._id)]{..., country ->, categories[] ->} | order(publishDate desc)}`

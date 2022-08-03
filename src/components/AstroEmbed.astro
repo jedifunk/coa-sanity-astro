@@ -3,6 +3,21 @@ const props = Astro.props
 
 const link = props.node.url
 let spotifyItem = link.split('https://open.spotify.com/')[1].split('?si')[0]
+// if (link.includes('spotify')) {
+//   let spotifyItem = link.split('https://open.spotify.com/')[1].split('?si')[0]
+// }
+// } else {
+//   const videoId = (node && node.url) ? getVideoId(node.url) : ''
+
+//   switch(videoId.service) {
+//     case 'youtube': {
+//       const source ={`https://www.youtube.com/embed/${videoId.id}?rel=0`}
+//     }
+//     case 'vimeo': {
+//       const source ={`https://player.vimeo.com/video/${videoId.id}`}
+//     }
+//   }
+// }
 ---
 <figure className={`embed spotify-embed`}>
   <iframe src={`https://open.spotify.com/embed/${spotifyItem}?utm_source=generator&theme=0`} width="100%" height="380" frameborder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
