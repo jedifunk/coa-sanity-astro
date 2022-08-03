@@ -24,6 +24,6 @@
     "@portabletext/react": "^1.0.6",
     "@sanity/client": "^3.3.2",
     "get-video-id": "^3.6.4",
-    "yet-another-react-lightbox": "^1.12.0"
+    "yet-another-react-lightbox": "^1.13.3"
   }
 }
