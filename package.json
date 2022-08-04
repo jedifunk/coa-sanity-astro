@@ -9,7 +9,7 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/image": "^0.3.0",
+    "@astrojs/image": "^0.3.1",
     "@astrojs/react": "^0.4.2",
     "@sanity/image-url": "^1.0.1",
     "astro": "^1.0.0-rc.2",
@@ -22,7 +22,7 @@
     "@fontsource/fira-sans": "^4.5.8",
     "@fontsource/merriweather": "^4.5.12",
     "@portabletext/react": "^1.0.6",
-    "@sanity/client": "^3.3.2",
+    "@sanity/client": "^3.3.3",
     "get-video-id": "^3.6.4",
     "yet-another-react-lightbox": "^1.13.3"
   }
