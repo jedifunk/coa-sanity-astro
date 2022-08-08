@@ -1,4 +1,4 @@
-import {useState} from "react"
+import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox"
 import { sSpeed, getSanityImageUrl } from "../lib/Helpers"
 import 'yet-another-react-lightbox/styles.css'
