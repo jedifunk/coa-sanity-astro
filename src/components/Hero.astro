@@ -9,5 +9,5 @@ const allSiteSettings = await client.fetch(siteSettings)
 ---
 
 <div class="hero">
-  {allSiteSettings[0].hpHero && <Picture src={getSanityImageUrl(allSiteSettings[0].hpHero).width(1400).url()} widths={[400, 769, 1200]} sizes={[]} aspectRatio={16/9} alt={allSiteSettings[0].hpHero.alt}/>}
+  {allSiteSettings[0].hpHero && <Picture loading="eager" src={getSanityImageUrl(allSiteSettings[0].hpHero).width(1400).url()} widths={[400, 769, 1200]} sizes={[]} aspectRatio={16/9} alt={allSiteSettings[0].hpHero.alt}/>}
 </div>

@@ -1,0 +1,22 @@
+---
+import { Image } from "@astrojs/image/components"
+
+const igImgs = await fetch(`https://graph.instagram.com/me/media?fields=caption,media_url,permalink&access_token=${import.meta.env.PUBLIC_IG_TOKEN}`)
+const { data } = await igImgs.json()
+const d = data.slice(0,9)
+---
+<section class="widget widget-ig">
+  <h3 class="widget-title">Visually Speaking</h3>
+  <div class="grid-wrapper grid-thirds">
+    {d.map(item =>
+      item.media_url && (
+        <div class='grid-item'>
+          <a href={item.permalink} target="_blank" rel="noopener noreferrer">
+            <Image src={item.media_url} width={200} height={200} alt={item.caption} />
+          </a>
+        </div>
+      )
+    )}
+    
+  </div>
+</section>
