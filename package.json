@@ -23,9 +23,9 @@
     "@fontsource/merriweather": "^4.5.13",
     "@nanostores/react": "^0.3.0",
     "@portabletext/react": "^1.0.6",
-    "@sanity/client": "^3.3.3",
-    "get-video-id": "^3.6.4",
-    "yet-another-react-lightbox": "^1.14.0"
-    "astro-portabletext": "^0.3.0",
+    "@sanity/client": "^3.3.6",
+    "get-video-id": "^3.6.5",
+    "yet-another-react-lightbox": "^2.0.3",
+    "astro-portabletext": "^0.3.0"
   }
 }
