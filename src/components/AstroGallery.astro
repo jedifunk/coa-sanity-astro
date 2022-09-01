@@ -3,6 +3,7 @@ import GalleryBlock from "./GalleryBlock"
 //import LightboxJS from './Lightbox'
 import { getSanityImageUrl } from '../lib/helpers.js'
 import { Picture } from '@astrojs/image/components'
+import { Icon } from 'astro-icon'
 
 const props = Astro.props
 const cols = (props.node.columns != null) ? props.node.columns : 3
@@ -41,15 +42,15 @@ import { isLightboxOpen, photoIndex } from '../lib/helpers'
 
 </script> -->
 
-<GalleryBlock value={props.node} client:load />
+<!-- <GalleryBlock value={props.node} client:load /> -->
 
-<!-- <div class={`blocks-gallery-grid columns-${cols}`}>
+<div class={`blocks-gallery-grid columns-${cols}`}>
   {props.node.images.map(img => {
 
     return(
       <figure class="blocks-gallery-item">
         <button>
-          {/* <BiExpandAlt class='enlarge'/> */}
+          <Icon name='icon-park:expand-text-input' />
           <Picture src={getSanityImageUrl(img).width(726).quality(75).auto('format').url()} widths={[500,726]} aspectRatio={3/4} alt={img.alt} />
           {img.caption && <figcaption>{img.caption}</figcaption>}
         </button>
@@ -58,4 +59,4 @@ import { isLightboxOpen, photoIndex } from '../lib/helpers'
     })}
 </div>
 
-<LightboxJS value={props.node} client:idle /> -->
+<!-- <LightboxJS value={props.node} client:idle /> -->

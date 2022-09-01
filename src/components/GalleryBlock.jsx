@@ -49,6 +49,7 @@ export default function GalleryBlock ({ value }) {
         index={photoIndex}
         plugins={[Captions]}
         animation={{swipe: 0}}
+        controller={{closeOnBackdropClick: true}}
       />
 
     </>

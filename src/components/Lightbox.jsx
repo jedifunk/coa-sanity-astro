@@ -40,6 +40,7 @@ export default function LightboxJS ({ value }) {
         index={$photoIndex}
         plugins={[Captions]}
         animation={{swipe: 0}}
+        controller={{closeOnBackdropClick: true}}
       />
 
     </>

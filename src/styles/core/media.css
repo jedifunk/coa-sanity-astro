@@ -49,17 +49,19 @@ figure.video-block {
   border-radius: 5px;
   padding: 5px;
 } */
-svg.enlarge {
+[astro-icon] {
 	position: absolute;
   top: 5px;
   right: 5px;
   width: 24px;
   height: 24px;
   z-index: 1;
-  fill: rgba(255 255 255 / .75);
   background-color: hsla(var(--h) var(--s) var(--l) / .5);
 	border-radius: 5px;
   padding: 5px;
+}
+[astro-icon] path {
+	stroke: rgba(255 255 255 / .75);
 }
 .img-full img {
 	cursor: pointer;
