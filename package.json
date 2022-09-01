@@ -21,6 +21,7 @@
   "dependencies": {
     "@fontsource/fira-sans": "^4.5.9",
     "@fontsource/merriweather": "^4.5.13",
+    "@nanostores/react": "^0.3.0",
     "@portabletext/react": "^1.0.6",
     "@sanity/client": "^3.3.3",
     "astro-portabletext": "^0.3.0",
