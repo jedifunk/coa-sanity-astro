@@ -42,9 +42,9 @@ import { isLightboxOpen, photoIndex } from '../lib/helpers'
 
 </script> -->
 
-<!-- <GalleryBlock value={props.node} client:load /> -->
+<GalleryBlock value={props.node} client:load />
 
-<div class={`blocks-gallery-grid columns-${cols}`}>
+<!-- <div class={`blocks-gallery-grid columns-${cols}`}>
   {props.node.images.map(img => {
 
     return(
@@ -55,8 +55,8 @@ import { isLightboxOpen, photoIndex } from '../lib/helpers'
           {img.caption && <figcaption>{img.caption}</figcaption>}
         </button>
       </figure>
-      )
-    })}
-</div>
+    )
+  })}
+</div> -->
 
 <!-- <LightboxJS value={props.node} client:idle /> -->
