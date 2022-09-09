@@ -1,6 +1,5 @@
 import { parseISO, format } from 'date-fns'
 import { client } from '../lib/sanityClient.js'
-import { atom } from 'nanostores'
 import imageUrlBuilder from '@sanity/image-url'
 
 const builder = imageUrlBuilder(client)
@@ -59,6 +58,3 @@ export function sSpeed(d) {
   }
   return top + "/" + bot + "s"
 }
-
-export const isLightboxOpen = atom(false)
-export const photoIndex = atom(0)
