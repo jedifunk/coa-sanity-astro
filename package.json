@@ -19,10 +19,12 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@astro-bryceguy/pagination": "^1.1.2",
     "@fontsource/fira-sans": "^4.5.9",
     "@fontsource/merriweather": "^4.5.13",
     "@portabletext/react": "^1.0.6",
     "@sanity/client": "^3.3.6",
+    "astro-json-element": "^1.1.1",
     "astro-portabletext": "^0.3.0",
     "get-video-id": "^3.6.5",
     "yet-another-react-lightbox": "^2.1.1"

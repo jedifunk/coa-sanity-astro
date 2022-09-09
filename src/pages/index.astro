@@ -8,7 +8,6 @@ import Sidebar from '../components/Sidebar.astro'
 import { client } from '../lib/sanityClient.js'
 import { allPosts } from '../lib/queries.js'
 
-
 const allPostData = await client.fetch(allPosts)
 ---
 <Layout title="COA Astro" type={`home`}>

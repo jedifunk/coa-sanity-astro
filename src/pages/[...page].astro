@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
+import { Pagination } from '@astro-bryceguy/pagination'
 
 import { client } from '../lib/sanityClient.js'
 import { allPosts } from '../lib/queries.js'
@@ -13,6 +14,7 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { page } = Astro.props
+console.log(page)
 ---
 <Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage}>
 	<div class="content-area wrapper">
@@ -21,6 +23,21 @@ const { page } = Astro.props
 				<div class="content grid-wrapper grid-halves">
 					{page.data.map((article) => <PostEntry article={article} />)}
 				</div>
+				<Pagination total={page.lastPage} current={page.currentPage} start="1" end="1" middle="1" 
+					theme={{
+						container: {
+							tag: 'ul',
+							class: 'nav-paged',
+						},
+						active: {
+							class: 'current'
+						},
+						disabled: {
+							text: '...',
+							class: 'dots'
+						}
+					}}
+				/>
 			</main>
 			<Sidebar />
 		</div>
