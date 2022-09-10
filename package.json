@@ -9,10 +9,10 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/image": "^0.6.0",
-    "@astrojs/react": "^1.1.1",
+    "@astrojs/image": "^0.7.0",
+    "@astrojs/react": "^1.1.2",
     "@sanity/image-url": "^1.0.1",
-    "astro": "^1.1.7",
+    "astro": "^1.2.1",
     "date-fns": "^2.29.2",
     "dotenv": "^16.0.2",
     "react": "^18.2.0",
@@ -23,7 +23,7 @@
     "@fontsource/fira-sans": "^4.5.9",
     "@fontsource/merriweather": "^4.5.13",
     "@portabletext/react": "^1.0.6",
-    "@sanity/client": "^3.3.6",
+    "@sanity/client": "^3.4.1",
     "astro-icon": "^0.7.3",
     "astro-json-element": "^1.1.1",
     "astro-portabletext": "^0.3.0",
