@@ -12,7 +12,7 @@ export default function GalleryBlock ({ value }) {
   const slides = value.images.map((img) => ({
     src: getSanityImageUrl(img).url(),
     title: img.caption,
-    description: `Camera: ${img.asset.metadata.exif.LensModel}, Aperture: f/${img.asset.metadata.exif.FNumber}, ISO: ${img.asset.metadata.exif.ISO}, Shutter Speed: ${sSpeed(img.asset.metadata.exif.ExposureTime)}`
+    description: `${img.asset.metadata.exif ? `Camera: ${img.asset.metadata.exif.LensModel}, Aperture: f/${img.asset.metadata.exif.FNumber}, ISO: ${img.asset.metadata.exif.ISO}, Shutter Speed: ${sSpeed(img.asset.metadata.exif.ExposureTime)}` : ``}`
   }))
 
   // Set State for Lightbox
