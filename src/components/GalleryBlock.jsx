@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox"
-import { sSpeed, getSanityImageUrl } from "../lib/Helpers"
+import { sSpeed, getSanityImageUrl } from "../lib/helpers"
 import 'yet-another-react-lightbox/styles.css'
 import Captions from "yet-another-react-lightbox/plugins/captions"
 import "yet-another-react-lightbox/plugins/captions.css"

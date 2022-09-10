@@ -16,7 +16,6 @@ export async function getStaticPaths({ paginate }) {
 
 const { page } = Astro.props
 const total = Math.ceil(page.total / page.size)
-console.log(page)
 ---
 <Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage}>
 	<div class="content-area wrapper">
