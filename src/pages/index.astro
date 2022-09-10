@@ -4,11 +4,13 @@ import Hero from '../components/Hero.astro'
 import FeaturedPost from '../components/FeaturedPost.astro'
 import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
+import { Pagination } from '@astro-bryceguy/pagination'
 
 import { client } from '../lib/sanityClient.js'
 import { allPosts } from '../lib/queries.js'
 
 const allPostData = await client.fetch(allPosts)
+const totalPages = Math.ceil(allPostData.length / 10)
 ---
 <Layout title="COA Astro" type={`home`}>
 	<Hero />
@@ -20,9 +22,30 @@ const allPostData = await client.fetch(allPosts)
 		<div class="grid-wrapper grid-main">
 			<main>
 				<div class="content grid-wrapper grid-halves">
-					{allPostData && allPostData.slice(2).map((article) => <PostEntry article={article} />)}
+					{allPostData && allPostData.slice(2, 8).map((article) => <PostEntry article={article} />)}
 				</div>
-
+				<nav class="navigation post-navigation">
+					<div class="nav-previous"></div>
+					<Pagination total={totalPages} current='/' start="0" end="11" 
+						theme={{
+							container: {
+								tag: 'ul',
+								class: 'nav-paged',
+							},
+							active: {
+								class: 'current'
+							},
+							disabled: {
+								text: '...',
+								class: 'dots'
+							},
+							wrapper: {
+								tag: 'li'
+							},
+						}}
+					/>
+					<div class="nav-next"><a href='/2' >Older Posts</a></div>
+				</nav>
 			</main>
 			<Sidebar />
 		</div>
