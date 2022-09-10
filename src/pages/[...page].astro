@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro'
 import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
 import { Pagination } from '@astro-bryceguy/pagination'
+import { Icon } from 'astro-icon'
 
 import { client } from '../lib/sanityClient.js'
 import { allPosts } from '../lib/queries.js'
@@ -14,6 +15,7 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { page } = Astro.props
+const total = Math.ceil(page.total / page.size)
 console.log(page)
 ---
 <Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage}>
@@ -24,8 +26,8 @@ console.log(page)
 					{page.data.map((article) => <PostEntry article={article} />)}
 				</div>
 				<nav class="navigation post-navigation">
-					<div class="nav-previous">{page.currentPage !== '/' ? <a href={page.url.prev}>Newer Posts</a> : null}</div>
-					<Pagination total={page.lastPage} current={page.currentPage} start="1" end="1" middle="1" 
+					<div class="nav-previous">{page.currentPage !== '/' ? <Icon class='nav-icon' name="charm:chevron-left"/> <a href={page.currentPage !== 2 ? page.url.prev : '/'}>Newer Posts</a> : null}</div>
+					<Pagination total={total} current={page.currentPage} start="1" end="1" middle="1" index={true}
 						theme={{
 							container: {
 								tag: 'ul',
@@ -43,7 +45,7 @@ console.log(page)
 							},
 						}}
 					/>
-					<div class="nav-next">{page.currentPage !== page.lastPage ? <a href={page.url.next} >Older Posts</a>  : null}</div>
+					<div class="nav-next">{page.currentPage !== page.lastPage ? <a href={page.url.next} >Older Posts</a> <Icon class="nav-icon" name="charm:chevron-right"/>  : null}</div>
 			</nav>
 			</main>
 			<Sidebar />

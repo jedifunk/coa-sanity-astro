@@ -35,6 +35,10 @@ justify-content: space-between;
   align-items: center;
   gap: 5px;
 }
+.nav-icon {
+  width: 1rem;
+  height: 1rem;
+}
 
 @media (min-width: 769px) {
   .post-navigation {

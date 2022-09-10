@@ -49,7 +49,7 @@ figure.video-block {
   border-radius: 5px;
   padding: 5px;
 } */
-[astro-icon] {
+[astro-icon="icon-park:expand-text-input"] {
 	position: absolute;
   top: 5px;
   right: 5px;
@@ -60,7 +60,7 @@ figure.video-block {
 	border-radius: 5px;
   padding: 5px;
 }
-[astro-icon] path {
+[astro-icon="icon-park:expand-text-input"] path {
 	stroke: rgba(255 255 255 / .75);
 }
 .img-full img {
