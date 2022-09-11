@@ -1,0 +1,4 @@
+---
+const { node } = Astro.props
+---
+<a href={`/${node.markDef.slug.current}`}><slot /></a>

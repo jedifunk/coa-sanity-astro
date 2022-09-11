@@ -7,7 +7,10 @@ import AstroGallery from "./AstroGallery.astro"
 import AstroIGEmbedBlock from "./AstroIGEmbedBlock.astro"
 import AstroMapBlock from "./AstroMapBlock.astro"
 import AstroVideoBlock from "./AstroVideoBlock.astro"
+
+import InternalLink from "./InternalLink.astro"
 import { PortableText } from "astro-portabletext"
+
 ---
 <PortableText 
   {...Astro.props}
@@ -23,6 +26,9 @@ import { PortableText } from "astro-portabletext"
       quotation: AstroQuotation,
       break: AstroBreak,
       embed: AstroEmbed,
-    }
+    },
+    mark: {
+      internalLink: InternalLink
+    },
   }}
 />
