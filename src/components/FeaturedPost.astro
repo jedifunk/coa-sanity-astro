@@ -11,7 +11,7 @@ const fImg = getSanityImageUrl(article.featuredImage).url()
 <article class="featured-item">
   <figure>
     <a href={`/${article.slug.current}`}>
-      {article.featuredImage && <Picture src={getSanityImageUrl(article.featuredImage).width(568).height(320).url()} widths={[568]} aspectRatio={16/9} alt={article.featuredImage.alt}/>}
+      {article.featuredImage && <Picture src={getSanityImageUrl(article.featuredImage).url()} widths={[568]} aspectRatio={16/9} alt={article.featuredImage.alt}/>}
     </a>
     <figcaption>
       <h2 class="entry-title">

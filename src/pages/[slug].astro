@@ -33,7 +33,7 @@ const prevPage = await client.fetch(`*[_type == 'article' && publishDate < "${th
           
           <PostMeta article={post} />
           <h2 class="entry-title">{post.title}</h2>
-          {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).auto('format').url()} widths={[726]} aspectRatio={16/9} alt={post.featuredImage.alt} loading="eager" />}
+          {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).url()} widths={[726]} aspectRatio={16/9} alt={post.featuredImage.alt} loading="eager" />}
         </header>
 
         <Handler value={post.content} />

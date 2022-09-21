@@ -23,7 +23,7 @@ export default function GalleryBlock ({ value }) {
     <>
     <div className={`blocks-gallery-grid columns-${cols}`}>
         {value.images.map((img, index) => {
-          const image = getSanityImageUrl(img).width(500).url()
+          const image = getSanityImageUrl(img).url()
           // setup onclick function to handle state change
           function updateOnClick() {
             setPhotoIndex(index)
@@ -34,7 +34,7 @@ export default function GalleryBlock ({ value }) {
             <figure key={index} className="blocks-gallery-item">
               <button onClick={updateOnClick}>
                 {/* <BiExpandAlt className='enlarge'/> */}
-                <img src={getSanityImageUrl(img).width(726).quality(75).auto('format').url()} loading="lazy" alt={img.alt}/>
+                <img src={getSanityImageUrl(img).url()} loading="lazy" alt={img.alt}/>
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </button>
             </figure>
