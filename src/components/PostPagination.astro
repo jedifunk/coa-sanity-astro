@@ -1,4 +1,6 @@
 ---
+import { Icon } from 'astro-icon'
+
 export interface Props {
   previous: any;
   next: any;
@@ -8,14 +10,14 @@ const {previous, next} = Astro.props
 <nav class="navigation post-navigation" role="navigation">
   {previous && (
     <div class="nav-previous">
-
+      <Icon class='nav-icon' name="charm:chevron-left"/>
       <a href={`/${previous.slug.current}`} rel="prev">{previous.title}</a>
     </div>
   )}
   {next && (
     <div class="nav-next">
       <a href={`/${next.slug.current}`} rel="next">{next.title}</a>
-
+      <Icon class="nav-icon" name="charm:chevron-right"/>
     </div>
   )}
   </nav>
