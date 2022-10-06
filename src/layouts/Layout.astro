@@ -18,8 +18,9 @@ export interface Props {
 	title: string;
 }
 
-const { title, type, description, image, pathname } = Astro.props as Props
-const pageType = type != 'article' ? 'archive' : ''
+const { title, type, description, image } = Astro.props as Props
+
+const pageType = type != 'article' ? type != 'page' ? `archive ${type}` : type : type
 ---
 
 <!DOCTYPE html>
@@ -30,7 +31,7 @@ const pageType = type != 'article' ? 'archive' : ''
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <Seo title={title} description={description} image={image} />
 </head>
-<body class={`${pageType} ${type}`}>
+<body class={`${pageType}`}>
   <Header />
   
   <slot />
