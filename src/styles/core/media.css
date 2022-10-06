@@ -6,7 +6,8 @@ object {
 video {
 	width: 100%;
 }
-img:not(.hero img) {
+img:not(.hero img),
+video {
   border-radius: 5px;
 }
 figure {

@@ -10,7 +10,7 @@ export default function GalleryBlock ({ value }) {
   const cols = (value.columns != null) ? value.columns : 3
 
   const slides = value.images.map((img) => ({
-    src: getSanityImageUrl(img).url(),
+    src: getSanityImageUrl(img).auto('format').quality(100).url(),
     title: img.caption,
     description: `${img.asset.metadata.exif ? `Camera: ${img.asset.metadata.exif.LensModel}, Aperture: f/${img.asset.metadata.exif.FNumber}, ISO: ${img.asset.metadata.exif.ISO}, Shutter Speed: ${sSpeed(img.asset.metadata.exif.ExposureTime)}` : ``}`
   }))
@@ -34,7 +34,7 @@ export default function GalleryBlock ({ value }) {
             <figure key={index} className="blocks-gallery-item">
               <button onClick={updateOnClick}>
                 {/* <BiExpandAlt className='enlarge'/> */}
-                <img src={getSanityImageUrl(img).url()} loading="lazy" alt={img.alt}/>
+                <img src={getSanityImageUrl(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </button>
             </figure>
