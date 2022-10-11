@@ -5,7 +5,7 @@ import 'yet-another-react-lightbox/styles.css'
 import Captions from "yet-another-react-lightbox/plugins/captions"
 import "yet-another-react-lightbox/plugins/captions.css"
 
-export default function GalleryBlock ({ value }) {
+export default function GalleryBlock({ value }) {
 
   const cols = (value.columns != null) ? value.columns : 3
 
@@ -24,6 +24,7 @@ export default function GalleryBlock ({ value }) {
     <div className={`blocks-gallery-grid columns-${cols}`}>
         {value.images.map((img, index) => {
           const image = getSanityImageUrl(img).url()
+
           // setup onclick function to handle state change
           function updateOnClick() {
             setPhotoIndex(index)
