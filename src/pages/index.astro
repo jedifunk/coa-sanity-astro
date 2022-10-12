@@ -23,7 +23,7 @@ const totalPages = Math.ceil(allPostData.length / 10)
 		<div class="grid-wrapper grid-main">
 			<main>
 				<div class="content grid-wrapper grid-halves">
-					{allPostData && allPostData.slice(2, 8).map((article) => <PostEntry article={article} />)}
+					{allPostData && allPostData.slice(2, 10).map((article) => <PostEntry article={article} />)}
 				</div>
 				<nav class="navigation post-navigation">
 					<div class="nav-previous"></div>

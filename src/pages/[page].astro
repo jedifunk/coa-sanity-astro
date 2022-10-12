@@ -1,36 +1,53 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
-import {client} from '../lib/sanityClient.js'
-import Handler from '../components/Handler.astro'
+import { Pagination } from '@astro-bryceguy/pagination'
+import { Icon } from 'astro-icon'
 
-import { aboutPageQuery, allPagesQuery } from '../lib/queries.js'
+import { client } from '../lib/sanityClient.js'
+import { allPosts } from '../lib/queries.js'
 
-// const query = await client.fetch(aboutPageQuery)
-// const page = query[0]
+export async function getStaticPaths({ paginate }) {
+  const allPostData = await client.fetch(allPosts)
 
-export async function getStaticPaths() {
-  const allPages = await client.fetch(allPagesQuery)
-
-  return allPages.map(page => ({params: { page: page.slug.current }, props: {page}}))
+  return paginate(allPostData, {pageSize: 10 })
 }
+
 const { page } = Astro.props
-
+const total = Math.ceil(page.total / page.size)
 ---
-<Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage} pathname={page.slug.current}>
-  <div class="content-area wrapper grid-wrapper grid-main">
-    <main id="main" class="site-main" role="main">
-      <article>
-        <header class="entry-header">
-          <h1 class="entry-title">{page.title}</h1>
-        </header>
-
-        <div class="entry-content">
-          <Handler value={page.content} />
-        </div>
-
-      </article>
-    </main>
-    <Sidebar />
-  </div>
+<Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage}>
+	<div class="content-area wrapper">
+		<div class="grid-wrapper grid-main">
+			<main>
+				<div class="content grid-wrapper grid-halves">
+					{page.data.map((article) => <PostEntry article={article} />)}
+				</div>
+				<nav class="navigation post-navigation">
+					<div class="nav-previous">{page.currentPage !== '/' ? <Icon class='nav-icon' name="charm:chevron-left"/> <a href={page.currentPage !== 2 ? page.url.prev : '/'}>Newer Posts</a> : null}</div>
+					<Pagination total={total} current={page.currentPage} start="1" end="1" middle="1" index={true}
+						theme={{
+							container: {
+								tag: 'ul',
+								class: 'nav-paged',
+							},
+							active: {
+								class: 'current'
+							},
+							disabled: {
+								text: '...',
+								class: 'dots'
+							},
+							wrapper: {
+								tag: 'li'
+							},
+						}}
+					/>
+					<div class="nav-next">{page.currentPage !== page.lastPage ? <a href={page.url.next} >Older Posts</a> <Icon class="nav-icon" name="charm:chevron-right"/>  : null}</div>
+			</nav>
+			</main>
+			<Sidebar />
+		</div>
+	</div>
 </Layout>
