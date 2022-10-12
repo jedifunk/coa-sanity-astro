@@ -10,6 +10,12 @@
 	font-weight: 700;
 	margin: 0;
 }
+.post-entry figure img {
+  transition: filter var(--base-transition);
+}
+.post-entry figure:hover img {
+  filter: brightness(.75);
+}
 .post-entry figcaption {
   font-style: normal;
   font-size: unset;
