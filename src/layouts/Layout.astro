@@ -19,7 +19,6 @@ export interface Props {
 }
 
 const { title, type, description, image } = Astro.props as Props
-
 const pageType = type != 'article' ? type != 'page' ? `archive ${type}` : type : type
 ---
 
@@ -27,7 +26,7 @@ const pageType = type != 'article' ? type != 'page' ? `archive ${type}` : type :
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <Seo title={title} description={description} image={image} />
 </head>

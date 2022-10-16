@@ -21,20 +21,24 @@ if (props.title === undefined) {
 if (props.description === undefined) {
   props.description = settings[0].metaDescription
 }
+const canonicalUrl = new URL(Astro.url.pathname, settings[0].siteUrl)
 ---
+<link rel="canonical" href={canonicalUrl} />
 <title>{`${props.title} | ${settings[0].siteTitle}`}</title>
+<meta name="title" content={props.title} />
+<meta name="description" content={props.description} />
 
-<link rel="canonical" href={props.url} />
 <meta property='og:type' content='website' />
 <meta name='apple-mobile-web-app-title' content={settings[0].siteTitle} />
 
 <meta property='og:site_name' content={settings[0].siteTitle} />
-<meta property='og:url' content={props.url} />
+<meta property='og:url' content={canonicalUrl} />
 <meta property='og:title' content={props.title} />
 <meta property='og:image' content={getSanityImageUrl(props.image).width(1200).url()} />
-<meta name='description' property='og:description' content={props.description} />
+<meta property='og:description' name='description' content={props.description} />
 
 <meta name='twitter:title' content={props.title} />
 <meta name='twitter:image:src' content={getSanityImageUrl(props.image).width(1200).url()} />
 <meta name='twitter:card' content={'summary_large_image'} />
 <meta name='twitter:description' content={props.description} />
+<meta property="twitter:url" content={canonicalUrl} />

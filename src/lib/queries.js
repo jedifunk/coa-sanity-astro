@@ -7,7 +7,5 @@ export const recentPosts = `*[_type == "article"] | order(_createdAt desc)[0...5
 export const countryList = `*[_type == "country"] | order(name asc) {name, menu, slug}`
 export const categoryList = `*[_type == "category"] | order(title asc) {title, slug}`
 
-export const aboutPageQuery = `*[_type == 'page' && title == 'About']{..., content[]{..., asset->}}`
-
 export const siteSettings = `*[_type == 'siteSettings']`
 export const siteNav = `*[_type == 'siteSettings'][0]{siteNav{menuItems[]{name, page->{slug}}}}`
