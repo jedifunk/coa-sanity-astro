@@ -10,9 +10,9 @@
   },
   "devDependencies": {
     "@astrojs/image": "^0.10.0",
-    "@astrojs/react": "^1.2.0",
+    "@astrojs/react": "^1.2.1",
     "@sanity/image-url": "^1.0.1",
-    "astro": "^1.5.0",
+    "astro": "^1.5.2",
     "date-fns": "^2.29.2",
     "dotenv": "^16.0.3",
     "react": "^18.2.0",
