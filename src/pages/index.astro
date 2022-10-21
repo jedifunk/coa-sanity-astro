@@ -13,7 +13,7 @@ import { allPosts } from '../lib/queries.js'
 const allPostData = await client.fetch(allPosts)
 const totalPages = Math.ceil(allPostData.length / 10)
 ---
-<Layout title="COA Astro" type={`home`}>
+<Layout title="Choosing Our Adventure" type={`home`}>
 	<Hero />
 	<div class="content-area wrapper">
 		<div class="featured grid-wrapper grid-halves">
