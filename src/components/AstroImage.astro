@@ -6,6 +6,6 @@ const props = Astro.props
 <figure class={`img-full`}>
   <button >
     <img src={getSanityImageUrl(props.node.asset).width(725).auto('format').url()} loading="lazy" />
-    {props.caption && <figcaption>{props.caption}</figcaption>}
+    {props.node.caption && <figcaption>{props.node.caption}</figcaption>}
   </button>
 </figure>
