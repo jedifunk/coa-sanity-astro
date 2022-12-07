@@ -9,10 +9,10 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/image": "^0.11.6",
+    "@astrojs/image": "^0.12.1",
     "@astrojs/react": "^1.2.2",
     "@sanity/image-url": "^1.0.1",
-    "astro": "^1.6.11",
+    "astro": "^1.6.13",
     "date-fns": "^2.29.2",
     "dotenv": "^16.0.3",
     "react": "^18.2.0",
