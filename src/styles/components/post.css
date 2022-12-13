@@ -11,6 +11,7 @@
 	margin: 0;
 }
 .post-entry figure img {
+  aspect-ratio: 16/9;
   transition: filter var(--base-transition);
 }
 .post-entry figure:hover img {
