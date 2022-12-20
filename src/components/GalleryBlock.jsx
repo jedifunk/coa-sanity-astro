@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox"
 import { sSpeed, getSanityImageUrl } from "../lib/helpers"
-import {BiExpandAlt} from 'react-icons/bi'
+// import {BiExpandAlt} from 'react-icons/bi'
 import 'yet-another-react-lightbox/styles.css'
 import Captions from "yet-another-react-lightbox/plugins/captions"
 import "yet-another-react-lightbox/plugins/captions.css"
@@ -15,7 +15,7 @@ export default function GalleryBlock({ value }) {
     title: img.caption,
     description: `${img.asset.metadata.exif ? `Camera: ${img.asset.metadata.exif.LensModel}, Aperture: f/${img.asset.metadata.exif.FNumber}, ISO: ${img.asset.metadata.exif.ISO}, Shutter Speed: ${sSpeed(img.asset.metadata.exif.ExposureTime)}` : ``}`
   }))
-
+console.log(slides)
   // Set State for Lightbox
   const [photoIndex, setPhotoIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
@@ -35,7 +35,7 @@ export default function GalleryBlock({ value }) {
           return (
             <figure key={index} className="blocks-gallery-item">
               <button onClick={updateOnClick}>
-                <BiExpandAlt className='enlarge'/>
+                {/* <BiExpandAlt className='enlarge'/> */}
                 <img src={getSanityImageUrl(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </button>
