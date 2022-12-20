@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox"
 import { sSpeed, getSanityImageUrl } from "../lib/helpers"
+import {BiExpandAlt} from 'react-icons/bi'
 import 'yet-another-react-lightbox/styles.css'
 import Captions from "yet-another-react-lightbox/plugins/captions"
 import "yet-another-react-lightbox/plugins/captions.css"
@@ -34,7 +35,7 @@ export default function GalleryBlock({ value }) {
           return (
             <figure key={index} className="blocks-gallery-item">
               <button onClick={updateOnClick}>
-                {/* <BiExpandAlt className='enlarge'/> */}
+                <BiExpandAlt className='enlarge'/>
                 <img src={getSanityImageUrl(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
                 {img.caption && <figcaption>{img.caption}</figcaption>}
               </button>

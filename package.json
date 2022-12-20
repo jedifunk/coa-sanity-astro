@@ -29,6 +29,7 @@
     "astro-json-element": "^1.1.4",
     "astro-portabletext": "^0.7.0",
     "get-video-id": "^3.6.5",
+    "react-icons": "^4.7.1",
     "sharp": "^0.31.2",
     "yet-another-react-lightbox": "^2.2.3"
   }

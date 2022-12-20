@@ -50,7 +50,8 @@ figure.video-block {
   border-radius: 5px;
   padding: 5px;
 } */
-[astro-icon="icon-park:expand-text-input"] {
+[astro-icon="icon-park:expand-text-input"],
+svg.enlarge {
 	position: absolute;
   top: 5px;
   right: 5px;
@@ -60,8 +61,10 @@ figure.video-block {
   background-color: hsla(var(--h) var(--s) var(--l) / .5);
 	border-radius: 5px;
   padding: 5px;
+	fill: rgba(255 255 255 / .75);
 }
-[astro-icon="icon-park:expand-text-input"] path {
+[astro-icon="icon-park:expand-text-input"] path,
+svg.enlarge path {
 	stroke: rgba(255 255 255 / .75);
 }
 .img-full img {
