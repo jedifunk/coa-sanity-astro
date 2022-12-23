@@ -1,4 +1,4 @@
-import { parseISO, format } from 'date-fns'
+import { parseISO, format, fromUnixTime } from 'date-fns'
 import { client } from '../lib/sanityClient.js'
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -25,6 +25,11 @@ export function formatBlogPostDate(date) {
   const dateString = parseISO(date, 'YYYY/MM/Do')
   const formattedDateString = format(dateString, 'MMMM do, yyyy')
   return `${formattedDateString}`
+}
+export function formatUnixDate(date) {
+  const dateString = fromUnixTime(date)
+  const notUnix = format(dateString, 'MMMM do, yyyy')
+  return `${notUnix}`
 }
 
 export function getSanityImageUrl(source) {
