@@ -1,0 +1,382 @@
+---
+
+---
+<div class="map-wrapper">
+  <nav id="map-toggles" class="map-toggles"></nav>
+  <div id="map" class="map"></div>
+</div>
+<script>
+import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import {mapButtons} from '../lib/helpers'
+
+const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
+const FS_TOKEN = import.meta.env.PUBLIC_FS_TOKEN
+
+async function getCheckins(query) {
+  return fetch(query).then(res => res.json())
+}
+// const time = '1646776800'
+// const version = '20221221'
+// const cats = [
+//   {name: 'foods', iD: '4d4b7105d754a06374d81259'},
+//   {name: 'coffees', iD: '4bf58dd8d48988d1e0931735'},
+//   {name: 'bars', iD: '4d4b7105d754a06376d81259'},
+// ]
+
+// cats.map(async (cat) => {
+//   let query = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${time}&categoryId=${cat.iD}&v=${version}`
+  
+//   const results = await getCheckins(query)
+
+//   return result.response.venues.items
+  
+// })
+
+const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06374d81259&v=20221221`
+const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d1e0931735&v=20221221`
+const cafeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d16d941735&v=20221221`
+const nightlifeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06376d81259&v=20221221`
+const outdoorQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06377d81259&v=20221221`
+const artQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7104d754a06370d81259&v=20221221`
+const spiritualQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d131941735&v=20221221`
+const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d12d941735&v=20221221`
+const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4deefb944765f83613cdba6e&v=20221221`
+const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06379d81259&v=20221221`
+
+const outdoorRes = await getCheckins(outdoorQuery)
+const artRes = await getCheckins(artQuery)
+const foodRes = await getCheckins(foodQuery)
+const nightlifeRes = await getCheckins(nightlifeQuery)
+const coffeeshopRes = await getCheckins(coffeeshopsQuery)
+const cafesRes = await getCheckins(cafeQuery)
+const monumentsRes = await getCheckins(monumentsQuery)
+const historicRes = await getCheckins(historicQuery)
+const spiritualRes = await getCheckins(spiritualQuery)
+const transitRes = await getCheckins(transitQuery)
+
+const outdoors = outdoorRes.response.venues.items
+const arts = artRes.response.venues.items
+const coffee = coffeeshopRes.response.venues.items
+const cafes = cafesRes.response.venues.items
+const transit = transitRes.response.venues.items
+const monuments = monumentsRes.response.venues.items
+const historic = historicRes.response.venues.items
+const spiritual = spiritualRes.response.venues.items
+const nightlifes = nightlifeRes.response.venues.items
+const foods = foodRes.response.venues.items
+
+const shops = coffee.concat(cafes, nightlifes)
+const histMons = historic.concat(monuments, spiritual, arts)
+
+let foodsG = foods.map((food) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [food.venue.location.lng, food.venue.location.lat]
+      },
+      properties: {
+        title: food.venue.name
+      }
+    }
+  )
+})
+
+const foodsGeoJSON = {
+  type: 'FeatureCollection',
+  features: foodsG
+}
+
+let shopsG = shops.map((shop) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [shop.venue.location.lng, shop.venue.location.lat]
+      },
+      properties: {
+        title: shop.venue.name
+      }
+    }
+  )
+})
+
+const shopsGeoJSON = {
+  type: 'FeatureCollection',
+  features: shopsG
+}
+
+let ppG = outdoors.map((pp) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [pp.venue.location.lng, pp.venue.location.lat]
+      },
+      properties: {
+        title: pp.venue.name
+      }
+    }
+  )
+})
+
+const ppGeoJSON = {
+  type: 'FeatureCollection',
+  features: ppG
+}
+
+let histMonG = histMons.map((histMon) => {
+  return (
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point', 
+        coordinates: [histMon.venue.location.lng, histMon.venue.location.lat]
+      },
+      properties: {
+        title: histMon.venue.name
+      }
+    }
+  )
+})
+
+const histMonGeoJSON = {
+  type: 'FeatureCollection',
+  features: histMonG
+}
+
+let transitG = transit.map((trans) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [trans.venue.location.lng, trans.venue.location.lat]
+      },
+      properties: {
+        title: trans.venue.name
+      }
+    }
+  )
+})
+
+const transitGeoJSON = {
+  type: 'FeatureCollection',
+  features: transitG
+}
+
+mapboxgl.accessToken = MB_TOKEN
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: [15.981919, 45.815010],
+  zoom: 2.5
+})
+map.on('load', () => {
+  const nav = new mapboxgl.NavigationControl({
+    showCompass: false,
+  })
+  map.addControl(nav, 'top-left')
+
+  map.addSource('transit', {
+    type: 'geojson',
+    data: transitGeoJSON
+  })
+  map.addLayer({
+    id: 'transit',
+    source: 'transit',
+    type: 'circle',
+    paint: {
+      'circle-color': 'hsla(199, 100%, 40%, .5)',
+    },
+    layout: {
+      visibility: 'visible'
+    }
+  })
+
+  map.addSource('food', {
+    type: 'geojson',
+    data: foodsGeoJSON
+  })
+  map.addLayer({
+    id: 'food',
+    source: 'food',
+    type: 'circle',
+    paint: {
+      'circle-color': 'hsla(199, 100%, 25%, .5)',
+    },
+    layout: {
+      visibility: 'visible'
+    }
+  })
+
+  map.addSource('cafes-bars', {
+    type: 'geojson',
+    data: shopsGeoJSON
+  })
+  map.addLayer({
+    id: 'cafes-bars',
+    source: 'cafes-bars',
+    type: 'circle',
+    paint: {
+      'circle-color': 'hsla(199, 100%, 30%, .5)',
+    },
+    layout: {
+      visibility: 'visible'
+    }
+  })
+
+  map.addSource('pp', {
+    type: 'geojson',
+    data: ppGeoJSON
+  })
+  map.addLayer({
+    id: 'parks-plazas',
+    source: 'pp',
+    type: 'circle',
+    paint: {
+      'circle-color': 'hsla(199, 100%, 20%, .5)',
+    },
+    layout: {
+      visibility: 'visible'
+    }
+  })
+
+  map.addSource('historic-monuments', {
+    type: 'geojson',
+    data: histMonGeoJSON
+  })
+  map.addLayer({
+    id: 'historic-monuments',
+    source: 'historic-monuments',
+    type: 'circle',
+    paint: {
+      'circle-color': 'hsla(199, 100%, 15%, .5)',
+    },
+
+    layout: {
+      visibility: 'visible'
+    }
+  })
+
+  // Change the cursor to a pointer when the it enters a feature in the 'circle' layer.
+  map.on('mouseenter', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], () => {
+    map.getCanvas().style.cursor = 'pointer'
+  })
+  
+  // Change it back to a pointer when it leaves.
+  map.on('mouseleave', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], () => {
+    map.getCanvas().style.cursor = ''
+  })
+
+  map.on('click', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], (e) => {
+    map.flyTo({
+      center: e.features[0].geometry.coordinates,
+      zoom: 13,
+    })
+  })
+
+  // Create a popup, but don't add it to the map yet.
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false
+  });
+
+  map.on('mouseenter', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], (e) => {
+    let currentZoom = map.getZoom()
+    if (currentZoom >= 13) {
+      // Copy coordinates array.
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const description = e.features[0].properties.title;
+      
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+      
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(coordinates).setHTML(description).addTo(map);
+    }
+  });
+  map.on('mouseleave', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], () => {
+    popup.remove();
+  });
+
+  // Reset Zoom level
+  const resetZoom = document.createElement('button')
+  resetZoom.id = 'reset'
+  resetZoom.textContent = 'Reset Zoom'
+  resetZoom.className = 'pill pill-dark'
+  resetZoom.onclick = function(e) {
+    map.flyTo({
+      center: [15.981919, 45.815010],
+      zoom: 2.5
+    })
+  }
+  document.getElementById('map-toggles').appendChild(resetZoom)
+})
+map.on('idle', () => {
+  // If these layers were not added to the map, abort
+  if (
+    !map.getLayer('cafes-bars') 
+    || !map.getLayer('historic-monuments') 
+    || !map.getLayer('transit')
+    || !map.getLayer('parks-plazas')
+    || !map.getLayer('food')
+  ) {
+    return;
+  }
+
+  // Enumerate ids of the layers.
+  const toggleableLayerIds = ['food', 'cafes-bars', 'parks-plazas', 'historic-monuments', 'transit']
+  // Set up the corresponding toggle button for each layer.
+  for (const id of toggleableLayerIds) {
+    // Skip layers that already have a button set up.
+    if (document.getElementById(id)) {
+      continue;
+    }
+    
+    // Create a link.
+    const link = document.createElement('button');
+    link.id = id;
+    link.textContent = mapButtons(id);
+    link.className = 'pill';
+    
+    // Show or hide layer when the toggle is clicked.
+    link.onclick = function (e) {
+      const clickedLayer = this.id;
+      // e.preventDefault();
+      // e.stopPropagation();
+      
+      const visibility = map.getLayoutProperty(
+        clickedLayer,
+        'visibility'
+      );
+      
+      // Toggle layer visibility by changing the layout object's visibility property.
+      if (visibility === 'visible') {
+        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+          this.classList.add('inactive');
+      } else {
+        this.classList.remove('inactive');
+        map.setLayoutProperty(
+        clickedLayer,
+          'visibility',
+          'visible'
+        );
+      }
+    }
+    
+    const layers = document.getElementById('map-toggles');
+    layers.appendChild(link);
+  }
+})
+</script>

@@ -1,0 +1,10 @@
+---
+import AstroChart from "./AstroChart.astro"
+
+const props = Astro.props
+const cols = (props.node.columns != null) ? props.node.columns : 2
+const charts = props.node.content
+---
+<div class={`content-grid columns-${cols}`}>
+  {charts.map(chart => (<AstroChart cId={chart.chartId}/>))}
+</div>

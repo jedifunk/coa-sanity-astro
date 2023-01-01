@@ -59,6 +59,9 @@
   text-transform: none;
   transition: var(--base-transition);
 }
+.pill.pill-dark {
+  background-color: var(--pill-dark);
+}
 .pill:hover {
   background-image: none;
   background-color: hsl(var(--h) var(--s) var(--alt-l) / var(--a));

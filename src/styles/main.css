@@ -18,5 +18,7 @@
 @import './components/pagination.css';
 @import './components/quotation.css';
 @import './components/gallery.css';
+@import './components/mapbox.css';
+@import './components/chart.css';
 @import './components/hero.css';
 @import './components/social-share.css';

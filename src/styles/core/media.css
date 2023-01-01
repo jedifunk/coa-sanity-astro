@@ -6,6 +6,9 @@ object {
 video {
 	width: 100%;
 }
+button:hover {
+	cursor: pointer;
+}
 img:not(.hero img),
 video {
   border-radius: 5px;

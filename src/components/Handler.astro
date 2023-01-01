@@ -9,6 +9,9 @@ import AstroIGEmbedBlock from "./AstroIGEmbedBlock.astro"
 import AstroMapBlock from "./AstroMapBlock.astro"
 import AstroVideoBlock from "./AstroVideoBlock.astro"
 import InternalLink from "./InternalLink.astro"
+import AstroChart from "./AstroChart.astro"
+import AstroMapbox from "./AstroMapBox.astro"
+import AstroContentGrid from "./AstroContentGrid.astro"
 
 ---
 <PortableText 
@@ -21,10 +24,12 @@ import InternalLink from "./InternalLink.astro"
       gallery: AstroGallery,
       googleMyMap: AstroMapBlock,
       instagramPost: AstroIGEmbedBlock,
-      //mapbox: Mapbox,
+      mapbox: AstroMapbox,
       quotation: AstroQuotation,
       break: AstroBreak,
       embed: AstroEmbed,
+      chart: AstroChart,
+      contentGrid: AstroContentGrid,
     },
     mark: {
       internalLink: InternalLink

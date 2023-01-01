@@ -28,7 +28,9 @@
     "astro-icon": "^0.8.0",
     "astro-json-element": "^1.1.4",
     "astro-portabletext": "^0.7.0",
+    "chart.js": "^4.1.1",
     "get-video-id": "^3.6.5",
+    "mapbox-gl": "^2.11.1",
     "react-icons": "^4.7.1",
     "sharp": "^0.31.2",
     "yet-another-react-lightbox": "^2.2.3"

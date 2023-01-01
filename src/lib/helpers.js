@@ -6,7 +6,7 @@ const builder = imageUrlBuilder(client)
 
 export async function getSanityContent({ query, variables = {} }) {
   const { data } = await fetch(
-    `${import.meta.env.PUBLIC_SANITY_GRAPHQL_URL}`,
+    `${import.meta.env.PUBLIC_SANITY_URL}`,
     {
       method: 'POST',
       headers: {
@@ -62,4 +62,19 @@ export function sSpeed(d) {
     return "1s"
   }
   return top + "/" + bot + "s"
+}
+
+export function mapButtons(text) {
+  var output = text
+    .replace(/-/g, ' / ')
+  
+    const words = output.split(" ");
+
+    for (let i = 0; i < words.length; i++) {
+        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+    }
+
+  var final = words.join(" ");
+
+  return final
 }

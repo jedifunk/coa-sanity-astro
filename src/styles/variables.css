@@ -8,8 +8,10 @@
   --l: 30%;
   --a: 1;
   --alt-l: 35%;
+  --dark-l: 20%;
   --alt-a: .5;
   --main-color: hsla(var(--h) var(--s) var(--l) / var(--a));
+  --pill-dark: hsla(var(--h) var(--s) var(--dark-l) / var(--a));
 
   /* Typography */
   --body-font: 'Merriweather', serif;
