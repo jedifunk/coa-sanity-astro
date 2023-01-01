@@ -14,24 +14,17 @@ const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
 const FS_TOKEN = import.meta.env.PUBLIC_FS_TOKEN
 
 async function getCheckins(query) {
-  return fetch(query).then(res => res.json())
+  return await fetch(query).then(res => res.json()).then((data) => data.response.venues.items)
+  
 }
 // const time = '1646776800'
 // const version = '20221221'
-// const cats = [
-//   {name: 'foods', iD: '4d4b7105d754a06374d81259'},
-//   {name: 'coffees', iD: '4bf58dd8d48988d1e0931735'},
-//   {name: 'bars', iD: '4d4b7105d754a06376d81259'},
-// ]
-
-// cats.map(async (cat) => {
-//   let query = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${time}&categoryId=${cat.iD}&v=${version}`
-  
-//   const results = await getCheckins(query)
-
-//   return result.response.venues.items
-  
-// })
+// const baseUrl = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${time}&v=${version}`
+// const queries = {
+//   foods: `${baseUrl}&categoryId=4d4b7105d754a06374d81259`,
+//   coffees: `${baseUrl}&categoryId=4bf58dd8d48988d1e0931735`,
+//   bars: `${baseUrl}&categoryId=4d4b7105d754a06376d81259`,
+// }
 
 const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06374d81259&v=20221221`
 const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d1e0931735&v=20221221`
@@ -44,30 +37,19 @@ const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oa
 const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4deefb944765f83613cdba6e&v=20221221`
 const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06379d81259&v=20221221`
 
-const outdoorRes = await getCheckins(outdoorQuery)
-const artRes = await getCheckins(artQuery)
-const foodRes = await getCheckins(foodQuery)
-const nightlifeRes = await getCheckins(nightlifeQuery)
-const coffeeshopRes = await getCheckins(coffeeshopsQuery)
-const cafesRes = await getCheckins(cafeQuery)
-const monumentsRes = await getCheckins(monumentsQuery)
-const historicRes = await getCheckins(historicQuery)
-const spiritualRes = await getCheckins(spiritualQuery)
-const transitRes = await getCheckins(transitQuery)
+const outdoors = await getCheckins(outdoorQuery)
+const arts = await getCheckins(artQuery)
+const foods = await getCheckins(foodQuery)
+const nightlifes = await getCheckins(nightlifeQuery)
+const coffeeshops = await getCheckins(coffeeshopsQuery)
+const cafes = await getCheckins(cafeQuery)
+const monuments = await getCheckins(monumentsQuery)
+const historics = await getCheckins(historicQuery)
+const spirituals = await getCheckins(spiritualQuery)
+const transits = await getCheckins(transitQuery)
 
-const outdoors = outdoorRes.response.venues.items
-const arts = artRes.response.venues.items
-const coffee = coffeeshopRes.response.venues.items
-const cafes = cafesRes.response.venues.items
-const transit = transitRes.response.venues.items
-const monuments = monumentsRes.response.venues.items
-const historic = historicRes.response.venues.items
-const spiritual = spiritualRes.response.venues.items
-const nightlifes = nightlifeRes.response.venues.items
-const foods = foodRes.response.venues.items
-
-const shops = coffee.concat(cafes, nightlifes)
-const histMons = historic.concat(monuments, spiritual, arts)
+const shops = coffeeshops.concat(cafes, nightlifes)
+const histMons = historics.concat(monuments, spirituals, arts)
 
 let foodsG = foods.map((food) => {
   return (
@@ -109,7 +91,7 @@ const shopsGeoJSON = {
   features: shopsG
 }
 
-let ppG = outdoors.map((pp) => {
+let outdoorsG = outdoors.map((pp) => {
   return (
     {
       type: 'Feature', 
@@ -124,9 +106,9 @@ let ppG = outdoors.map((pp) => {
   )
 })
 
-const ppGeoJSON = {
+const outdoorsGeoJSON = {
   type: 'FeatureCollection',
-  features: ppG
+  features: outdoorsG
 }
 
 let histMonG = histMons.map((histMon) => {
@@ -149,16 +131,16 @@ const histMonGeoJSON = {
   features: histMonG
 }
 
-let transitG = transit.map((trans) => {
+let transitG = transits.map((transit) => {
   return (
     {
       type: 'Feature', 
       geometry: {
         type: 'Point', 
-        coordinates: [trans.venue.location.lng, trans.venue.location.lat]
+        coordinates: [transit.venue.location.lng, transit.venue.location.lat]
       },
       properties: {
-        title: trans.venue.name
+        title: transit.venue.name
       }
     }
   )
@@ -233,7 +215,7 @@ map.on('load', () => {
 
   map.addSource('pp', {
     type: 'geojson',
-    data: ppGeoJSON
+    data: outdoorsGeoJSON
   })
   map.addLayer({
     id: 'parks-plazas',
