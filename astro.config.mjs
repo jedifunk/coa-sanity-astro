@@ -6,7 +6,7 @@ import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [react(), image({
+  integrations: [partytown(), react(), image({
     serviceEntryPoint: '@astrojs/image/sharp'
-  }), partytown()]
+  }),]
 });
