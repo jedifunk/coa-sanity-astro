@@ -13,18 +13,63 @@ import {mapButtons} from '../lib/helpers'
 const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
 const FS_TOKEN = import.meta.env.PUBLIC_FS_TOKEN
 
-async function getCheckins(query) {
-  return await fetch(query).then(res => res.json()).then((data) => data.response.venues.items)
-  
-}
 // const time = '1646776800'
 // const version = '20221221'
 // const baseUrl = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${time}&v=${version}`
-// const queries = {
-//   foods: `${baseUrl}&categoryId=4d4b7105d754a06374d81259`,
+// const shopsQ = {
 //   coffees: `${baseUrl}&categoryId=4bf58dd8d48988d1e0931735`,
 //   bars: `${baseUrl}&categoryId=4d4b7105d754a06376d81259`,
+//   cafes: `${baseUrl}&categoryId=4bf58dd8d48988d16d941735`,
 // }
+// const historicQ = {
+//   spiritual: `${baseUrl}&categoryId=4bf58dd8d48988d131941735`,
+//   arts: `${baseUrl}&categoryId=4d4b7104d754a06370d81259`,
+//   monuments: `${baseUrl}&categoryId=4bf58dd8d48988d12d941735`,
+//   historic: `${baseUrl}&categoryId=4deefb944765f83613cdba6e`,
+// }
+// const foodsQ = { foods: `${baseUrl}&categoryId=4d4b7105d754a06374d81259`, }
+// const outdoorsQ = { outdoors: `${baseUrl}&categoryId=4d4b7105d754a06377d81259`, }
+// const transitQ = { transit: `${baseUrl}&categoryId=4d4b7105d754a06379d81259`, }
+
+// async function getCheckins(query, queryName){
+//   return await fetch(query).then(res => res.json().then(data => ({[queryName] : data.response.venues.items})))
+// }
+
+// const getResponses = async (array, queries) => {
+//   for (const query in queries) {
+//     if (queries.hasOwnProperty(query)) {
+//       const res = await getCheckins(queries[query], query)
+//       array.push(...res[query])
+//     }
+//   }
+// };
+// const shops = []
+// const histMons = []
+// const foods = []
+// const transits = []
+// const outdoors = []
+
+// getResponses(shops, shopsQ)
+// // getResponses(histMons, historicQ)
+// // getResponses(foods, foodsQ)
+// // getResponses(transits, transitQ)
+// // getResponses(outdoors, outdoorsQ)
+
+// const shopsM = shops.map((shop) => {
+//   return shop.venue.name
+// })
+// console.log(shops)
+
+// async function getCheckins2(query){
+//   return await fetch(query).then(res => res.json().then(data => (data.response.venues.items)))
+// }
+
+// const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06374d81259&v=20221221`
+// const foods2 = await getCheckins2(foodQuery)
+// const foods2m = foods2.map((food) => {
+//   return food.venue
+// })
+//console.log(foods2)
 
 const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06374d81259&v=20221221`
 const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d1e0931735&v=20221221`
@@ -37,6 +82,9 @@ const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oa
 const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4deefb944765f83613cdba6e&v=20221221`
 const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06379d81259&v=20221221`
 
+async function getCheckins(query) {
+  return await fetch(query).then(res => res.json()).then((data) => data.response.venues.items)
+}
 const outdoors = await getCheckins(outdoorQuery)
 const arts = await getCheckins(artQuery)
 const foods = await getCheckins(foodQuery)
@@ -52,6 +100,7 @@ const shops = coffeeshops.concat(cafes, nightlifes)
 const histMons = historics.concat(monuments, spirituals, arts)
 
 let foodsG = foods.map((food) => {
+  
   return (
     {
       type: 'Feature', 
