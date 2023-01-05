@@ -6,7 +6,6 @@ export interface Props {
   article: any
 }
 const { article } = Astro.props
-const fImg = getSanityImageUrl(article.featuredImage).url()
 ---
 <article class="featured-item">
   <figure>
