@@ -10,6 +10,9 @@ export default function GalleryBlock({ value }) {
 
   const cols = (value.columns != null) ? value.columns : 3
 
+  const gClass = (value.gClass !== undefined) ? value.gClass : ''
+  const cssParams = value.cssParams
+
   const slides = value.images.map((img) => ({
     src: getSanityImageUrl(img).auto('format').quality(100).url(),
     title: img.caption,
@@ -22,7 +25,8 @@ export default function GalleryBlock({ value }) {
 
   return (
     <>
-    <div className={`blocks-gallery-grid columns-${cols}`}>
+    {cssParams !== undefined && <style>{`${cssParams}`}</style>}
+    <div className={`blocks-gallery-grid columns-${cols} ${gClass}`}>
       {value.images.map((img, index) => {
         const image = getSanityImageUrl(img).url()
 
