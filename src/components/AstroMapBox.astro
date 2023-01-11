@@ -1,106 +1,43 @@
 ---
+import EleventyFetch from '@11ty/eleventy-fetch'
 
----
-<div class="map-wrapper">
-  <nav id="map-toggles" class="map-toggles"></nav>
-  <div id="map" class="map"></div>
-</div>
-<script>
-import mapboxgl from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
-import {mapButtons} from '../lib/helpers'
-
-const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
 const FS_TOKEN = import.meta.env.PUBLIC_FS_TOKEN
 
-// const time = '1646776800'
-// const version = '20221221'
-// const baseUrl = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${time}&v=${version}`
-// const shopsQ = {
-//   coffees: `${baseUrl}&categoryId=4bf58dd8d48988d1e0931735`,
-//   bars: `${baseUrl}&categoryId=4d4b7105d754a06376d81259`,
-//   cafes: `${baseUrl}&categoryId=4bf58dd8d48988d16d941735`,
-// }
-// const historicQ = {
-//   spiritual: `${baseUrl}&categoryId=4bf58dd8d48988d131941735`,
-//   arts: `${baseUrl}&categoryId=4d4b7104d754a06370d81259`,
-//   monuments: `${baseUrl}&categoryId=4bf58dd8d48988d12d941735`,
-//   historic: `${baseUrl}&categoryId=4deefb944765f83613cdba6e`,
-// }
-// const foodsQ = { foods: `${baseUrl}&categoryId=4d4b7105d754a06374d81259`, }
-// const outdoorsQ = { outdoors: `${baseUrl}&categoryId=4d4b7105d754a06377d81259`, }
-// const transitQ = { transit: `${baseUrl}&categoryId=4d4b7105d754a06379d81259`, }
+const before = '1672524000'
+const after = '1646776800'
+const version = '20221221'
+const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06374d81259&&v=${version}`
+const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d1e0931735&v=${version}`
+const cafeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d16d941735&v=${version}`
+const nightlifeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06376d81259&v=${version}`
+const outdoorQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06377d81259&v=${version}`
+const artQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7104d754a06370d81259&v=${version}`
+const spiritualQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d131941735&v=${version}`
+const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d12d941735&v=${version}`
+const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4deefb944765f83613cdba6e&v=${version}`
+const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06379d81259&v=${version}`
 
-// async function getCheckins(query, queryName){
-//   return await fetch(query).then(res => res.json().then(data => ({[queryName] : data.response.venues.items})))
-// }
-
-// const getResponses = async (array, queries) => {
-//   for (const query in queries) {
-//     if (queries.hasOwnProperty(query)) {
-//       const res = await getCheckins(queries[query], query)
-//       array.push(...res[query])
-//     }
-//   }
-// };
-// const shops = []
-// const histMons = []
-// const foods = []
-// const transits = []
-// const outdoors = []
-
-// getResponses(shops, shopsQ)
-// // getResponses(histMons, historicQ)
-// // getResponses(foods, foodsQ)
-// // getResponses(transits, transitQ)
-// // getResponses(outdoors, outdoorsQ)
-
-// const shopsM = shops.map((shop) => {
-//   return shop.venue.name
-// })
-// console.log(shops)
-
-// async function getCheckins2(query){
-//   return await fetch(query).then(res => res.json().then(data => (data.response.venues.items)))
-// }
-
-// const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06374d81259&v=20221221`
-// const foods2 = await getCheckins2(foodQuery)
-// const foods2m = foods2.map((food) => {
-//   return food.venue
-// })
-//console.log(foods2)
-
-const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06374d81259&v=20221221`
-const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d1e0931735&v=20221221`
-const cafeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d16d941735&v=20221221`
-const nightlifeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06376d81259&v=20221221`
-const outdoorQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06377d81259&v=20221221`
-const artQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7104d754a06370d81259&v=20221221`
-const spiritualQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d131941735&v=20221221`
-const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4bf58dd8d48988d12d941735&v=20221221`
-const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4deefb944765f83613cdba6e&v=20221221`
-const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=1646776800&categoryId=4d4b7105d754a06379d81259&v=20221221`
-
-async function getCheckins(query) {
-  return await fetch(query).then(res => res.json()).then((data) => data.response.venues.items)
+async function getCheckinsCache(query) {
+  return EleventyFetch(query, {
+    duration: '1d',
+    type: 'json',
+  })
 }
-const outdoors = await getCheckins(outdoorQuery)
-const arts = await getCheckins(artQuery)
-const foods = await getCheckins(foodQuery)
-const nightlifes = await getCheckins(nightlifeQuery)
-const coffeeshops = await getCheckins(coffeeshopsQuery)
-const cafes = await getCheckins(cafeQuery)
-const monuments = await getCheckins(monumentsQuery)
-const historics = await getCheckins(historicQuery)
-const spirituals = await getCheckins(spiritualQuery)
-const transits = await getCheckins(transitQuery)
+const foods = await getCheckinsCache(foodQuery).then(data => data.response.venues.items)
+const outdoors = await getCheckinsCache(outdoorQuery).then(data => data.response.venues.items)
+const arts = await getCheckinsCache(artQuery).then(data => data.response.venues.items)
+const nightlifes = await getCheckinsCache(nightlifeQuery).then(data => data.response.venues.items)
+const coffeeshops = await getCheckinsCache(coffeeshopsQuery).then(data => data.response.venues.items)
+const cafes = await getCheckinsCache(cafeQuery).then(data => data.response.venues.items)
+const monuments = await getCheckinsCache(monumentsQuery).then(data => data.response.venues.items)
+const historics = await getCheckinsCache(historicQuery).then(data => data.response.venues.items)
+const spirituals = await getCheckinsCache(spiritualQuery).then(data => data.response.venues.items)
+const transits = await getCheckinsCache(transitQuery).then(data => data.response.venues.items)
 
 const shops = coffeeshops.concat(cafes, nightlifes)
 const histMons = historics.concat(monuments, spirituals, arts)
 
-let foodsG = foods.map((food) => {
-  
+let foodsG = foods.map((food) => { 
   return (
     {
       type: 'Feature', 
@@ -115,10 +52,10 @@ let foodsG = foods.map((food) => {
   )
 })
 
-const foodsGeoJSON = {
+const foodsGeoJSON = JSON.stringify({
   type: 'FeatureCollection',
   features: foodsG
-}
+})
 
 let shopsG = shops.map((shop) => {
   return (
@@ -135,10 +72,10 @@ let shopsG = shops.map((shop) => {
   )
 })
 
-const shopsGeoJSON = {
+const shopsGeoJSON = JSON.stringify({
   type: 'FeatureCollection',
   features: shopsG
-}
+})
 
 let outdoorsG = outdoors.map((pp) => {
   return (
@@ -155,10 +92,10 @@ let outdoorsG = outdoors.map((pp) => {
   )
 })
 
-const outdoorsGeoJSON = {
+const outdoorsGeoJSON = JSON.stringify({
   type: 'FeatureCollection',
   features: outdoorsG
-}
+})
 
 let histMonG = histMons.map((histMon) => {
   return (
@@ -175,10 +112,10 @@ let histMonG = histMons.map((histMon) => {
   )
 })
 
-const histMonGeoJSON = {
+const histMonGeoJSON = JSON.stringify({
   type: 'FeatureCollection',
   features: histMonG
-}
+})
 
 let transitG = transits.map((transit) => {
   return (
@@ -195,13 +132,46 @@ let transitG = transits.map((transit) => {
   )
 })
 
-const transitGeoJSON = {
+const transitGeoJSON = JSON.stringify({
   type: 'FeatureCollection',
   features: transitG
-}
+})
+---
+<div class="map-wrapper">
+  <nav id="map-toggles" class="map-toggles"></nav>
+  <div id="map" class="map" data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
+  <!-- <astro-maps data-maps={foods} -->
+</div>
+<script>
+// class AstroMaps extends HTMLElement {
+//   constructor() {
+//     super();
+
+//     // Read the message from the data attribute.
+//     const foods = this.dataset.foods;
+//     const button = this.querySelector('button');
+//     button.addEventListener('click', () => {
+//       alert(message);
+//     });
+//   }
+// }
+
+// customElements.define('astro-greet', AstroGreet);
+import mapboxgl from 'mapbox-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
+import {mapButtons} from '../lib/helpers'
+
+const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
+const element = document.getElementById('map')
+const newShops = JSON.parse(element.dataset.shops)
+const newTransit = JSON.parse(element.dataset.transit)
+const newOutdoors = JSON.parse(element.dataset.outdoors)
+const newFoods = JSON.parse(element.dataset.foods)
+const newHist = JSON.parse(element.dataset.hist)
+//console.log(newShops)
 
 mapboxgl.accessToken = MB_TOKEN
-
+  
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/light-v10',
@@ -216,7 +186,7 @@ map.on('load', () => {
 
   map.addSource('transit', {
     type: 'geojson',
-    data: transitGeoJSON
+    data: newTransit
   })
   map.addLayer({
     id: 'transit',
@@ -232,7 +202,7 @@ map.on('load', () => {
 
   map.addSource('food', {
     type: 'geojson',
-    data: foodsGeoJSON
+    data: newFoods
   })
   map.addLayer({
     id: 'food',
@@ -248,7 +218,7 @@ map.on('load', () => {
 
   map.addSource('cafes-bars', {
     type: 'geojson',
-    data: shopsGeoJSON
+    data: newShops
   })
   map.addLayer({
     id: 'cafes-bars',
@@ -264,7 +234,7 @@ map.on('load', () => {
 
   map.addSource('pp', {
     type: 'geojson',
-    data: outdoorsGeoJSON
+    data: newOutdoors
   })
   map.addLayer({
     id: 'parks-plazas',
@@ -280,7 +250,7 @@ map.on('load', () => {
 
   map.addSource('historic-monuments', {
     type: 'geojson',
-    data: histMonGeoJSON
+    data: newHist
   })
   map.addLayer({
     id: 'historic-monuments',
