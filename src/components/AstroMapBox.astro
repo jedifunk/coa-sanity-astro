@@ -140,23 +140,8 @@ const transitGeoJSON = JSON.stringify({
 <div class="map-wrapper">
   <nav id="map-toggles" class="map-toggles"></nav>
   <div id="map" class="map" data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
-  <!-- <astro-maps data-maps={foods} -->
 </div>
 <script>
-// class AstroMaps extends HTMLElement {
-//   constructor() {
-//     super();
-
-//     // Read the message from the data attribute.
-//     const foods = this.dataset.foods;
-//     const button = this.querySelector('button');
-//     button.addEventListener('click', () => {
-//       alert(message);
-//     });
-//   }
-// }
-
-// customElements.define('astro-greet', AstroGreet);
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import {mapButtons} from '../lib/helpers'
@@ -168,7 +153,6 @@ const newTransit = JSON.parse(element.dataset.transit)
 const newOutdoors = JSON.parse(element.dataset.outdoors)
 const newFoods = JSON.parse(element.dataset.foods)
 const newHist = JSON.parse(element.dataset.hist)
-//console.log(newShops)
 
 mapboxgl.accessToken = MB_TOKEN
   
