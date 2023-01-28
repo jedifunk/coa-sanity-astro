@@ -1,8 +1,18 @@
 ---
+import EleventyFetch from '@11ty/eleventy-fetch'
 import { Image } from "@astrojs/image/components"
 
-const igImgs = await fetch(`https://graph.instagram.com/me/media?fields=caption,media_url,permalink&access_token=${import.meta.env.PUBLIC_IG_TOKEN}`)
-const { data } = await igImgs.json()
+const IG_TOKEN = import.meta.env.PUBLIC_IG_TOKEN
+
+async function getIgPosts() {
+  const igImgs = `https://graph.instagram.com/me/media?fields=caption,media_url,permalink&access_token=${IG_TOKEN}`
+  return EleventyFetch(igImgs, {
+    duration: '1d',
+    type: 'json',
+  })
+}
+
+const { data } = await getIgPosts()
 const d = data.slice(0,9)
 ---
 <section class="widget widget-ig">
