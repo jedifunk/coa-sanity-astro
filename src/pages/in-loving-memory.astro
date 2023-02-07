@@ -1,8 +1,74 @@
 ---
-import Layout from '../layouts/Layout.astro'
+//import Layout from '../layouts/Layout.astro'
 //import Sidebar from '../components/Sidebar.astro'
+const jfImg = '/IMG_7539.jpg'
+// import jfImg from './public/IMG_7539.jpg'
+// console.log(jfImg)
+import { client } from '../lib/sanityClient.js'
+import { siteSettings } from '../lib/queries.js'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+//import Seo from '../components/Seo.astro'
+import '@fontsource/merriweather/300.css'
+import '@fontsource/merriweather/400.css'
+import '@fontsource/merriweather/400-italic.css'
+import '@fontsource/merriweather/700.css'
+import '@fontsource/merriweather/700-italic.css'
+import '@fontsource/fira-sans/300.css'
+import '@fontsource/fira-sans/400.css'
+import '@fontsource/fira-sans/500.css'
+import '@fontsource/fira-sans/700.css'
+import '@fontsource/fira-sans/900.css'
+import '../styles/main.css'
+
+export interface Props {
+	title: string;
+}
+const settings = await client.fetch(siteSettings)
+const canonicalUrl = new URL(Astro.url.pathname, settings[0].siteUrl)
 ---
-<Layout>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="canonical" href={canonicalUrl} />
+<title>{`In loving Memory`}</title>
+<meta name="title" content={`In loving Memory`} />
+<meta name="description" content={`Words of love for James Bryce Flory, 1948-2023`} />
+
+<meta property='og:type' content='website' />
+<meta name='apple-mobile-web-app-title' content={`In loving Memory`} />
+
+<meta property='og:site_name' content={`Choosing Our Adventure`} />
+<meta property='og:url' content={canonicalUrl} />
+<meta property='og:title' content={`In loving Memory`} />
+<meta property='og:image' content={jfImg} />
+<meta property='og:description' name='description' content={`Words of love for James Bryce Flory, 1948-2023`} />
+
+<meta name='twitter:title' content={`In loving Memory`} />
+<meta name='twitter:image:src' content={jfImg} />
+<meta name='twitter:card' content={'summary_large_image'} />
+<meta name='twitter:description' content={`Words of love for James Bryce Flory, 1948-2023`} />
+<meta property="twitter:url" content={canonicalUrl} />
+  <!-- Google Tag Manager -->
+  <script>
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TC542ZZ');
+  </script>
+  <!-- End Google Tag Manager -->
+</head>
+<body class="page">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TC542ZZ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <Header />
+  
   <div class="content-area wrapper grid-wrapper" style="max-width:700px;">
     <main id="main" class="site-main" role="main" style="">
       <article>
@@ -45,6 +111,10 @@ import Layout from '../layouts/Layout.astro'
 
       </article>
     </main>
-    <!-- <Sidebar /> -->
+
   </div>
-</Layout>
+
+  <Footer />
+
+</body>
+</html>
