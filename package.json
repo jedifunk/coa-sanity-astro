@@ -33,6 +33,6 @@
     "get-video-id": "^3.6.5",
     "mapbox-gl": "^2.14.1",
     "sharp": "^0.32.0",
-    "yet-another-react-lightbox": "^2.2.7"
+    "yet-another-react-lightbox": "^3.5.0"
   }
 }
