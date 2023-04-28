@@ -24,6 +24,7 @@
     "@astrojs/partytown": "^1.0.3",
     "@fontsource/fira-sans": "^4.5.10",
     "@fontsource/merriweather": "^4.5.14",
+    "@glidejs/glide": "^3.6.0",
     "@portabletext/react": "^2.0.3",
     "@sanity/client": "^5.4.2",
     "astro-icon": "^0.8.0",
