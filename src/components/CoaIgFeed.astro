@@ -1,12 +1,18 @@
 ---
 import EleventyFetch from '@11ty/eleventy-fetch'
+import { getUnixTime } from 'date-fns'
+import { formatBlogPostDate } from '../lib/helpers'
 import { Image } from "@astrojs/image/components"
 import { Icon } from "astro-icon"
 
 const IG_TOKEN = import.meta.env.COA_IG_TOKEN
 
+const currentDate = new Date()
+var priorDate = new Date(new Date().setDate(currentDate.getDate() - 7))
+const priorDateUnix = getUnixTime(priorDate)
+
 async function getIgPosts() {
-  const igImgs = `https://graph.instagram.com/me/media?fields=caption,media_url,permalink&access_token=${IG_TOKEN}`
+  const igImgs = `https://graph.instagram.com/me/media?fields=caption,media_url,permalink,timestamp&since=${priorDateUnix}&access_token=${IG_TOKEN}`
   return EleventyFetch(igImgs, {
     duration: '1d',
     type: 'json',
@@ -14,20 +20,21 @@ async function getIgPosts() {
 }
 
 const { data } = await getIgPosts()
-const d = data.slice(0,3)
-
 ---
 <section class="widget coa-ig-widget">
   <h3 class="widget-title">Daily Camino</h3>
   <div class="grid-wrapper glide">
     <div class="glide__track" data-glide-el="track">
       <ul class="glide__slides">
-        {d.map(item =>
+        {data.map(item =>
           item.media_url && (
             <li class='glide__slide'>
-              <a href={item.permalink} target="_blank" rel="noopener noreferrer">
-                <Image src={item.media_url} width={375} height={375} alt={item.caption} />
-              </a>
+              <figure class="slide-wrapper">
+                <a href={item.permalink} target="_blank" rel="noopener noreferrer">
+                  <Image src={item.media_url} width={375} height={375} alt={item.caption} />
+                </a>
+                <figcaption><strong>{formatBlogPostDate(item.timestamp)}</strong> | {item.caption}</figcaption>
+              </figure>
             </li>
           )
         )}
@@ -140,4 +147,7 @@ new Glide('.glide').mount({Controls, Swipe})
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
 }
+/* .slide-wrapper > figcaption {
+  text-align: center;
+} */
 </style>
