@@ -15,3 +15,12 @@
   background-color: lightgray;
   color: var(--off-black);
 }
+.map-popup {
+  font-family: var(--body-font);
+}
+.map-popup b {
+  font-family: var(--headline-font);
+}
+.map-popup p {
+  margin: 0;
+}

@@ -1,6 +1,7 @@
 import { parseISO, format, fromUnixTime } from 'date-fns'
 import { client } from '../lib/sanityClient.js'
 import imageUrlBuilder from '@sanity/image-url'
+import EleventyFetch from '@11ty/eleventy-fetch'
 
 const builder = imageUrlBuilder(client)
 
@@ -77,4 +78,12 @@ export function mapButtons(text) {
   var final = words.join(" ");
 
   return final
+}
+
+// use EleventyFetch to cache query results
+export async function cacheFetch(query) {
+  return EleventyFetch(query, {
+    duration: '1d',
+    type: 'json',
+  })
 }

@@ -273,6 +273,7 @@ map.on('load', () => {
   });
 
   map.on('mouseenter', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], (e) => {
+    console.log(e)
     let currentZoom = map.getZoom()
     if (currentZoom >= 13) {
       // Copy coordinates array.

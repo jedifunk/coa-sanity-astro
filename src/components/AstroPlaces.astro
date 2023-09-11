@@ -1,0 +1,36 @@
+---
+import { client } from '../lib/sanityClient.js'
+import { citiesQuery, placesQuery, countryList } from '../lib/queries'
+
+const citiesVisited = await client.fetch(citiesQuery)
+const placesVisited = await client.fetch(placesQuery)
+const countriesVisited = await client.fetch(countryList)
+
+const countries = JSON.stringify(countriesVisited)
+const locations = JSON.stringify(citiesVisited)
+const places = JSON.stringify(placesVisited)
+---
+<div class="map-wrapper">
+  <nav id="map-toggles" class="map-toggles"></nav>
+  <div class="map" id="map" data-locations={locations} data-places={places} data-countries={countries}></div>
+</div>
+<script>
+import * as maps from '../lib/maps'
+
+// grab data passed from Astro frontmatter via data attributes
+const element = document.getElementById('map')
+const countries = JSON.parse(element.dataset.countries)
+const locations = JSON.parse(element.dataset.locations)
+const places = JSON.parse(element.dataset.places)
+
+// run all functions for map
+async function orchestrate() {
+  const map = await maps.initializeMap()
+  await maps.mapInteractivity(map)
+  await maps.addMapboxCountries(countries, map)
+  await maps.convertCities(locations, map)
+  await maps.convertPlaces(places, map)
+}
+
+orchestrate()
+</script>
