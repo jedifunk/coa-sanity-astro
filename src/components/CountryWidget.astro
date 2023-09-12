@@ -1,8 +1,8 @@
 ---
-import { client } from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import { countryList } from '../lib/queries.js'
 
-const data = await client.fetch(countryList)
+const data = await useSanityClient().fetch(countryList)
 const countries = data.filter(x => x.menu)
 ---
 

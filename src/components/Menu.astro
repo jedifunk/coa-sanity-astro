@@ -1,8 +1,8 @@
 ---
-import {client} from '../lib/sanityClient'
+import { useSanityClient } from '@sanity/astro'
 import {siteNav} from '../lib/queries'
 
-const nav = await client.fetch(siteNav)
+const nav = await useSanityClient().fetch(siteNav)
 ---
 <nav class="main-navigation" role="navigation" aria-label="Primary Menu">
   <ul class="menu">

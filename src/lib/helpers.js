@@ -1,26 +1,40 @@
 import { parseISO, format, fromUnixTime } from 'date-fns'
-import { client } from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import imageUrlBuilder from '@sanity/image-url'
-import EleventyFetch from '@11ty/eleventy-fetch'
 
-const builder = imageUrlBuilder(client)
+const builder = imageUrlBuilder(useSanityClient())
 
-export async function getSanityContent({ query, variables = {} }) {
-  const { data } = await fetch(
-    `${import.meta.env.PUBLIC_SANITY_URL}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query,
-        variables,
-      }),
-    },
-  ).then((response) => response.json());
-  return data;
+// Included to get galleries to work until new @sanity/astro fix for images is out
+import {createClient} from '@sanity/client'
+const config = {
+  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
+  dataset: import.meta.env.PUBLIC_SANITY_DATASET,
+  token: import.meta.env.PUBLIC_SANITY_READ_TOKEN,
+  apiVersion: import.meta.env.PUBLIC_SANITY_API_VERSION,
+  useCdn: false,
 }
+const oldClient = createClient(config)
+const oldBuilder = imageUrlBuilder(oldClient)
+export function getSanityImageUrlOldBuilder(source) {
+  return oldBuilder.image(source)
+}
+
+// export async function getSanityContent({ query, variables = {} }) {
+//   const { data } = await fetch(
+//     `${import.meta.env.PUBLIC_SANITY_URL}`,
+//     {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         query,
+//         variables,
+//       }),
+//     },
+//   ).then((response) => response.json());
+//   return data;
+// }
 
 export function formatBlogPostDate(date) {
   const dateString = parseISO(date, 'YYYY/MM/Do')
@@ -63,27 +77,4 @@ export function sSpeed(d) {
     return "1s"
   }
   return top + "/" + bot + "s"
-}
-
-export function mapButtons(text) {
-  var output = text
-    .replace(/-/g, ' / ')
-  
-    const words = output.split(" ");
-
-    for (let i = 0; i < words.length; i++) {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
-    }
-
-  var final = words.join(" ");
-
-  return final
-}
-
-// use EleventyFetch to cache query results
-export async function cacheFetch(query) {
-  return EleventyFetch(query, {
-    duration: '1d',
-    type: 'json',
-  })
 }

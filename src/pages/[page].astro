@@ -5,11 +5,11 @@ import Sidebar from '../components/Sidebar.astro'
 import { Pagination } from '@astro-bryceguy/pagination'
 import { Icon } from 'astro-icon'
 
-import { client } from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import { allPosts } from '../lib/queries.js'
 
 export async function getStaticPaths({ paginate }) {
-  const allPostData = await client.fetch(allPosts)
+  const allPostData = await useSanityClient().fetch(allPosts)
 
   return paginate(allPostData, {pageSize: 10 })
 }

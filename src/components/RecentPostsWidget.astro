@@ -1,8 +1,8 @@
 ---
-import { client } from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import { recentPosts } from '../lib/queries.js'
 
-const posts = await client.fetch(recentPosts)
+const posts = await useSanityClient().fetch(recentPosts)
 ---
 
 <section class="widget recent-articles">

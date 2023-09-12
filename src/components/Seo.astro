@@ -1,9 +1,9 @@
 ---
-import { client } from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import { siteSettings } from '../lib/queries.js'
 import { getSanityImageUrl } from '../lib/helpers.js'
 
-const settings = await client.fetch(siteSettings)
+const settings = await useSanityClient().fetch(siteSettings)
 
 export interface Props {
   title: string

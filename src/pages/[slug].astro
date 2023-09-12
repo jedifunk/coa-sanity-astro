@@ -3,16 +3,15 @@ import Layout from '../layouts/Layout.astro'
 import Sidebar from '../components/Sidebar.astro'
 import PostMeta from '../components/PostMeta.astro'
 import PostPagination from '../components/PostPagination.astro'
-import {client} from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import { getSanityImageUrl } from '../lib/helpers.js'
-import { Picture } from '@astrojs/image/components'
 
 import Handler from '../components/Handler.astro'
 
 import { allPosts } from '../lib/queries.js'
 
 export async function getStaticPaths() {
-  const allBlogPosts = await client.fetch(allPosts)
+  const allBlogPosts = await useSanityClient().fetch(allPosts)
 
   return allBlogPosts.map(post => ({params: { slug: post.slug.current }, props: {post}}))
 }
@@ -20,8 +19,8 @@ export async function getStaticPaths() {
 const { post } = Astro.props
 
 const thisDate = post.publishDate
-const nextPage = await client.fetch(`*[_type == "article" && publishDate > "${thisDate}"] | order(publishDate) [0] {title, publishDate, slug}`)
-const prevPage = await client.fetch(`*[_type == 'article' && publishDate < "${thisDate}"] | order(publishDate desc) [0] {title, publishDate, slug}`)
+const nextPage = await useSanityClient().fetch(`*[_type == "article" && publishDate > "${thisDate}"] | order(publishDate) [0] {title, publishDate, slug}`)
+const prevPage = await useSanityClient().fetch(`*[_type == 'article' && publishDate < "${thisDate}"] | order(publishDate desc) [0] {title, publishDate, slug}`)
 ---
 <Layout title={post.title} type={post._type} description={post.excerpt} image={post.featuredImage} pathname={post.slug.current}>
   <div class="content-area wrapper grid-wrapper grid-main">
@@ -33,7 +32,8 @@ const prevPage = await client.fetch(`*[_type == 'article' && publishDate < "${th
           
           <PostMeta article={post} />
           <h2 class="entry-title">{post.title}</h2>
-          {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).url()} widths={[400, 800]} sizes='(min-width: 400px) 726px, 347px' aspectRatio='16:9' alt={post.featuredImage.alt} loading="eager" />}
+          <!-- {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).url()} widths={[400, 800]} sizes='(min-width: 400px) 726px, 347px' aspectRatio='16:9' alt={post.featuredImage.alt} loading="eager" />} -->
+          {post.featuredImage && <img src={getSanityImageUrl(post.featuredImage).url()} sizes='(min-width: 400px) 726px, 347px' alt={post.featuredImage.alt} loading="eager" />}
         </header>
 
         <Handler value={post.content} />

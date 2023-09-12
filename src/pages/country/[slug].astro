@@ -2,12 +2,12 @@
 import Layout from '../../layouts/Layout.astro'
 import Sidebar from '../../components/Sidebar.astro'
 import PostEntry from '../../components/PostEntry.astro'
-import {client} from '../../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 
 import { allCountryPostsQuery } from '../../lib/queries.js'
 
 export async function getStaticPaths() {
-  const allCountries = await client.fetch(allCountryPostsQuery)
+  const allCountries = await useSanityClient().fetch(allCountryPostsQuery)
 
   return allCountries.map((post) => {
     return {

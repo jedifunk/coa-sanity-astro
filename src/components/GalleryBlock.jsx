@@ -1,12 +1,12 @@
 import { useState } from "react"
 import Lightbox from "yet-another-react-lightbox"
-import { sSpeed, getSanityImageUrl } from "../lib/helpers"
+import { sSpeed, getSanityImageUrlOldBuilder } from "../lib/helpers"
 // import {BiExpandAlt} from 'react-icons/bi'
 import 'yet-another-react-lightbox/styles.css'
 import Captions from "yet-another-react-lightbox/plugins/captions"
 import "yet-another-react-lightbox/plugins/captions.css"
 
-export default function GalleryBlock({ value }) {
+export function GalleryBlock({ value }) {
 
   const cols = (value.columns != null) ? value.columns : 3
 
@@ -14,7 +14,7 @@ export default function GalleryBlock({ value }) {
   const cssParams = value.cssParams
 
   const slides = value.images.map((img) => ({
-    src: getSanityImageUrl(img).auto('format').quality(100).url(),
+    src: getSanityImageUrlOldBuilder(img).auto('format').quality(100).url(),
     title: img.caption,
     description: `${img?.asset?.metadata?.exif ? `Camera: ${img?.asset?.metadata?.exif?.LensModel}, ISO: ${img?.asset?.metadata?.exif?.ISO}, Shutter Speed: ${sSpeed(img?.asset?.metadata?.exif?.ExposureTime)}` : ``}`
   }))
@@ -22,13 +22,12 @@ export default function GalleryBlock({ value }) {
   // Set State for Lightbox
   const [photoIndex, setPhotoIndex] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
-
   return (
     <>
     {cssParams !== undefined && <style>{`${cssParams}`}</style>}
     <div className={`blocks-gallery-grid columns-${cols} ${gClass}`}>
       {value.images.map((img, index) => {
-        const image = getSanityImageUrl(img).url()
+        //const image = getSanityImageUrl(img).url()
 
         // setup onclick function to handle state change
         function updateOnClick() {
@@ -38,9 +37,9 @@ export default function GalleryBlock({ value }) {
         
         return (
           <figure key={index} className="blocks-gallery-item">
-            <button onClick={updateOnClick}>
+            <button onClick={updateOnClick} className="gal-btn">
               {/* <BiExpandAlt className='enlarge'/> */}
-              <img src={getSanityImageUrl(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
+              <img src={getSanityImageUrlOldBuilder(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
               {img.caption && <figcaption>{img.caption}</figcaption>}
             </button>
           </figure>
