@@ -5,7 +5,7 @@ import PostMeta from '../components/PostMeta.astro'
 import PostPagination from '../components/PostPagination.astro'
 import { useSanityClient } from '@sanity/astro'
 import { getSanityImageUrl } from '../lib/helpers.js'
-
+import Picture from 'astro-sanity-picture'
 import Handler from '../components/Handler.astro'
 
 import { allPosts } from '../lib/queries.js'
@@ -32,8 +32,7 @@ const prevPage = await useSanityClient().fetch(`*[_type == 'article' && publishD
           
           <PostMeta article={post} />
           <h2 class="entry-title">{post.title}</h2>
-          <!-- {post.featuredImage && <Picture src={getSanityImageUrl(post.featuredImage).url()} widths={[400, 800]} sizes='(min-width: 400px) 726px, 347px' aspectRatio='16:9' alt={post.featuredImage.alt} loading="eager" />} -->
-          {post.featuredImage && <img src={getSanityImageUrl(post.featuredImage).url()} sizes='(min-width: 400px) 726px, 347px' alt={post.featuredImage.alt} loading="eager" />}
+          {post.featuredImage && <Picture src={post.featuredImage} imageUrlBuilder={getSanityImageUrl()} widths={[400, 800]} sizes='(min-width: 400px) 726px, 347px' alt={post.featuredImage.alt} loading="eager" />}
         </header>
 
         <Handler value={post.content} />

@@ -1,5 +1,6 @@
 ---
 import { getSanityImageUrl } from '../lib/helpers.js'
+import Picture from 'astro-sanity-picture'
 import PostMeta from './PostMeta.astro'
 export interface Props {
   article: any
@@ -10,11 +11,8 @@ const { article } = Astro.props
 <article class="post-entry" >
   <figure>
     <a href={`/${article.slug.current}`}>
-      <!-- {article.featuredImage && 
-        <Picture src={getSanityImageUrl(article.featuredImage).url()} widths={[400, 1000]} formats={['avif', 'webp']} aspectRatio='16:9' alt={article.featuredImage.alt}/>
-      } -->
       {article.featuredImage && 
-        <img src={getSanityImageUrl(article.featuredImage).url()} alt={article.featuredImage.alt}/>
+        <Picture src={article.featuredImage} widths={[400, 1000]} imageUrlBuilder={getSanityImageUrl()} alt={article.featuredImage.alt}/>
       }
     </a>
     <figcaption>

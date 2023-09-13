@@ -1,5 +1,6 @@
 ---
 import { useSanityClient } from '@sanity/astro'
+import Picture from 'astro-sanity-picture'
 import { siteSettings } from '../lib/queries.js'
 import { getSanityImageUrl } from '../lib/helpers.js'
 
@@ -8,5 +9,5 @@ const allSiteSettings = await useSanityClient().fetch(siteSettings)
 ---
 
 <div class="hero">
-  {allSiteSettings[0].hpHero && <img loading="eager" src={getSanityImageUrl(allSiteSettings[0].hpHero).url()} sizes='(min-width: 400px) 726px, 347px' alt={allSiteSettings[0].hpHero.alt}/>}
+  {allSiteSettings[0].hpHero && <Picture loading="eager" src={allSiteSettings[0].hpHero} imageUrlBuilder={getSanityImageUrl()} widths={[400, 769, 1200]} sizes='(min-width: 400px) 726px, 347px' alt={allSiteSettings[0].hpHero.alt}/>}
 </div>

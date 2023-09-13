@@ -30,6 +30,7 @@
     "astro-icon": "^0.8.1",
     "astro-json-element": "^1.1.4",
     "astro-portabletext": "^0.9.4",
+    "astro-sanity-picture": "^0.2.0",
     "chart.js": "^4.4.0",
     "get-video-id": "^3.6.5",
     "mapbox-gl": "^2.15.0",

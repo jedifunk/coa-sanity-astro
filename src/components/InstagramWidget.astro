@@ -1,5 +1,6 @@
 ---
 import EleventyFetch from '@11ty/eleventy-fetch'
+import { Image } from 'astro:assets'
 
 const IG_TOKEN = import.meta.env.PUBLIC_IG_TOKEN
 
@@ -21,7 +22,7 @@ const d = data.slice(0,9)
       item.media_url && (
         <div class='grid-item'>
           <a href={item.permalink} target="_blank" rel="noopener noreferrer">
-            <img src={item.media_url} width={200} height={200} alt={item.caption} />
+            <Image src={item.media_url} width="200" height="200" alt={item.caption} />
           </a>
         </div>
       )

@@ -23,15 +23,7 @@
 .recent-articles a {
   font-size: .97rem;
 }
-/* .widget_categories ul,
-.widget_cloud ul {
-	display: flex;
-	flex-wrap: wrap;
+.widget-ig img {
+	aspect-ratio: 1/1;
+	object-fit: cover;
 }
-.widget_categories ul li,
-.widget_cloud ul li {
-	margin: 2px;
-}
-.widget_instagram .grid-thirds {
-	grid-template-columns: repeat(3, 1fr);
-} */
