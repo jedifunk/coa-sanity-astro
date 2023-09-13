@@ -1,0 +1,164 @@
+---
+import EleventyFetch from '@11ty/eleventy-fetch'
+
+const FS_TOKEN = import.meta.env.PUBLIC_FS_TOKEN
+
+const before = '1672524000'
+const after = '1646776800'
+const version = '20221221'
+const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06374d81259&&v=${version}`
+const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d1e0931735&v=${version}`
+const cafeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d16d941735&v=${version}`
+const nightlifeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06376d81259&v=${version}`
+const outdoorQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06377d81259&v=${version}`
+const artQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7104d754a06370d81259&v=${version}`
+const spiritualQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d131941735&v=${version}`
+const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d12d941735&v=${version}`
+const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4deefb944765f83613cdba6e&v=${version}`
+const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06379d81259&v=${version}`
+
+async function getCheckinsCache(query) {
+  return EleventyFetch(query, {
+    duration: '1d',
+    type: 'json',
+  })
+}
+const foods = await getCheckinsCache(foodQuery).then(data => data.response.venues.items)
+const outdoors = await getCheckinsCache(outdoorQuery).then(data => data.response.venues.items)
+const arts = await getCheckinsCache(artQuery).then(data => data.response.venues.items)
+const nightlifes = await getCheckinsCache(nightlifeQuery).then(data => data.response.venues.items)
+const coffeeshops = await getCheckinsCache(coffeeshopsQuery).then(data => data.response.venues.items)
+const cafes = await getCheckinsCache(cafeQuery).then(data => data.response.venues.items)
+const monuments = await getCheckinsCache(monumentsQuery).then(data => data.response.venues.items)
+const historics = await getCheckinsCache(historicQuery).then(data => data.response.venues.items)
+const spirituals = await getCheckinsCache(spiritualQuery).then(data => data.response.venues.items)
+const transits = await getCheckinsCache(transitQuery).then(data => data.response.venues.items)
+
+const shops = coffeeshops.concat(cafes, nightlifes)
+const histMons = historics.concat(monuments, spirituals, arts)
+
+let foodsG = foods.map((food) => { 
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [food.venue.location.lng, food.venue.location.lat]
+      },
+      properties: {
+        title: food.venue.name
+      }
+    }
+  )
+})
+
+const foodsGeoJSON = JSON.stringify({
+  type: 'FeatureCollection',
+  features: foodsG
+})
+
+let shopsG = shops.map((shop) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [shop.venue.location.lng, shop.venue.location.lat]
+      },
+      properties: {
+        title: shop.venue.name
+      }
+    }
+  )
+})
+
+const shopsGeoJSON = JSON.stringify({
+  type: 'FeatureCollection',
+  features: shopsG
+})
+
+let outdoorsG = outdoors.map((pp) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [pp.venue.location.lng, pp.venue.location.lat]
+      },
+      properties: {
+        title: pp.venue.name
+      }
+    }
+  )
+})
+
+const outdoorsGeoJSON = JSON.stringify({
+  type: 'FeatureCollection',
+  features: outdoorsG
+})
+
+let histMonG = histMons.map((histMon) => {
+  return (
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point', 
+        coordinates: [histMon.venue.location.lng, histMon.venue.location.lat]
+      },
+      properties: {
+        title: histMon.venue.name
+      }
+    }
+  )
+})
+
+const histMonGeoJSON = JSON.stringify({
+  type: 'FeatureCollection',
+  features: histMonG
+})
+
+let transitG = transits.map((transit) => {
+  return (
+    {
+      type: 'Feature', 
+      geometry: {
+        type: 'Point', 
+        coordinates: [transit.venue.location.lng, transit.venue.location.lat]
+      },
+      properties: {
+        title: transit.venue.name
+      }
+    }
+  )
+})
+
+const transitGeoJSON = JSON.stringify({
+  type: 'FeatureCollection',
+  features: transitG
+})
+---
+<div class="map-wrapper">
+  <nav id="map-toggles" class="map-toggles"></nav>
+  <div id="map" class="map" data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
+</div>
+<script>
+import * as maps from '../lib/maps'
+
+const element = document.getElementById('map')
+const newShops = JSON.parse(element.dataset.shops)
+const newTransit = JSON.parse(element.dataset.transit)
+const newOutdoors = JSON.parse(element.dataset.outdoors)
+const newFoods = JSON.parse(element.dataset.foods)
+const newHist = JSON.parse(element.dataset.hist)
+
+async function orchestrate() {
+  const map = await maps.initializeMap()
+  await maps.checkinInteractivity(map)
+  await maps.addShopCheckins2022(newShops, map)
+  await maps.addTransitCheckins2022(newTransit, map)
+  await maps.addOutdoorCheckins2022(newOutdoors, map)
+  await maps.addFoodCheckins2022(newFoods, map)
+  await maps.addHistoricCheckins2022(newHist, map)
+}
+orchestrate()
+</script>

@@ -214,7 +214,28 @@ export async function addPlaces(geojson, map) {
     layout: {
       visibility: 'visible'
     }
+  })  
+}
+
+export async function addPlacesAndZoom(geojson, map) {
+
+  map.addSource('places', {
+    type: 'geojson',
+    data: geojson
   })
+  map.addLayer({
+    id: 'places',
+    type: 'circle',
+    source: 'places',
+    paint: {
+      'circle-color': 'hsla(199, 100%, 20%, 1)',
+    },
+    layout: {
+      visibility: 'visible'
+    }
+  })
+  placesBB(map)
+  
 }
 
 export async function addCities(geojson, map) {
@@ -284,6 +305,20 @@ export function mapButtons(text) {
   return final
 }
 
+function placesBB(map) {
+  map.on('idle', function() {
+    const features = map.queryRenderedFeatures({layers: ['places']})
+
+    if (features.length > 0) {
+      const bounds = features.reduce(function(bounds, feature) {
+        return bounds.extend(feature.geometry.coordinates);
+      }, new mapboxgl.LngLatBounds(features[0].geometry.coordinates, features[0].geometry.coordinates));
+
+      map.fitBounds(bounds, {padding: 20, animate: false});
+    }
+  })
+}
+
 export function addTransitCheckins2022(geojson, map) {
   map.addSource('transit', {
     type: 'geojson',
@@ -301,7 +336,6 @@ export function addTransitCheckins2022(geojson, map) {
     }
   })
 }
-
 export function addFoodCheckins2022(geojson, map) {
   map.addSource('food', {
     type: 'geojson',
@@ -371,7 +405,6 @@ export function addHistoricCheckins2022(geojson, map) {
     }
   })
 }
-
 export function checkinInteractivity(map) {
   const nav = new mapboxgl.NavigationControl({
     showCompass: false,

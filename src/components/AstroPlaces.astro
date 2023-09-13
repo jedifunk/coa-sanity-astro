@@ -1,10 +1,10 @@
 ---
-import { client } from '../lib/sanityClient.js'
+import { useSanityClient } from '@sanity/astro'
 import { citiesQuery, placesQuery, countryList } from '../lib/queries'
 
-const citiesVisited = await client.fetch(citiesQuery)
-const placesVisited = await client.fetch(placesQuery)
-const countriesVisited = await client.fetch(countryList)
+const citiesVisited = await useSanityClient().fetch(citiesQuery)
+const placesVisited = await useSanityClient().fetch(placesQuery)
+const countriesVisited = await useSanityClient().fetch(countryList)
 
 const countries = JSON.stringify(countriesVisited)
 const locations = JSON.stringify(citiesVisited)
