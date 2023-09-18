@@ -18,18 +18,19 @@ const places = JSON.stringify(placesVisited)
 import * as maps from '../lib/maps'
 
 // grab data passed from Astro frontmatter via data attributes
-const element = document.getElementById('map')
-const countries = JSON.parse(element.dataset.countries)
-const locations = JSON.parse(element.dataset.locations)
-const places = JSON.parse(element.dataset.places)
+const el = document.getElementById('map')
+const mapType = el.dataset.type
+const countries = JSON.parse(el.dataset.countries)
+const locations = JSON.parse(el.dataset.locations)
+const places = JSON.parse(el.dataset.places)
 
 // run all functions for map
 async function orchestrate() {
-  const map = await maps.initializeMap()
+  const map = await maps.initializeMap(el)
   await maps.mapInteractivity(map)
   await maps.addMapboxCountries(countries, map)
   await maps.convertCities(locations, map)
-  await maps.convertPlaces(places, map)
+  await maps.convertPlaces(places, map, mapType)
 }
 
 orchestrate()

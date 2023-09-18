@@ -1,27 +1,78 @@
 ---
 import { useSanityClient } from "@sanity/astro"
+import { countryList, citiesQuery, placesQuery } from "../lib/queries"
 const props = Astro.props
 
 // get map ID & query for its details
 const mapID = props.node.map._ref
-const mapQuery = `*[_type == 'map' && _id == '${mapID}']{..., location[]->{name, country->{name}, city->{name}, description, geometry{...}}}`
+const mapQuery = `*[_type == 'map' && _id == '${mapID}']{
+  ...,
+  ...select(
+    customMap == true => {mapAttr},
+    {location[]->{name, country->{name}, city->{...}, description, geometry{...}}}
+  )
+}`
 const map = await useSanityClient().fetch(mapQuery)
-const locations = JSON.stringify(map[0].location)
+
+let countries
+let cities
+let locations
+
+const layers = map[0].layers
+const mapAttr = map[0].mapAttr
+const mapZoom = JSON.stringify(map[0].zoomTo)
+
+if (map[0].queryAll == true) {
+  const countryQuery = await useSanityClient().fetch(countryList)
+  const cityQuery = await useSanityClient().fetch(citiesQuery)
+  const placeQuery = await useSanityClient().fetch(placesQuery)
+
+  countries = JSON.stringify(countryQuery)
+  cities = JSON.stringify(cityQuery)
+  locations = JSON.stringify(placeQuery)
+} else {
+  locations = JSON.stringify(map[0].location)
+}
 ---
 <div class="map-wrapper">
   <nav id="map-toggles" class="map-toggles"></nav>
-  <div id="map" class="map" data-locations={locations}></div>
+  <div id={mapID} class="map" data-use data-zoom={mapZoom} data-locations={locations} data-attr={mapAttr} data-layers={layers} data-countries={countries} data-cities={cities}></div>
   <figcaption>{map[0].name}</figcaption>
 </div>
 <script>
 import * as maps from '../lib/maps'
 
-const element = document.getElementById('map')
-const locations = JSON.parse(element.dataset.locations)
+const el = document.querySelector(`[data-use]`)
+const mapAttr = el.dataset.attr
+const mapLayers = el.dataset.layers.split(',')
+const mapZoom = el.dataset.zoom
+
+let countries
+if (el.dataset.countries) {
+  countries = JSON.parse(el.dataset.countries)
+}
+let cities
+if (el.dataset.cities) {
+  cities = JSON.parse(el.dataset.cities)
+}
+let locations
+if (el.dataset.locations) {
+  locations = JSON.parse(el.dataset.locations)
+}
 
 async function orchestrate() {
-  const map = await maps.initializeMap()
-  await maps.convertPlaces(locations, map)
+  const map = await maps.initializeMap(el.id)
+  await maps.mapInteractivity(map, mapLayers)
+  if (mapLayers.includes('countries')) {
+    await maps.addMapboxCountries(countries, map)
+  }
+  if (mapLayers.includes('cities')) {
+    await maps.convertCities(cities, map, mapZoom, mapLayers)
+  }
+  if (mapLayers.includes('places')) {
+    await maps.convertPlaces(locations, map, mapZoom, mapLayers)
+  }
 }
+
 orchestrate()
 </script>
