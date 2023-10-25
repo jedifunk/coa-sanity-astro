@@ -4,6 +4,21 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
 mapboxgl.accessToken = MB_TOKEN
 
+export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, locations) {
+  const map = await initializeMap(mapID)
+  await mapInteractivity(map, mapLayers, mapZoom)
+
+  if (mapLayers.includes('countries')) {
+    await addMapboxCountries(countries, map)
+  }
+  if (mapLayers.includes('cities')) {
+    await convertCities(cities, map)
+  }
+  if (mapLayers.includes('places')) {
+    await convertPlaces(locations, map, mapZoom, mapLayers)
+  }
+}
+
 export async function initializeMap(id) {
   return new Promise(resolve => {
     const map = new mapboxgl.Map({
@@ -16,7 +31,7 @@ export async function initializeMap(id) {
   });
 }
 
-export async function mapInteractivity(map, layers) {
+export async function mapInteractivity(map, layers, zoom) {
   const nav = new mapboxgl.NavigationControl({
     showCompass: false,
   })
@@ -35,30 +50,8 @@ export async function mapInteractivity(map, layers) {
   countryClick(map)
   cityClick(map)
   placePopup(map)
+  resetZoom(map, zoom)
 
-  // Reset Zoom level
-  const resetZoom = document.createElement('button')
-  resetZoom.id = 'reset'
-  resetZoom.textContent = 'Reset Zoom'
-  resetZoom.className = 'pill pill-dark'
-  resetZoom.onclick = function(e) {
-    map.flyTo({
-      zoom: 1
-    })
-  }
-  document.getElementById('map-toggles').appendChild(resetZoom)
-
-}
-
-export async function fetchCity(query) {
-  try {
-    const response = await fetch(query)
-    const data = await response.json()
-
-    return data
-  } catch (error) {
-    console.error('Error on Fetch:', error)
-  }
 }
 
 export async function convertCities(cities, map) {
@@ -153,11 +146,11 @@ function addPlacesAndZoom(geojson, map) {
       visibility: 'visible'
     }
   })
-  setUpBB(map)
+  setUpBBox(map)
   
 }
 
-export async function addCities(geojson, map) {
+function addCities(geojson, map) {
   map.addSource('cities', {
     type: 'geojson',
     data: geojson
@@ -224,8 +217,7 @@ export function mapButtons(text) {
   return final
 }
 
-function setUpBB(map) {
-
+function setUpBBox(map, ) {
   map.once('idle', function() {
     const features = map.queryRenderedFeatures({layers: ['places']})
 
@@ -234,7 +226,7 @@ function setUpBB(map) {
         return bounds.extend(feature.geometry.coordinates);
       }, new mapboxgl.LngLatBounds(features[0].geometry.coordinates, features[0].geometry.coordinates));
 
-      map.fitBounds(bounds, {padding: 20, animate: false});
+      map.fitBounds(bounds, {padding: 20, animate: false})
     }
   })
 }
@@ -329,6 +321,25 @@ function placePopup(map) {
   map.on('mouseleave', ['cities', 'places'], () => {
     popup.remove();
   });
+}
+
+function resetZoom(map, zoom) {
+
+  if (zoom == 'true') {
+    setUpBBox(map)
+  } else {
+    // Reset Zoom level
+    const resetZoom = document.createElement('button')
+    resetZoom.id = 'reset'
+    resetZoom.textContent = 'Reset Zoom'
+    resetZoom.className = 'pill pill-dark'
+    resetZoom.onclick = function(e) {
+      map.flyTo({
+        zoom: 1
+      })
+    }
+    document.getElementById('map-toggles').appendChild(resetZoom)
+  }
 }
 
 export function addTransitCheckins2022(geojson, map) {
@@ -469,19 +480,6 @@ export function checkinInteractivity(map) {
   map.on('mouseleave', ['cafes-bars', 'parks-plazas', 'historic-monuments', 'transit', 'food'], () => {
     popup.remove();
   });
-
-  // Reset Zoom level
-  const resetZoom = document.createElement('button')
-  resetZoom.id = 'reset'
-  resetZoom.textContent = 'Reset Zoom'
-  resetZoom.className = 'pill pill-dark'
-  resetZoom.onclick = function(e) {
-    map.flyTo({
-      center: [15.981919, 45.815010],
-      zoom: 2.5
-    })
-  }
-  document.getElementById('map-toggles').appendChild(resetZoom)
 
   map.on('idle', () => {
     // If these layers were not added to the map, abort
