@@ -19,6 +19,17 @@ export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, 
   }
 }
 
+// temp to get 4sq working, come back to fold into main orchestrate
+export async function orchestrateFoursquare(mapID, newShops, newTransit, newOutdoors, newFood, newHist) {
+  const map = await initializeMap(mapID)
+  await checkinInteractivity(map)
+  await addShopCheckins2022(newShops, map)
+  await addTransitCheckins2022(newTransit, map)
+  await addOutdoorCheckins2022(newOutdoors, map)
+  await addFoodCheckins2022(newFood, map)
+  await addHistoricCheckins2022(newHist, map)
+}
+
 export async function initializeMap(id) {
   return new Promise(resolve => {
     const map = new mapboxgl.Map({
@@ -217,18 +228,23 @@ export function mapButtons(text) {
   return final
 }
 
-function setUpBBox(map, ) {
-  map.once('idle', function() {
-    const features = map.queryRenderedFeatures({layers: ['places']})
+function setUpBBox(map) {
+  return new Promise((resolve, reject) => {
+    map.once('idle', function() {
+      const features = map.queryRenderedFeatures({layers: ['places']})
 
-    if (features.length > 0) {
-      const bounds = features.reduce(function(bounds, feature) {
-        return bounds.extend(feature.geometry.coordinates);
-      }, new mapboxgl.LngLatBounds(features[0].geometry.coordinates, features[0].geometry.coordinates));
+      if (features.length > 0) {
+        const bounds = features.reduce(function(bounds, feature) {
+          return bounds.extend(feature.geometry.coordinates);
+        }, new mapboxgl.LngLatBounds(features[0].geometry.coordinates, features[0].geometry.coordinates));
 
-      map.fitBounds(bounds, {padding: 20, animate: false})
-    }
-  })
+        map.fitBounds(bounds, {padding: 20, animate: false});
+        resolve(bounds);
+      } else {
+        reject('No features found');
+      }
+    });
+  });
 }
 
 function countryClick(map) {
@@ -324,25 +340,21 @@ function placePopup(map) {
 }
 
 function resetZoom(map, zoom) {
-
   if (zoom == 'true') {
     setUpBBox(map)
+      // part of resetting to bounding box, needs to be fixed
+      // .then(bounds => {
+      //   addResetZoomControl(map, bounds)
+      // })
+      // .catch(error => {
+      //   console.error(error);
+      // });
   } else {
-    // Reset Zoom level
-    const resetZoom = document.createElement('button')
-    resetZoom.id = 'reset'
-    resetZoom.textContent = 'Reset Zoom'
-    resetZoom.className = 'pill pill-dark'
-    resetZoom.onclick = function(e) {
-      map.flyTo({
-        zoom: 1
-      })
-    }
-    document.getElementById('map-toggles').appendChild(resetZoom)
+    map.addControl(new ResetZoom(), 'top-left')
   }
 }
 
-export function addTransitCheckins2022(geojson, map) {
+function addTransitCheckins2022(geojson, map) {
   map.addSource('transit', {
     type: 'geojson',
     data: geojson
@@ -359,7 +371,7 @@ export function addTransitCheckins2022(geojson, map) {
     }
   })
 }
-export function addFoodCheckins2022(geojson, map) {
+function addFoodCheckins2022(geojson, map) {
   map.addSource('food', {
     type: 'geojson',
     data: geojson
@@ -376,7 +388,7 @@ export function addFoodCheckins2022(geojson, map) {
     }
   })
 }
-export function addShopCheckins2022(geojson, map) {
+function addShopCheckins2022(geojson, map) {
   map.addSource('cafes-bars', {
     type: 'geojson',
     data: geojson
@@ -393,7 +405,7 @@ export function addShopCheckins2022(geojson, map) {
     }
   })
 }
-export function addOutdoorCheckins2022(geojson, map) {
+function addOutdoorCheckins2022(geojson, map) {
   map.addSource('pp', {
     type: 'geojson',
     data: geojson
@@ -410,7 +422,7 @@ export function addOutdoorCheckins2022(geojson, map) {
     }
   })
 }
-export function addHistoricCheckins2022(geojson, map) {
+function addHistoricCheckins2022(geojson, map) {
   map.addSource('historic-monuments', {
     type: 'geojson',
     data: geojson
@@ -428,7 +440,7 @@ export function addHistoricCheckins2022(geojson, map) {
     }
   })
 }
-export function checkinInteractivity(map) {
+function checkinInteractivity(map, zoom) {
   const nav = new mapboxgl.NavigationControl({
     showCompass: false,
   })
@@ -533,8 +545,60 @@ export function checkinInteractivity(map) {
         }
       }
       
-      const layers = document.getElementById('map-toggles');
+      const layers = document.querySelector('[data-attr="foursquare"]');
       layers.appendChild(link);
     }
   })
+  resetZoom(map, zoom)
+}
+// part of resetting to bounding box, needs to be fixed
+// function addResetZoomControl(map, bounds) {
+//   const resetZoom = new ResetZoom(bounds);
+//   map.addControl(resetZoom, 'top-left');
+// }
+
+class ResetZoom {
+  // for resetting to bounding box, needs to be fixed
+  // constructor(bounds) {
+  //   this.bounds = bounds;
+  //   console.log('this.bounds: ', this.bounds)
+  // }
+  onAdd(map) {
+    this._map = map
+    let _this = this
+    this._btn = document.createElement('button')
+    this._btn.className = 'mapboxgl-ctrl-icon'
+    this._btn.type = "button"
+    this._btn.title = "Reset Zoom"
+
+    // Trying to reset to bounding box for pre-zoomed maps, come back to fix sometime
+    // if (this.bounds) {
+    //   this._btn.onclick = function(e) {
+    //     map.fitBounds(this.bounds, {padding: 20, animate: false});
+    //   }
+    // } else {
+    //   this._btn.onclick = function(e) {
+    //     map.flyTo({
+    //       zoom: 1
+    //     })
+    //   }
+    // }
+
+    // once above is working remove this
+    this._btn.onclick = function(e) {
+      map.flyTo({
+        zoom: 1
+      })
+    }
+
+    this._container = document.createElement("div");
+    this._container.className = "mapboxgl-ctrl-group mapboxgl-ctrl";
+    this._container.appendChild(this._btn);
+    return this._container;
+  }
+   
+  onRemove() {
+    this._container.parentNode.removeChild(this._container)
+    this._map = undefined
+  }
 }

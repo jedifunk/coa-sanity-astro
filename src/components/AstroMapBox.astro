@@ -1,6 +1,9 @@
 ---
 import { useSanityClient } from "@sanity/astro"
 import { countryList, citiesQuery, placesQuery } from "../lib/queries"
+import EleventyFetch from '@11ty/eleventy-fetch'
+
+const FS_TOKEN = import.meta.env.PUBLIC_FS_TOKEN
 const props = Astro.props
 
 // get map ID & query for its details
@@ -18,9 +21,16 @@ let countries
 let cities
 let locations
 
-const layers = map[0].layers
+// temp to get 4sq working, come back to fold into main workflow
+let foodsGeoJSON
+let shopsGeoJSON
+let transitGeoJSON
+let histMonGeoJSON
+let outdoorsGeoJSON
+
+// layer ternary is temp for 4sq, fix up to make more elegant
+const layers = map[0].layers ? map[0].layers : ['']
 const mapAttr = map[0].mapAttr
-//console.log(mapAttr)
 const mapZoom = JSON.stringify(map[0].zoomTo)
 
 if (map[0].queryAll == true) {
@@ -34,14 +44,156 @@ if (map[0].queryAll == true) {
 } else {
   locations = JSON.stringify(map[0].location)
 }
+
+// temp to get 4sq working again, come back to make more elegant
+if (mapAttr == 'foursquare') {
+
+  const before = '1672524000'
+  const after = '1646776800'
+  const version = '20221221'
+  const foodQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06374d81259&&v=${version}`
+  const coffeeshopsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d1e0931735&v=${version}`
+  const cafeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d16d941735&v=${version}`
+  const nightlifeQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06376d81259&v=${version}`
+  const outdoorQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06377d81259&v=${version}`
+  const artQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7104d754a06370d81259&v=${version}`
+  const spiritualQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d131941735&v=${version}`
+  const monumentsQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4bf58dd8d48988d12d941735&v=${version}`
+  const historicQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4deefb944765f83613cdba6e&v=${version}`
+  const transitQuery = `https://api.foursquare.com/v2/users/self/venuehistory?oauth_token=${FS_TOKEN}&afterTimestamp=${after}&beforeTimestamp=${before}&categoryId=4d4b7105d754a06379d81259&v=${version}`
+
+  async function getCheckinsCache(query) {
+    return EleventyFetch(query, {
+      duration: '1d',
+      type: 'json',
+    })
+  }
+  const foods = await getCheckinsCache(foodQuery).then(data => data.response.venues.items)
+  const outdoors = await getCheckinsCache(outdoorQuery).then(data => data.response.venues.items)
+  const arts = await getCheckinsCache(artQuery).then(data => data.response.venues.items)
+  const nightlifes = await getCheckinsCache(nightlifeQuery).then(data => data.response.venues.items)
+  const coffeeshops = await getCheckinsCache(coffeeshopsQuery).then(data => data.response.venues.items)
+  const cafes = await getCheckinsCache(cafeQuery).then(data => data.response.venues.items)
+  const monuments = await getCheckinsCache(monumentsQuery).then(data => data.response.venues.items)
+  const historics = await getCheckinsCache(historicQuery).then(data => data.response.venues.items)
+  const spirituals = await getCheckinsCache(spiritualQuery).then(data => data.response.venues.items)
+  const transits = await getCheckinsCache(transitQuery).then(data => data.response.venues.items)
+
+  const shops = coffeeshops.concat(cafes, nightlifes)
+  const histMons = historics.concat(monuments, spirituals, arts)
+
+  let foodsG = foods.map((food) => { 
+    return (
+      {
+        type: 'Feature', 
+        geometry: {
+          type: 'Point', 
+          coordinates: [food.venue.location.lng, food.venue.location.lat]
+        },
+        properties: {
+          title: food.venue.name
+        }
+      }
+    )
+  })
+
+  foodsGeoJSON = JSON.stringify({
+    type: 'FeatureCollection',
+    features: foodsG
+  })
+
+  let shopsG = shops.map((shop) => {
+    return (
+      {
+        type: 'Feature', 
+        geometry: {
+          type: 'Point', 
+          coordinates: [shop.venue.location.lng, shop.venue.location.lat]
+        },
+        properties: {
+          title: shop.venue.name
+        }
+      }
+    )
+  })
+
+  shopsGeoJSON = JSON.stringify({
+    type: 'FeatureCollection',
+    features: shopsG
+  })
+
+  let outdoorsG = outdoors.map((pp) => {
+    return (
+      {
+        type: 'Feature', 
+        geometry: {
+          type: 'Point', 
+          coordinates: [pp.venue.location.lng, pp.venue.location.lat]
+        },
+        properties: {
+          title: pp.venue.name
+        }
+      }
+    )
+  })
+
+  outdoorsGeoJSON = JSON.stringify({
+    type: 'FeatureCollection',
+    features: outdoorsG
+  })
+
+  let histMonG = histMons.map((histMon) => {
+    return (
+      {
+        type: 'Feature',
+        geometry: {
+          type: 'Point', 
+          coordinates: [histMon.venue.location.lng, histMon.venue.location.lat]
+        },
+        properties: {
+          title: histMon.venue.name
+        }
+      }
+    )
+  })
+
+  histMonGeoJSON = JSON.stringify({
+    type: 'FeatureCollection',
+    features: histMonG
+  })
+
+  let transitG = transits.map((transit) => {
+    return (
+      {
+        type: 'Feature', 
+        geometry: {
+          type: 'Point', 
+          coordinates: [transit.venue.location.lng, transit.venue.location.lat]
+        },
+        properties: {
+          title: transit.venue.name
+        }
+      }
+    )
+  })
+
+  transitGeoJSON = JSON.stringify({
+    type: 'FeatureCollection',
+    features: transitG
+  })
+}
 ---
 <div class="map-wrapper">
-  <nav id="map-toggles" class="map-toggles"></nav>
-  <div id={mapID} class="map" data-use data-zoom={mapZoom} data-locations={locations} data-attr={mapAttr} data-layers={layers} data-countries={countries} data-cities={cities}></div>
+  <nav class="map-toggles" data-attr={mapAttr}></nav>
+  {mapAttr == 'foursquare' ? 
+    <div id={mapID} class="map" data-use data-attr={mapAttr} data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
+  :  
+    <div id={mapID} class="map" data-use data-zoom={mapZoom} data-locations={locations} data-attr={mapAttr} data-layers={layers} data-countries={countries} data-cities={cities}></div>
+  }
   <figcaption>{map[0].name}</figcaption>
 </div>
 <script>
-import {orchestrate} from '../lib/maps'
+import {orchestrate, orchestrateFoursquare} from '../lib/maps'
 
 const allMaps = document.querySelectorAll(`[data-use]`)
 let countries
@@ -50,21 +202,33 @@ let locations
 
 allMaps.forEach((map) => {
   const mapId = map.getAttribute('id')
-  const mapLayers = map.dataset.layers.split(',')
-  const mapZoom = map.dataset.zoom
+  const mapAttr = map.dataset.attr
 
-  if (map.dataset.countries) {
-    countries = JSON.parse(map.dataset.countries)
-  }
+  // temp to get 4sq working, come back to make more elegant
+  if (mapAttr == 'foursquare') {
+    const newShops = JSON.parse(map.dataset.shops)
+    const newTransit = JSON.parse(map.dataset.transit)
+    const newOutdoors = JSON.parse(map.dataset.outdoors)
+    const newFoods = JSON.parse(map.dataset.foods)
+    const newHist = JSON.parse(map.dataset.hist)
+    orchestrateFoursquare(mapId, newShops, newTransit, newOutdoors, newFoods, newHist)
+  } else {
+    const mapLayers = map.dataset.layers.split(',')
+    const mapZoom = map.dataset.zoom
 
-  if (map.dataset.cities) {
-    cities = JSON.parse(map.dataset.cities)
-  }
+    if (map.dataset.countries) {
+      countries = JSON.parse(map.dataset.countries)
+    }
 
-  if (map.dataset.locations) {
-    locations = JSON.parse(map.dataset.locations)
+    if (map.dataset.cities) {
+      cities = JSON.parse(map.dataset.cities)
+    }
+
+    if (map.dataset.locations) {
+      locations = JSON.parse(map.dataset.locations)
+    }
+    orchestrate(mapId, mapLayers, mapZoom, countries, cities, locations)
   }
-  orchestrate(mapId, mapLayers, mapZoom, countries, cities, locations)
 })
 
 </script>
