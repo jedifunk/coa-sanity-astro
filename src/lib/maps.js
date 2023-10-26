@@ -566,10 +566,15 @@ class ResetZoom {
   onAdd(map) {
     this._map = map
     let _this = this
+
+    this._el = document.createElement('span')
+    this._el.className = 'mapboxgl-ctrl-icon'
+
     this._btn = document.createElement('button')
-    this._btn.className = 'mapboxgl-ctrl-icon'
+    this._btn.className = 'mapboxgl-ctrl-reset'
     this._btn.type = "button"
     this._btn.title = "Reset Zoom"
+    this._btn.appendChild(this._el)
 
     // Trying to reset to bounding box for pre-zoomed maps, come back to fix sometime
     // if (this.bounds) {
