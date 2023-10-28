@@ -12,7 +12,7 @@ const mapQuery = `*[_type == 'map' && _id == '${mapID}']{
   ...,
   ...select(
     customMap == true => {mapAttr},
-    {location[]->{name, country->{name}, city->{...}, description, geometry{...}}}
+    {location[]->{name, country->{name}, city->{...}, description, website, placeType->{title}, geometry{...}}}
   )
 }`
 const map = await useSanityClient().fetch(mapQuery)
@@ -28,9 +28,9 @@ let transitGeoJSON
 let histMonGeoJSON
 let outdoorsGeoJSON
 
-// layer ternary is temp for 4sq, fix up to make more elegant
 const layers = map[0].layers ? map[0].layers : ['']
 const mapAttr = map[0].mapAttr
+const includeTypes = JSON.stringify(map[0].includeTypes)
 const mapZoom = JSON.stringify(map[0].zoomTo)
 
 if (map[0].queryAll == true) {
@@ -42,7 +42,9 @@ if (map[0].queryAll == true) {
   cities = JSON.stringify(cityQuery)
   locations = JSON.stringify(placeQuery)
 } else {
+  //const placeQuery = await useSanityClient().fetch(placesQuery)
   locations = JSON.stringify(map[0].location)
+
 }
 
 // temp to get 4sq working again, come back to make more elegant
@@ -184,11 +186,11 @@ if (mapAttr == 'foursquare') {
 }
 ---
 <div class="map-wrapper">
-  <nav class="map-toggles" data-attr={mapAttr}></nav>
+  <nav class="map-toggles" data-attr={mapAttr} data-cat={includeTypes}></nav>
   {mapAttr == 'foursquare' ? 
     <div id={mapID} class="map" data-use data-attr={mapAttr} data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
   :  
-    <div id={mapID} class="map" data-use data-zoom={mapZoom} data-locations={locations} data-attr={mapAttr} data-layers={layers} data-countries={countries} data-cities={cities}></div>
+    <div id={mapID} class="map" data-use data-zoom={mapZoom} data-attr={mapAttr} data-layers={layers} data-types={includeTypes} data-locations={locations} data-countries={countries} data-cities={cities}></div>
   }
   <figcaption>{map[0].name}</figcaption>
 </div>
@@ -215,6 +217,7 @@ allMaps.forEach((map) => {
   } else {
     const mapLayers = map.dataset.layers.split(',')
     const mapZoom = map.dataset.zoom
+    const hasTypes = map.dataset.types
 
     if (map.dataset.countries) {
       countries = JSON.parse(map.dataset.countries)
@@ -227,7 +230,7 @@ allMaps.forEach((map) => {
     if (map.dataset.locations) {
       locations = JSON.parse(map.dataset.locations)
     }
-    orchestrate(mapId, mapLayers, mapZoom, countries, cities, locations)
+    orchestrate(mapId, mapLayers, hasTypes, mapZoom, countries, cities, locations)
   }
 })
 

@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 const MB_TOKEN = import.meta.env.PUBLIC_MAPBOX_TOKEN
 mapboxgl.accessToken = MB_TOKEN
 
-export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, locations) {
+export async function orchestrate(mapID, mapLayers, hasTypes, mapZoom, countries, cities, locations) {
   const map = await initializeMap(mapID)
   await mapInteractivity(map, mapLayers, mapZoom)
 
@@ -15,7 +15,11 @@ export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, 
     await convertCities(cities, map)
   }
   if (mapLayers.includes('places')) {
-    await convertPlaces(locations, map, mapZoom, mapLayers)
+    if (hasTypes) {
+      await convertPlaceTypes(locations, map, mapZoom, mapLayers)
+    } else {
+      await convertPlaces(locations, map, mapZoom, mapLayers)
+    }
   }
 }
 
@@ -95,8 +99,9 @@ export async function convertPlaces(places, map, mapZoom, mapLayers) {
     features.push({
       type: 'Feature', 
       properties: { 
-        name: place.name, 
+        name: place.name,
         description: place.description,
+        website: place.website,
         box: [place.geometry.mapBounds.southwest, place.geometry.mapBounds.northeast] }, 
       geometry: { 
         type:'Point', 
@@ -111,6 +116,35 @@ export async function convertPlaces(places, map, mapZoom, mapLayers) {
 
   if (mapZoom == 'true') {
     await addPlacesAndZoom(geojson, map)
+  } else {
+    await addPlaces(geojson, map)
+  }
+}
+export async function convertPlaceTypes(places, map, mapZoom) {
+  const features = []
+
+  for (const place of places) {
+    features.push({
+      type: 'Feature', 
+      properties: { 
+        name: place.name,
+        description: place.description,
+        website: place.website,
+        placeType: place.placeType && place.placeType.title,
+        box: [place.geometry.mapBounds.southwest, place.geometry.mapBounds.northeast] }, 
+      geometry: { 
+        type:'Point', 
+        coordinates: [place.geometry.longitude, place.geometry.latitude]
+      }
+    })
+  }
+  const geojson = {
+    type: 'FeatureCollection',
+    features: features
+  }
+
+  if (mapZoom == 'true') {
+    await addPlaceTypesAndZoom(geojson, map)
   } else {
     await addPlaces(geojson, map)
   }
@@ -140,6 +174,36 @@ function addPlaces(geojson, map) {
   })  
 }
 
+function addPlaceTypes(geojson, map) {
+  // First, create a set of unique placeTypes
+  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType));
+
+  // Then, for each unique placeType, create a layer
+  placeTypes.forEach(placeType => {
+    const filteredGeojson = {
+      type: 'FeatureCollection',
+      features: geojson.features.filter(feature => feature.properties.placeType === placeType)
+    };
+
+    map.addSource(placeType, {
+      type: 'geojson',
+      data: filteredGeojson
+    });
+
+    map.addLayer({
+      id: placeType,
+      type: 'circle',
+      source: placeType,
+      paint: {
+        'circle-color': 'hsla(199, 100%, 20%, 1)',
+      },
+      layout: {
+        visibility: 'visible'
+      }
+    });
+  });
+}
+
 function addPlacesAndZoom(geojson, map) {
 
   map.addSource('places', {
@@ -157,8 +221,42 @@ function addPlacesAndZoom(geojson, map) {
       visibility: 'visible'
     }
   })
-  setUpBBox(map)
+  const layers = 'places'
+  setUpBBox(map, layers)
   
+}
+
+function addPlaceTypesAndZoom(geojson, map) {
+  // First, create a set of unique placeTypes
+  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType));
+
+  // Then, for each unique placeType, create a layer
+  placeTypes.forEach(placeType => {
+    const filteredGeojson = {
+      type: 'FeatureCollection',
+      features: geojson.features.filter(feature => feature.properties.placeType === placeType)
+    };
+
+    map.addSource(placeType, {
+      type: 'geojson',
+      data: filteredGeojson
+    });
+
+    map.addLayer({
+      id: placeType,
+      type: 'circle',
+      source: placeType,
+      paint: {
+        'circle-color': 'hsla(199, 100%, 20%, 1)',
+      },
+      layout: {
+        visibility: 'visible'
+      }
+    });
+  });
+  createTypeButtons(map, placeTypes)
+  const layers = placeTypes ? Array.from(placeTypes) : 'places'
+  setUpBBox(map, layers);
 }
 
 function addCities(geojson, map) {
@@ -228,10 +326,10 @@ export function mapButtons(text) {
   return final
 }
 
-function setUpBBox(map) {
+function setUpBBox(map, layers) {
   return new Promise((resolve, reject) => {
     map.once('idle', function() {
-      const features = map.queryRenderedFeatures({layers: ['places']})
+      const features = map.queryRenderedFeatures({layers: layers})
 
       if (features.length > 0) {
         const bounds = features.reduce(function(bounds, feature) {
@@ -319,8 +417,10 @@ function placePopup(map) {
     if (currentZoom >= 5) {
       // Copy coordinates array.
       const coordinates = e.features[0].geometry.coordinates.slice();
+      const header = `<p><b>${e.features[0].properties.name}</b></p>`
       const description = e.features[0].properties.description != null ? `<p>${e.features[0].properties.description}</p>` : '';
-      const content = `<b>${e.features[0].properties.name}</b>${description}`
+      const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
+      const content = `${header}${description}`
 
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
@@ -341,7 +441,7 @@ function placePopup(map) {
 
 function resetZoom(map, zoom) {
   if (zoom == 'true') {
-    setUpBBox(map)
+    //setUpBBox(map)
       // part of resetting to bounding box, needs to be fixed
       // .then(bounds => {
       //   addResetZoomControl(map, bounds)
@@ -551,6 +651,59 @@ function checkinInteractivity(map, zoom) {
   })
   resetZoom(map, zoom)
 }
+
+function createTypeButtons(map, placeTypes) {
+  map.on('idle', () => {
+
+    // create array from Set passed from placeTypes
+    const typeArr = Array.from(placeTypes)
+    // If these layers were not added to the map, abort
+    if (typeArr.some(layer => !map.getLayer(layer))) {return}
+
+    // For each Place Type create a button
+    for (const id of typeArr) {
+      // Skip layers that already have a button set up.
+      if (document.getElementById(id)) {
+        continue;
+      }
+      
+      // Create a link.
+      const link = document.createElement('button');
+      link.id = id;
+      link.textContent = mapButtons(id);
+      link.className = 'pill';
+      
+      // Show or hide layer when the toggle is clicked.
+      link.onclick = function (e) {
+        const clickedLayer = this.id;
+        // e.preventDefault();
+        // e.stopPropagation();
+        
+        const visibility = map.getLayoutProperty(
+          clickedLayer,
+          'visibility'
+        );
+        
+        // Toggle layer visibility by changing the layout object's visibility property.
+        if (visibility === 'visible') {
+          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.classList.add('inactive');
+        } else {
+          this.classList.remove('inactive');
+          map.setLayoutProperty(
+          clickedLayer,
+            'visibility',
+            'visible'
+          );
+        }
+      }
+      
+      const layers = document.querySelector('[data-cat="true"]')
+      layers.appendChild(link);
+    }
+  })
+}
+
 // part of resetting to bounding box, needs to be fixed
 // function addResetZoomControl(map, bounds) {
 //   const resetZoom = new ResetZoom(bounds);

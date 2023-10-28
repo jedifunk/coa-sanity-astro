@@ -15,4 +15,4 @@ export const recentPosts = `*[_type == "article"] | order(_createdAt desc)[0...5
 export const countryList = `*[_type == "country"] | order(name asc) {name, menu, slug, isoA3}`
 export const categoryList = `*[_type == "category"] | order(title asc) {title, slug}`
 export const citiesQuery = `*[_type == 'city']{name, 'iso':country->isoA3, 'country':country->name, geometry}`
-export const placesQuery = `*[_type == 'place']{name, geometry, description}`
+export const placesQuery = `*[_type == 'place']{name, geometry, description, website, address, placeType->{title}}`
