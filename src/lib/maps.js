@@ -120,6 +120,7 @@ export async function convertPlaces(places, map, mapZoom, mapLayers) {
     await addPlaces(geojson, map)
   }
 }
+
 export async function convertPlaceTypes(places, map, mapZoom) {
   const features = []
 
@@ -146,7 +147,7 @@ export async function convertPlaceTypes(places, map, mapZoom) {
   if (mapZoom == 'true') {
     await addPlaceTypesAndZoom(geojson, map)
   } else {
-    await addPlaces(geojson, map)
+    await addPlaceTypes(geojson, map)
   }
 }
 
@@ -196,12 +197,18 @@ function addPlaceTypes(geojson, map) {
       source: placeType,
       paint: {
         'circle-color': 'hsla(199, 100%, 20%, 1)',
+        'circle-opacity': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          7,0,
+          9,1
+        ],
       },
-      layout: {
-        visibility: 'visible'
-      }
+      minzoom: 8,
     });
   });
+  createTypeButtons(map, placeTypes)
 }
 
 function addPlacesAndZoom(geojson, map) {
