@@ -42,9 +42,7 @@ if (map[0].queryAll == true) {
   cities = JSON.stringify(cityQuery)
   locations = JSON.stringify(placeQuery)
 } else {
-  //const placeQuery = await useSanityClient().fetch(placesQuery)
   locations = JSON.stringify(map[0].location)
-
 }
 
 // temp to get 4sq working again, come back to make more elegant
@@ -195,7 +193,7 @@ if (mapAttr == 'foursquare') {
   <figcaption>{map[0].name}</figcaption>
 </div>
 <script>
-import {orchestrate, orchestrateFoursquare} from '../lib/maps'
+import {orchestrate, orchestrateFoursquare} from '../lib/maps/map-setup'
 
 const allMaps = document.querySelectorAll(`[data-use]`)
 let countries
