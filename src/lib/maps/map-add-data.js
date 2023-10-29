@@ -138,7 +138,7 @@ export function addPlacesAndZoom(geojson, map) {
 
 export function addPlaceTypesAndZoom(geojson, map) {
   // First, create a set of unique placeTypes
-  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType));
+  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
 
   // Then, for each unique placeType, create a layer
   placeTypes.forEach(placeType => {
@@ -165,7 +165,7 @@ export function addPlaceTypesAndZoom(geojson, map) {
     });
   });
   //helpers.createTypeButtons(map, placeTypes)
-  const layers = placeTypes ? Array.from(placeTypes) : 'places'
+  const layers = Array.from(placeTypes)
   setUpBBox(map, layers)
   helpers.cursorChange(map, layers)
   placePopup(map, layers)

@@ -65,7 +65,7 @@ export async function mapInteractivity(map, layers, zoom) {
   placePopup(map, layers)
 }
 
-export function setUpBBox(map, layers) {
+export function setUpBBox(map,layers) {
   return new Promise((resolve, reject) => {
     map.once('idle', function() {
       const features = map.queryRenderedFeatures({layers: layers})
@@ -80,8 +80,8 @@ export function setUpBBox(map, layers) {
       } else {
         reject('No features found');
       }
-    });
-  });
+    })
+  })
 }
 
 export function placePopup(map, layers) {
@@ -119,6 +119,7 @@ export function placePopup(map, layers) {
     popup.remove();
   });
 }
+
 export function checkinInteractivity(map, zoom) {
   const nav = new mapboxgl.NavigationControl({
     showCompass: false,

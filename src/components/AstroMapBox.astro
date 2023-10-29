@@ -12,7 +12,7 @@ const mapQuery = `*[_type == 'map' && _id == '${mapID}']{
   ...,
   ...select(
     customMap == true => {mapAttr},
-    {location[]->{name, country->{name}, city->{...}, description, website, placeType->{title}, geometry{...}}}
+    {location[]->{name, country->{name}, city->{...}, description, website, placeType->{title, slug}, geometry{...}}}
   )
 }`
 const map = await useSanityClient().fetch(mapQuery)
