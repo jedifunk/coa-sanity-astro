@@ -184,7 +184,8 @@ if (mapAttr == 'foursquare') {
 }
 ---
 <div class="map-wrapper">
-  {(includeTypes == 'true' || mapAttr == 'foursquare') && <nav class="map-toggles" data-attr={mapAttr} data-cat={includeTypes}></nav>}
+  <!-- {(includeTypes == 'true' || mapAttr == 'foursquare') && <nav class="map-toggles" data-attr={mapAttr} data-cat={includeTypes}></nav>} -->
+  <nav class="map-toggles" data-attr={mapAttr} data-cat></nav>
   {mapAttr == 'foursquare' ? 
     <div id={mapID} class="map" data-use data-attr={mapAttr} data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
   :  

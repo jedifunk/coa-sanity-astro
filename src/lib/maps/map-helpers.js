@@ -128,7 +128,7 @@ export function createTypeButtons(map, layers) {
           clickedLayer,
           'visibility'
         );
-        
+
         // Toggle layer visibility by changing the layout object's visibility property.
         if (visibility === 'visible') {
           map.setLayoutProperty(clickedLayer, 'visibility', 'none');
@@ -143,7 +143,7 @@ export function createTypeButtons(map, layers) {
         }
       }
       
-      const layers = document.querySelector('[data-cat="true"]')
+      const layers = document.querySelector('[data-cat]')
       layers.appendChild(link);
     }
   })

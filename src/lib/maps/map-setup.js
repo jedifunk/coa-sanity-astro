@@ -19,11 +19,7 @@ export async function orchestrate(mapID, mapLayers, hasTypes, mapZoom, countries
     await convertMap.convertCities(cities, map)
   }
   if (mapLayers.includes('places')) {
-    if (hasTypes == 'true') {
-      await convertMap.convertPlaceTypes(locations, map, mapZoom, mapLayers)
-    } else {
-      await convertMap.convertPlaces(locations, map, mapZoom)
-    }
+    await convertMap.convertPlaceTypes(locations, map, mapZoom, mapLayers)
   }
 }
 

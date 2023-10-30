@@ -107,13 +107,16 @@ export function addPlaceTypes(geojson, map) {
           9,1
         ],
       },
+      layout: {
+        visibility: 'visible'
+      },
       minzoom: 8,
     });
   });
   const layers = Array.from(placeTypes)
   helpers.cursorChange(map, layers)
-  //helpers.createTypeButtons(map, placeTypes)
-  placePopup(map)
+  helpers.createTypeButtons(map, layers)
+  placePopup(map, layers)
 }
 
 export function addPlacesAndZoom(geojson, map) {
