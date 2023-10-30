@@ -98,16 +98,15 @@ export function resetZoom(map, zoom) {
   }
 }
 
-export function createTypeButtons(map, placeTypes) {
+export function createTypeButtons(map, layers) {
   map.on('idle', () => {
 
     // create array from Set passed from placeTypes
-    const typeArr = Array.from(placeTypes)
     // If these layers were not added to the map, abort
-    if (typeArr.some(layer => !map.getLayer(layer))) {return}
+    if (layers.some(layer => !map.getLayer(layer))) {return}
 
     // For each Place Type create a button
-    for (const id of typeArr) {
+    for (const id of layers) {
       // Skip layers that already have a button set up.
       if (document.getElementById(id)) {
         continue;
