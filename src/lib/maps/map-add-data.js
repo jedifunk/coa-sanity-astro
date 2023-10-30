@@ -164,9 +164,9 @@ export function addPlaceTypesAndZoom(geojson, map) {
       }
     });
   });
-  //helpers.createTypeButtons(map, placeTypes)
   const layers = Array.from(placeTypes)
   setUpBBox(map, layers)
+  helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)
   placePopup(map, layers)
 }
