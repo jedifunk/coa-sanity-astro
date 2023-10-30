@@ -63,6 +63,7 @@ export async function convertPlaceTypes(places, map, mapZoom) {
         description: place.description,
         website: place.website,
         placeType: place.placeType && place.placeType.slug.current,
+        favorite: place.favorite,
         box: [place.geometry.mapBounds.southwest, place.geometry.mapBounds.northeast] }, 
       geometry: { 
         type:'Point', 
