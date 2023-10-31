@@ -12,9 +12,10 @@ export async function getStaticPaths() {
   return allPages.map(page => ({params: { single: page.slug.current }, props: {page}}))
 }
 const { page } = Astro.props
+const sidebar = page.sidebar != false ? 'grid-main' : ''
 ---
 <Layout title={page.title} type={page._type} description={page.excerpt} image={page.featuredImage} pathname={page.slug.current}>
-  <div class="content-area wrapper grid-wrapper grid-main">
+  <div class=`content-area wrapper grid-wrapper ${sidebar}`>
     <main id="main" class="site-main" role="main">
       <article>
         <header class="entry-header">
@@ -27,6 +28,6 @@ const { page } = Astro.props
 
       </article>
     </main>
-    <Sidebar />
+    {page.sidebar != false && <Sidebar />}
   </div>
 </Layout>
