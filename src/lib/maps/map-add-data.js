@@ -172,4 +172,5 @@ export function addPlaceTypesAndZoom(geojson, map) {
   helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)
   placePopup(map, layers)
+  //helpers.zoomReset(map, layers)
 }

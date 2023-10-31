@@ -1,3 +1,5 @@
+import mapboxgl from "mapbox-gl";
+import { setUpBBox } from "./map-setup";
 export function mapButtons(text) {
   var output = text
     .replace(/-/g, ' / ')
@@ -85,14 +87,9 @@ export function cursorChange(map, layers) {
 
 export function resetZoom(map, zoom) {
   if (zoom == 'true') {
-    //setUpBBox(map)
-      // part of resetting to bounding box, needs to be fixed
-      // .then(bounds => {
-      //   addResetZoomControl(map, bounds)
-      // })
-      // .catch(error => {
-      //   console.error(error);
-      // });
+    // get bounds from sessionStorage that was saved by setUpBBox function
+    const bounds = sessionStorage.getItem('bounds')
+    map.addControl(new ResetZoom(bounds), 'top-left')
   } else {
     map.addControl(new ResetZoom(), 'top-left')
   }
@@ -149,18 +146,11 @@ export function createTypeButtons(map, layers) {
   })
 }
 
-// part of resetting to bounding box, needs to be fixed
-// function addResetZoomControl(map, bounds) {
-//   const resetZoom = new ResetZoom(bounds);
-//   map.addControl(resetZoom, 'top-left');
-// }
-
 class ResetZoom {
-  // for resetting to bounding box, needs to be fixed
-  // constructor(bounds) {
-  //   this.bounds = bounds;
-  //   console.log('this.bounds: ', this.bounds)
-  // }
+  // accept bounds from resetZoom above
+  constructor(bounds) {
+    this.bounds = bounds;
+  }
   onAdd(map) {
     this._map = map
     let _this = this
@@ -174,24 +164,15 @@ class ResetZoom {
     this._btn.title = "Reset Zoom"
     this._btn.appendChild(this._el)
 
-    // Trying to reset to bounding box for pre-zoomed maps, come back to fix sometime
-    // if (this.bounds) {
-    //   this._btn.onclick = function(e) {
-    //     map.fitBounds(this.bounds, {padding: 20, animate: false});
-    //   }
-    // } else {
-    //   this._btn.onclick = function(e) {
-    //     map.flyTo({
-    //       zoom: 1
-    //     })
-    //   }
-    // }
-
-    // once above is working remove this
-    this._btn.onclick = function(e) {
-      map.flyTo({
-        zoom: 1
-      })
+    this._btn.onclick = (e) => {
+      if (this.bounds) {
+        // parse the JSON string and recreate the necessary LngLatBounds for use in fitBounds
+        let bounds = JSON.parse(this.bounds)
+        bounds = new mapboxgl.LngLatBounds(bounds._sw, bounds._ne)
+        map.fitBounds(bounds, {padding: 20});
+      } else {
+        map.flyTo({zoom: 1})
+      } 
     }
 
     this._container = document.createElement("div");

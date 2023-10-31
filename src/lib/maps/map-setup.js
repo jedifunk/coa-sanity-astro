@@ -71,6 +71,9 @@ export function setUpBBox(map,layers) {
           return bounds.extend(feature.geometry.coordinates);
         }, new mapboxgl.LngLatBounds(features[0].geometry.coordinates, features[0].geometry.coordinates));
 
+        // save bounds as JSON string to sessionStorage for later use by ResetZoom
+        sessionStorage.setItem('bounds', JSON.stringify(bounds))
+
         map.fitBounds(bounds, {padding: 20, animate: false});
         resolve(bounds);
       } else {
