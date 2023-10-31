@@ -1,5 +1,5 @@
 import mapboxgl from "mapbox-gl";
-import { setUpBBox } from "./map-setup";
+
 export function mapButtons(text) {
   var output = text
     .replace(/-/g, ' / ')
