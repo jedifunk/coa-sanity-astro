@@ -1,10 +1,10 @@
 ---
-import { useSanityClient } from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import Picture from 'astro-sanity-picture'
 import { siteSettings } from '../lib/queries.js'
 import { getSanityImageUrl } from '../lib/helpers.js'
 
-const allSiteSettings = await useSanityClient().fetch(siteSettings)
+const allSiteSettings = await sanityClient.fetch(siteSettings)
 
 ---
 

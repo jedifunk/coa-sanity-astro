@@ -1,5 +1,5 @@
 ---
-import { useSanityClient } from "@sanity/astro"
+import { sanityClient } from "sanity:client"
 import { countryList, citiesQuery, placesQuery } from "../lib/queries"
 import EleventyFetch from '@11ty/eleventy-fetch'
 
@@ -15,7 +15,7 @@ const mapQuery = `*[_type == 'map' && _id == '${mapID}']{
     {location[]->{name, country->{name}, city->{...}, description, website, placeType->{title, slug}, geometry{...}}}
   )
 }`
-const map = await useSanityClient().fetch(mapQuery)
+const map = await sanityClient.fetch(mapQuery)
 
 let countries
 let cities
@@ -34,9 +34,9 @@ const includeTypes = JSON.stringify(map[0].includeTypes)
 const mapZoom = JSON.stringify(map[0].zoomTo)
 
 if (map[0].queryAll == true) {
-  const countryQuery = await useSanityClient().fetch(countryList)
-  const cityQuery = await useSanityClient().fetch(citiesQuery)
-  const placeQuery = await useSanityClient().fetch(placesQuery)
+  const countryQuery = await sanityClient.fetch(countryList)
+  const cityQuery = await sanityClient.fetch(citiesQuery)
+  const placeQuery = await sanityClient.fetch(placesQuery)
 
   countries = JSON.stringify(countryQuery)
   cities = JSON.stringify(cityQuery)

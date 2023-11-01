@@ -1,23 +1,8 @@
 import { parseISO, format, fromUnixTime } from 'date-fns'
-import { useSanityClient } from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import imageUrlBuilder from '@sanity/image-url'
 
-const builder = imageUrlBuilder(useSanityClient())
-
-// Included to get galleries to work until new @sanity/astro fix for images is out
-import {createClient} from '@sanity/client'
-const config = {
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID,
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET,
-  token: import.meta.env.PUBLIC_SANITY_READ_TOKEN,
-  apiVersion: import.meta.env.PUBLIC_SANITY_API_VERSION,
-  useCdn: false,
-}
-const oldClient = createClient(config)
-const oldBuilder = imageUrlBuilder(oldClient)
-export function getSanityImageUrlOldBuilder(source) {
-  return oldBuilder.image(source)
-}
+const builder = imageUrlBuilder(sanityClient)
 
 // export async function getSanityContent({ query, variables = {} }) {
 //   const { data } = await fetch(
