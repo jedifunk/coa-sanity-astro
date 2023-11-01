@@ -1,13 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import Sidebar from '../components/Sidebar.astro'
-import {useSanityClient} from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import Handler from '../components/Handler.astro'
 
 import { allPagesQuery } from '../lib/queries.js'
 
 export async function getStaticPaths() {
-  const allPages = await useSanityClient().fetch(allPagesQuery)
+  const allPages = await sanityClient.fetch(allPagesQuery)
 
   return allPages.map(page => ({params: { single: page.slug.current }, props: {page}}))
 }
