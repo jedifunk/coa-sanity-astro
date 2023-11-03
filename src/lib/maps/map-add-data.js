@@ -1,5 +1,4 @@
 import * as helpers from './map-helpers'
-import { placePopup, setUpBBox } from './map-setup'
 
 export async function addMapboxCountries(countries, map) {
   map.addSource('countries', {
@@ -53,28 +52,74 @@ export function addCities(geojson, map) {
   })
 }
 
-export function addPlaces(geojson, map) {
+export function addQuery(geojson, map) {
+  // First, create a set of unique placeTypes
+  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
 
-  map.addSource('places', {
-    type: 'geojson',
-    data: geojson
-  })
-  map.addLayer({
-    id: 'places',
-    type: 'circle',
-    source: 'places',
-    paint: {
-      'circle-color': 'hsla(199, 100%, 20%, 1)',
-      'circle-opacity': [
-        'interpolate',
-        ['linear'],
-        ['zoom'],
-        7,0,
-        9,1
-      ],
-    },
-    minzoom: 8,
-  })
+  // Then, for each unique placeType, create a layer
+  placeTypes.forEach(placeType => {
+    const filteredGeojson = {
+      type: 'FeatureCollection',
+      features: geojson.features.filter(feature => feature.properties.placeType === placeType)
+    };
+
+    map.addSource(placeType, {
+      type: 'geojson',
+      data: filteredGeojson
+    });
+
+    map.addLayer({
+      id: placeType,
+      type: 'circle',
+      source: placeType,
+      paint: {
+        'circle-color': 'hsla(199, 100%, 20%, 1)',
+      },
+      layout: {
+        visibility: 'visible'
+      }
+    });
+  });
+  const layers = Array.from(placeTypes)
+  helpers.layerClick(map, layers)
+  helpers.cursorChange(map, layers)
+  helpers.createTypeButtons(map, layers)
+  helpers.placePopup(map, layers)
+}
+
+export function addQueryAndZoom(geojson, map) {
+  // First, create a set of unique placeTypes
+  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
+
+  // Then, for each unique placeType, create a layer
+  placeTypes.forEach(placeType => {
+    const filteredGeojson = {
+      type: 'FeatureCollection',
+      features: geojson.features.filter(feature => feature.properties.placeType === placeType)
+    };
+
+    map.addSource(placeType, {
+      type: 'geojson',
+      data: filteredGeojson
+    });
+
+    map.addLayer({
+      id: placeType,
+      type: 'circle',
+      source: placeType,
+      paint: {
+        'circle-color': 'hsla(199, 100%, 20%, 1)',
+      },
+      layout: {
+        visibility: 'visible'
+      }
+    });
+  });
+  const layers = Array.from(placeTypes)
+  helpers.setUpBBox(map, geojson)
+  helpers.createTypeButtons(map, layers)
+  helpers.cursorChange(map, layers)
+  helpers.placePopup(map, layers)
 }
 
 export function addPlaceTypes(geojson, map) {
@@ -116,27 +161,7 @@ export function addPlaceTypes(geojson, map) {
   const layers = Array.from(placeTypes)
   helpers.cursorChange(map, layers)
   helpers.createTypeButtons(map, layers)
-  placePopup(map, layers)
-}
-
-export function addPlacesAndZoom(geojson, map) {
-
-  map.addSource('places', {
-    type: 'geojson',
-    data: geojson
-  })
-  map.addLayer({
-    id: 'places',
-    type: 'circle',
-    source: 'places',
-    paint: {
-      'circle-color': 'hsla(199, 100%, 20%, 1)',
-    },
-    layout: {
-      visibility: 'visible'
-    }
-  })
-
+  helpers.placePopup(map, layers)
 }
 
 export function addPlaceTypesAndZoom(geojson, map) {
@@ -168,9 +193,8 @@ export function addPlaceTypesAndZoom(geojson, map) {
     });
   });
   const layers = Array.from(placeTypes)
-  setUpBBox(map, layers)
+  helpers.setUpBBox(map, geojson)
   helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)
-  placePopup(map, layers)
-  //helpers.zoomReset(map, layers)
+  helpers.placePopup(map, layers)
 }

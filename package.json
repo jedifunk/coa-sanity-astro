@@ -26,6 +26,7 @@
     "@portabletext/react": "^3.0.11",
     "@sanity/astro": "^2.1.1",
     "@sanity/client": "^6.7.0",
+    "@turf/turf": "^6.5.0",
     "astro-headless-ui": "^0.0.30",
     "astro-icon": "^0.8.1",
     "astro-json-element": "^1.1.4",

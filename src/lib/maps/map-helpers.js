@@ -1,4 +1,5 @@
 import mapboxgl from "mapbox-gl";
+import * as turf from '@turf/turf'
 
 export function mapButtons(text) {
   var output = text
@@ -73,6 +74,15 @@ export function cityClick(map) {
   })
 }
 
+export function layerClick(map, layers) {
+  map.on('click', layers, (e) => {
+    map.flyTo({
+      center: e.features[0].geometry.coordinates,
+      zoom: 13,
+    })
+  })
+}
+
 export function cursorChange(map, layers) {
   // Change the cursor to a pointer when the it enters a feature in the 'circle' layer.
   map.on('mouseenter', layers, () => {
@@ -85,10 +95,54 @@ export function cursorChange(map, layers) {
   })
 }
 
+export function setUpBBox(map, source) {
+  map.once('idle', () => {
+    sessionStorage.setItem(`${map._container.dataset.attr}-bounds`, JSON.stringify(turf.bbox(source)))
+    map.fitBounds(turf.bbox(source), {padding: 20, animate: false});
+  })
+}
+
+export function placePopup(map, layers) {
+  // Create a popup, but don't add it to the map yet.
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false,
+    closeOnMove: true,
+    className: 'map-popup',
+  });
+
+  map.on('mouseenter', layers, (e) => {
+    let currentZoom = map.getZoom()
+    if (currentZoom >= 5) {
+      // Copy coordinates array.
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const favorite = e.features[0].properties.favorite == true ? `<div class="favorite"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.322 2.923c.126-.259.39-.423.678-.423.289 0 .552.164.678.423.974 1.998 2.65 5.44 2.65 5.44s3.811.524 6.022.829c.403.055.65.396.65.747 0 .19-.072.383-.231.536-1.61 1.538-4.382 4.191-4.382 4.191s.677 3.767 1.069 5.952c.083.462-.275.882-.742.882-.122 0-.244-.029-.355-.089-1.968-1.048-5.359-2.851-5.359-2.851s-3.391 1.803-5.359 2.851c-.111.06-.234.089-.356.089-.465 0-.825-.421-.741-.882.393-2.185 1.07-5.952 1.07-5.952s-2.773-2.653-4.382-4.191c-.16-.153-.232-.346-.232-.535 0-.352.249-.694.651-.748 2.211-.305 6.021-.829 6.021-.829s1.677-3.442 2.65-5.44z" fill-rule="nonzero"/></svg></div>` : '';
+      const header = `<header><div><b>${e.features[0].properties.title ? e.features[0].properties.title : e.features[0].properties.name}</b></div>${favorite}</header>`;
+      const description = e.features[0].properties.description != null ? `<p class="desc">${e.features[0].properties.description}</p>` : '';
+      const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
+      const content = `${header}${description}`
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+      
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(coordinates).setHTML(content).addTo(map);
+    }
+  });
+  map.on('mouseleave', layers, () => {
+    popup.remove();
+  });
+}
+
 export function resetZoom(map, zoom) {
   if (zoom == 'true') {
     // get bounds from sessionStorage that was saved by setUpBBox function
-    const bounds = sessionStorage.getItem('bounds')
+    const bounds = sessionStorage.getItem(`${map._container.dataset.attr}-bounds`)
     map.addControl(new ResetZoom(bounds), 'top-left')
   } else {
     map.addControl(new ResetZoom(), 'top-left')
@@ -96,8 +150,10 @@ export function resetZoom(map, zoom) {
 }
 
 export function createTypeButtons(map, layers) {
-  map.on('idle', () => {
-
+  if (!map.buttons) {
+    map.buttons = [];
+  }
+  map.once('idle', () => {
     // create array from Set passed from placeTypes
     // If these layers were not added to the map, abort
     if (layers.some(layer => !map.getLayer(layer))) {return}
@@ -105,16 +161,16 @@ export function createTypeButtons(map, layers) {
     // For each Place Type create a button
     for (const id of layers) {
       // Skip layers that already have a button set up.
-      if (document.getElementById(id)) {
+      if (map.buttons.includes(id)) {
         continue;
       }
-      
+
       // Create a link.
       const link = document.createElement('button');
       link.id = id;
       link.textContent = mapButtons(id);
       link.className = 'pill';
-      
+
       // Show or hide layer when the toggle is clicked.
       link.onclick = function (e) {
         const clickedLayer = this.id;
@@ -139,11 +195,31 @@ export function createTypeButtons(map, layers) {
           );
         }
       }
-      
-      const layers = document.querySelector('[data-cat]')
-      layers.appendChild(link);
+      const mapAttr = map._container.dataset.attr
+      const nav = document.querySelector(`[data-attr=${mapAttr}]`)
+      nav.appendChild(link);
+      map.buttons.push(id);
     }
   })
+}
+
+export function clusterZoom(map, layers, source) {
+  // inspect a cluster on click
+  map.on('click', layers, (e) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: layers });
+    const clusterId = features[0].properties.cluster_id;
+    map.getSource(source).getClusterExpansionZoom(
+      clusterId,
+      (err, zoom) => {
+        if (err) return;
+        
+        map.easeTo({
+          center: features[0].geometry.coordinates,
+          zoom: zoom
+        });
+      }
+    );
+  });
 }
 
 class ResetZoom {
@@ -164,11 +240,10 @@ class ResetZoom {
     this._btn.title = "Reset Zoom"
     this._btn.appendChild(this._el)
 
-    this._btn.onclick = (e) => {
+    this._btn.onclick = () => {
       if (this.bounds) {
         // parse the JSON string and recreate the necessary LngLatBounds for use in fitBounds
         let bounds = JSON.parse(this.bounds)
-        bounds = new mapboxgl.LngLatBounds(bounds._sw, bounds._ne)
         map.fitBounds(bounds, {padding: 20});
       } else {
         map.flyTo({zoom: 1})
