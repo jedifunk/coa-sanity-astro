@@ -13,7 +13,7 @@ export default defineConfig({
     // }), 
     sanity({
       projectId: "8icb2evz",
-      dataset: 'playground',
+      dataset: 'production',
       apiVersion: '2023-08-09',
       useCdn: false,
     }),
