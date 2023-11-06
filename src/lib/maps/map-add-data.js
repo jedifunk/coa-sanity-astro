@@ -165,6 +165,7 @@ export function addPlaceTypes(geojson, map) {
   helpers.cursorChange(map, layers)
   helpers.createTypeButtons(map, layers)
   helpers.placePopup(map, layers)
+  //helpers.sidebar(map, layers)
 }
 
 export function addPlaceTypesAndZoom(geojson, map) {
@@ -200,4 +201,5 @@ export function addPlaceTypesAndZoom(geojson, map) {
   helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)
   helpers.placePopup(map, layers)
+  //helpers.sidebar(map, layers)
 }

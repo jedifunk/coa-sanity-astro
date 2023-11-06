@@ -107,7 +107,7 @@ export function setUpBBox(map, source) {
 export function placePopup(map, layers) {
   // Create a popup, but don't add it to the map yet.
   const popup = new mapboxgl.Popup({
-    closeButton: false,
+    //closeButton: false,
     closeOnClick: false,
     closeOnMove: true,
     className: 'map-popup',
@@ -115,7 +115,7 @@ export function placePopup(map, layers) {
 
   const data = Array.isArray(layers) ? layers : Object.keys(layers)
 
-  map.on('mouseenter', data, (e) => {
+  map.on('click', data, (e) => {
     let currentZoom = map.getZoom()
 
     if (currentZoom >= 5) {
@@ -139,9 +139,9 @@ export function placePopup(map, layers) {
       popup.setLngLat(coordinates).setHTML(content).addTo(map);
     }
   });
-  map.on('mouseleave', data, () => {
-    popup.remove();
-  });
+  // map.on('mouseleave', data, () => {
+  //   popup.remove();
+  // });
 }
 
 export function resetZoom(map, zoom) {
@@ -230,6 +230,38 @@ export function clusterZoom(map, layers, source) {
       }
     );
   });
+}
+
+export function sidebar(map, layers) {
+  const wrapper = map._container
+  let sidebar
+
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
+
+  map.on('click', data, (e) => {
+    if (wrapper.contains(sidebar)){
+      wrapper.removeChild(sidebar)
+    }
+    let currentZoom = map.getZoom()
+      
+    if (currentZoom >= 5) {
+      const favorite = e.features[0].properties.favorite == true ? `<div class="favorite"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.322 2.923c.126-.259.39-.423.678-.423.289 0 .552.164.678.423.974 1.998 2.65 5.44 2.65 5.44s3.811.524 6.022.829c.403.055.65.396.65.747 0 .19-.072.383-.231.536-1.61 1.538-4.382 4.191-4.382 4.191s.677 3.767 1.069 5.952c.083.462-.275.882-.742.882-.122 0-.244-.029-.355-.089-1.968-1.048-5.359-2.851-5.359-2.851s-3.391 1.803-5.359 2.851c-.111.06-.234.089-.356.089-.465 0-.825-.421-.741-.882.393-2.185 1.07-5.952 1.07-5.952s-2.773-2.653-4.382-4.191c-.16-.153-.232-.346-.232-.535 0-.352.249-.694.651-.748 2.211-.305 6.021-.829 6.021-.829s1.677-3.442 2.65-5.44z" fill-rule="nonzero"/></svg></div>` : '';
+      const header = `<header><div><b>${e.features[0].properties.title ? e.features[0].properties.title : e.features[0].properties.name}</b></div>${favorite}</header>`;
+      const description = e.features[0].properties.description != null ? `<p class="desc">${e.features[0].properties.description}</p>` : '';
+      const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
+      const content = `${header}${description}${website}`
+
+      sidebar = document.createElement('div')
+      sidebar.className = 'map-sidebar'
+      sidebar.innerHTML = content
+      wrapper.appendChild(sidebar)
+    }
+  })
+  map.on('move', () => {
+    if (wrapper.contains(sidebar)){
+      wrapper.removeChild(sidebar)
+    }
+  })
 }
 
 class ResetZoom {
