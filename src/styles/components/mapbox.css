@@ -21,7 +21,6 @@
   font-family: var(--body-font);
   font-size: 14px;
   line-height: 1.75;
-  box-shadow: 0 0 0 2px rgba(0,0,0,.1);
 }
 .map-popup b,
 .map-sidebar b {
@@ -56,4 +55,5 @@
   background-color: white;
   border-radius: 5px;
   padding: 5px 10px;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.1);
 }
