@@ -55,7 +55,7 @@ export function addCities(geojson, map) {
 export function addQuery(geojson, map) {
   // First, create a set of unique placeTypes
   const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
-
+  const layers = {}
   // Then, for each unique placeType, create a layer
   placeTypes.forEach(placeType => {
     const filteredGeojson = {
@@ -79,8 +79,8 @@ export function addQuery(geojson, map) {
         visibility: 'visible'
       }
     });
+    layers[placeType] = filteredGeojson
   });
-  const layers = Array.from(placeTypes)
   helpers.layerClick(map, layers)
   helpers.cursorChange(map, layers)
   helpers.createTypeButtons(map, layers)
@@ -88,9 +88,10 @@ export function addQuery(geojson, map) {
 }
 
 export function addQueryAndZoom(geojson, map) {
+  
   // First, create a set of unique placeTypes
   const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
-
+  const layers = {}
   // Then, for each unique placeType, create a layer
   placeTypes.forEach(placeType => {
     const filteredGeojson = {
@@ -114,18 +115,20 @@ export function addQueryAndZoom(geojson, map) {
         visibility: 'visible'
       }
     });
+    layers[placeType] = filteredGeojson
   });
-  const layers = Array.from(placeTypes)
   helpers.setUpBBox(map, geojson)
+  helpers.layerClick(map, layers)
   helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)
   helpers.placePopup(map, layers)
 }
 
 export function addPlaceTypes(geojson, map) {
+  
   // First, create a set of unique placeTypes
   const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType));
-
+  const layers = {}
   // Then, for each unique placeType, create a layer
   placeTypes.forEach(placeType => {
     const filteredGeojson = {
@@ -157,8 +160,8 @@ export function addPlaceTypes(geojson, map) {
       },
       minzoom: 8,
     });
+    layers[placeType] = filteredGeojson
   });
-  const layers = Array.from(placeTypes)
   helpers.cursorChange(map, layers)
   helpers.createTypeButtons(map, layers)
   helpers.placePopup(map, layers)
@@ -167,7 +170,7 @@ export function addPlaceTypes(geojson, map) {
 export function addPlaceTypesAndZoom(geojson, map) {
   // First, create a set of unique placeTypes
   const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
-
+  const layers = {}
   // Then, for each unique placeType, create a layer
   placeTypes.forEach(placeType => {
     const filteredGeojson = {
@@ -191,8 +194,8 @@ export function addPlaceTypesAndZoom(geojson, map) {
         visibility: 'visible'
       }
     });
+    layers[placeType] = filteredGeojson
   });
-  const layers = Array.from(placeTypes)
   helpers.setUpBBox(map, geojson)
   helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)

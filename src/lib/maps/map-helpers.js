@@ -75,7 +75,8 @@ export function cityClick(map) {
 }
 
 export function layerClick(map, layers) {
-  map.on('click', layers, (e) => {
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
+  map.on('click', data, (e) => {
     map.flyTo({
       center: e.features[0].geometry.coordinates,
       zoom: 13,
@@ -84,13 +85,14 @@ export function layerClick(map, layers) {
 }
 
 export function cursorChange(map, layers) {
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
   // Change the cursor to a pointer when the it enters a feature in the 'circle' layer.
-  map.on('mouseenter', layers, () => {
+  map.on('mouseenter', data, () => {
     map.getCanvas().style.cursor = 'pointer'
   })
   
   // Change it back to a pointer when it leaves.
-  map.on('mouseleave', layers, () => {
+  map.on('mouseleave', data, () => {
     map.getCanvas().style.cursor = ''
   })
 }
@@ -111,8 +113,11 @@ export function placePopup(map, layers) {
     className: 'map-popup',
   });
 
-  map.on('mouseenter', layers, (e) => {
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
+
+  map.on('mouseenter', data, (e) => {
     let currentZoom = map.getZoom()
+
     if (currentZoom >= 5) {
       // Copy coordinates array.
       const coordinates = e.features[0].geometry.coordinates.slice();
@@ -134,7 +139,7 @@ export function placePopup(map, layers) {
       popup.setLngLat(coordinates).setHTML(content).addTo(map);
     }
   });
-  map.on('mouseleave', layers, () => {
+  map.on('mouseleave', data, () => {
     popup.remove();
   });
 }
@@ -153,22 +158,26 @@ export function createTypeButtons(map, layers) {
   if (!map.buttons) {
     map.buttons = [];
   }
-  map.once('idle', () => {
-    // create array from Set passed from placeTypes
-    // If these layers were not added to the map, abort
-    if (layers.some(layer => !map.getLayer(layer))) {return}
 
-    // For each Place Type create a button
-    for (const id of layers) {
+  map.once('idle', () => {
+    // If these layers were not added to the map, abort
+    if (Array.isArray(layers) ? layers.some(layer => !map.getLayer(layer)) : Object.keys(layers).some(layer => !map.getLayer(layer))) {return}
+
+    //if (Object.keys(layers).some(layer => !map.getLayer(layer))) {return}
+
+    // For each Place Type layer create a button
+    const layerKeys = Array.isArray(layers) ? layers : Object.keys(layers);
+    for (const layer of layerKeys) {
+
       // Skip layers that already have a button set up.
-      if (map.buttons.includes(id)) {
+      if (map.buttons.includes(layer)) {
         continue;
       }
 
       // Create a link.
       const link = document.createElement('button');
-      link.id = id;
-      link.textContent = mapButtons(id);
+      link.id = layer;
+      link.textContent = Array.isArray(layers) ? mapButtons(layer) : layers[layer].features[0].properties.placeTypeTitle
       link.className = 'pill';
 
       // Show or hide layer when the toggle is clicked.
@@ -198,15 +207,16 @@ export function createTypeButtons(map, layers) {
       const mapAttr = map._container.dataset.attr
       const nav = document.querySelector(`[data-attr=${mapAttr}]`)
       nav.appendChild(link);
-      map.buttons.push(id);
+      map.buttons.push(layer);
     }
   })
 }
 
 export function clusterZoom(map, layers, source) {
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
   // inspect a cluster on click
-  map.on('click', layers, (e) => {
-    const features = map.queryRenderedFeatures(e.point, { layers: layers });
+  map.on('click', data, (e) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: data });
     const clusterId = features[0].properties.cluster_id;
     map.getSource(source).getClusterExpansionZoom(
       clusterId,

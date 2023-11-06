@@ -26,18 +26,6 @@ export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, 
   }
 }
 
-// temp to get 4sq working, come back to fold into main orchestrate
-export async function orchestrateFoursquare(mapID, newShops, newTransit, newOutdoors, newFood, newHist) {
-  const map = await initializeMap(mapID)
-  await checkinInteractivity(map)
-  
-  await fsq.addShopCheckins2022(newShops, map)
-  await fsq.addTransitCheckins2022(newTransit, map)
-  await fsq.addOutdoorCheckins2022(newOutdoors, map)
-  await fsq.addFoodCheckins2022(newFood, map)
-  await fsq.addHistoricCheckins2022(newHist, map)
-}
-
 export async function initializeMap(id) {
   return new Promise(resolve => {
     const map = new mapboxgl.Map({
@@ -63,6 +51,18 @@ export async function mapInteractivity(map, layers, zoom) {
   helpers.placePopup(map, layers)
 }
 
+// temp to get 4sq working, come back to fold into main orchestrate
+export async function orchestrateFoursquare(mapID, newShops, newTransit, newOutdoors, newFood, newHist) {
+  const map = await initializeMap(mapID)
+  await checkinInteractivity(map)
+
+  await fsq.addShopCheckins2022(newShops, map)
+  await fsq.addTransitCheckins2022(newTransit, map)
+  await fsq.addOutdoorCheckins2022(newOutdoors, map)
+  await fsq.addFoodCheckins2022(newFood, map)
+  await fsq.addHistoricCheckins2022(newHist, map)
+}
+// temp to get 4sq working
 export function checkinInteractivity(map, zoom) {
   const nav = new mapboxgl.NavigationControl({
     showCompass: false,
