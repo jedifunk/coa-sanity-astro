@@ -163,8 +163,6 @@ export function createTypeButtons(map, layers) {
     // If these layers were not added to the map, abort
     if (Array.isArray(layers) ? layers.some(layer => !map.getLayer(layer)) : Object.keys(layers).some(layer => !map.getLayer(layer))) {return}
 
-    //if (Object.keys(layers).some(layer => !map.getLayer(layer))) {return}
-
     // For each Place Type layer create a button
     const layerKeys = Array.isArray(layers) ? layers : Object.keys(layers);
     for (const layer of layerKeys) {
@@ -183,8 +181,6 @@ export function createTypeButtons(map, layers) {
       // Show or hide layer when the toggle is clicked.
       link.onclick = function (e) {
         const clickedLayer = this.id;
-        // e.preventDefault();
-        // e.stopPropagation();
         
         const visibility = map.getLayoutProperty(
           clickedLayer,
