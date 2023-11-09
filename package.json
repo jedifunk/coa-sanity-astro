@@ -11,7 +11,7 @@
   "devDependencies": {
     "@astrojs/react": "^3.0.4",
     "@sanity/image-url": "^1.0.2",
-    "astro": "^3.4.0",
+    "astro": "^3.4.4",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "react": "^18.2.0",
@@ -19,13 +19,13 @@
   },
   "dependencies": {
     "@11ty/eleventy-fetch": "^4.0.0",
-    "@astrojs/partytown": "^2.0.1",
+    "@astrojs/partytown": "^2.0.2",
     "@fontsource/fira-sans": "^5.0.17",
     "@fontsource/merriweather": "^5.0.8",
     "@glidejs/glide": "^3.6.0",
     "@portabletext/react": "^3.0.11",
-    "@sanity/astro": "^2.1.1",
-    "@sanity/client": "^6.7.0",
+    "@sanity/astro": "^2.1.4",
+    "@sanity/client": "^6.7.1",
     "@turf/turf": "^6.5.0",
     "astro-headless-ui": "^0.0.30",
     "astro-icon": "^0.8.1",
@@ -37,6 +37,6 @@
     "mapbox-gl": "^2.15.0",
     "osmtogeojson": "^3.0.0-beta.5",
     "sharp": "^0.32.6",
-    "yet-another-react-lightbox": "^3.14.0"
+    "yet-another-react-lightbox": "^3.15.1"
   }
 }
