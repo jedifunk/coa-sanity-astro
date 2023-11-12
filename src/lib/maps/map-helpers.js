@@ -99,59 +99,46 @@ export function cursorChange(map, layers) {
 
 export function setUpBBox(map, source) {
   map.once('idle', () => {
-    sessionStorage.setItem(`${map._container.dataset.attr}-bounds`, JSON.stringify(turf.bbox(source)))
+    // get mapId to identify each map uniquely, use in creation of custom event
+    const mapID = map._mapId
+    const bounds = JSON.stringify(turf.bbox(source))
     map.fitBounds(turf.bbox(source), {padding: 20, animate: false});
+    const event = new CustomEvent(`bboxSet-${mapID}`, { detail: bounds });
+    window.dispatchEvent(event)
   })
-}
-
-export function placePopup(map, layers) {
-  // Create a popup, but don't add it to the map yet.
-  const popup = new mapboxgl.Popup({
-    //closeButton: false,
-    closeOnClick: false,
-    closeOnMove: true,
-    className: 'map-popup',
-  });
-
-  const data = Array.isArray(layers) ? layers : Object.keys(layers)
-
-  map.on('click', data, (e) => {
-    let currentZoom = map.getZoom()
-
-    if (currentZoom >= 5) {
-      // Copy coordinates array.
-      const coordinates = e.features[0].geometry.coordinates.slice();
-      const favorite = e.features[0].properties.favorite == true ? `<div class="favorite"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.322 2.923c.126-.259.39-.423.678-.423.289 0 .552.164.678.423.974 1.998 2.65 5.44 2.65 5.44s3.811.524 6.022.829c.403.055.65.396.65.747 0 .19-.072.383-.231.536-1.61 1.538-4.382 4.191-4.382 4.191s.677 3.767 1.069 5.952c.083.462-.275.882-.742.882-.122 0-.244-.029-.355-.089-1.968-1.048-5.359-2.851-5.359-2.851s-3.391 1.803-5.359 2.851c-.111.06-.234.089-.356.089-.465 0-.825-.421-.741-.882.393-2.185 1.07-5.952 1.07-5.952s-2.773-2.653-4.382-4.191c-.16-.153-.232-.346-.232-.535 0-.352.249-.694.651-.748 2.211-.305 6.021-.829 6.021-.829s1.677-3.442 2.65-5.44z" fill-rule="nonzero"/></svg></div>` : '';
-      const header = `<header><div><b>${e.features[0].properties.title ? e.features[0].properties.title : e.features[0].properties.name}</b></div>${favorite}</header>`;
-      const description = e.features[0].properties.description != null ? `<p class="desc">${e.features[0].properties.description}</p>` : '';
-      const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
-      const content = `${header}${description}`
-
-      // Ensure that if the map is zoomed out such that multiple
-      // copies of the feature are visible, the popup appears
-      // over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-      
-      // Populate the popup and set its coordinates
-      // based on the feature found.
-      popup.setLngLat(coordinates).setHTML(content).addTo(map);
-    }
-  });
-  // map.on('mouseleave', data, () => {
-  //   popup.remove();
-  // });
 }
 
 export function resetZoom(map, zoom) {
   if (zoom == 'true') {
-    // get bounds from sessionStorage that was saved by setUpBBox function
-    const bounds = sessionStorage.getItem(`${map._container.dataset.attr}-bounds`)
-    map.addControl(new ResetZoom(bounds), 'top-left')
+  // get mapId to match with mapId set in setUpBBox
+  const mapID = map._mapId
+    // get bounds from CustomEvent that was saved by setUpBBox function
+    window.addEventListener(`bboxSet-${mapID}`, (event) => {
+      map.addControl(new ResetZoom(event.detail), 'top-left')
+    })
   } else {
     map.addControl(new ResetZoom(), 'top-left')
   }
+}
+
+export function clusterZoom(map, layers, source) {
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
+  // inspect a cluster on click
+  map.on('click', data, (e) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: data });
+    const clusterId = features[0].properties.cluster_id;
+    map.getSource(source).getClusterExpansionZoom(
+      clusterId,
+      (err, zoom) => {
+        if (err) return;
+        
+        map.easeTo({
+          center: features[0].geometry.coordinates,
+          zoom: zoom
+        });
+      }
+    );
+  });
 }
 
 export function createTypeButtons(map, layers) {
@@ -208,24 +195,88 @@ export function createTypeButtons(map, layers) {
   })
 }
 
-export function clusterZoom(map, layers, source) {
-  const data = Array.isArray(layers) ? layers : Object.keys(layers)
-  // inspect a cluster on click
-  map.on('click', data, (e) => {
-    const features = map.queryRenderedFeatures(e.point, { layers: data });
-    const clusterId = features[0].properties.cluster_id;
-    map.getSource(source).getClusterExpansionZoom(
-      clusterId,
-      (err, zoom) => {
-        if (err) return;
-        
-        map.easeTo({
-          center: features[0].geometry.coordinates,
-          zoom: zoom
-        });
-      }
-    );
+export function placePopup(map, layers) {
+
+  // Create a popup, but don't add it to the map yet.
+  const popup = new mapboxgl.Popup({
+    //closeButton: false,
+    closeOnClick: false,
+    closeOnMove: true,
+    className: 'map-popup',
   });
+
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
+
+  map.on('click', data, (e) => {
+    let currentZoom = map.getZoom()
+
+    if (currentZoom >= 5) {
+      // Copy coordinates array.
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const favorite = e.features[0].properties.favorite == true ? `<div class="favorite"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.322 2.923c.126-.259.39-.423.678-.423.289 0 .552.164.678.423.974 1.998 2.65 5.44 2.65 5.44s3.811.524 6.022.829c.403.055.65.396.65.747 0 .19-.072.383-.231.536-1.61 1.538-4.382 4.191-4.382 4.191s.677 3.767 1.069 5.952c.083.462-.275.882-.742.882-.122 0-.244-.029-.355-.089-1.968-1.048-5.359-2.851-5.359-2.851s-3.391 1.803-5.359 2.851c-.111.06-.234.089-.356.089-.465 0-.825-.421-.741-.882.393-2.185 1.07-5.952 1.07-5.952s-2.773-2.653-4.382-4.191c-.16-.153-.232-.346-.232-.535 0-.352.249-.694.651-.748 2.211-.305 6.021-.829 6.021-.829s1.677-3.442 2.65-5.44z" fill-rule="nonzero"/></svg></div>` : '';
+      const header = `<header><div><b>${e.features[0].properties.title ? e.features[0].properties.title : e.features[0].properties.name}</b></div>${favorite}</header>`;
+      const description = e.features[0].properties.description != null ? `<p class="desc">${e.features[0].properties.description}</p>` : '';
+      const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
+      const content = `${header}${description}`
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+      
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(coordinates).setHTML(content).addTo(map);
+      console.log('click')
+    }
+  });
+  // map.on('mouseleave', data, () => {
+  //   popup.remove();
+  // });
+}
+
+export function zoomAndPopup(map, layers) {
+  // Create a popup, but don't add it to the map yet.
+  const popup = new mapboxgl.Popup({
+    //closeButton: false,
+    closeOnClick: false,
+    closeOnMove: true,
+    className: 'map-popup',
+  })
+
+  const data = Array.isArray(layers) ? layers : Object.keys(layers)
+
+  map.on('click', data, (e) => {
+    let currentZoom = map.getZoom()
+    if (currentZoom >= 5) {
+      // Copy coordinates array.
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const favorite = e.features[0].properties.favorite == true ? `<div class="favorite"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.322 2.923c.126-.259.39-.423.678-.423.289 0 .552.164.678.423.974 1.998 2.65 5.44 2.65 5.44s3.811.524 6.022.829c.403.055.65.396.65.747 0 .19-.072.383-.231.536-1.61 1.538-4.382 4.191-4.382 4.191s.677 3.767 1.069 5.952c.083.462-.275.882-.742.882-.122 0-.244-.029-.355-.089-1.968-1.048-5.359-2.851-5.359-2.851s-3.391 1.803-5.359 2.851c-.111.06-.234.089-.356.089-.465 0-.825-.421-.741-.882.393-2.185 1.07-5.952 1.07-5.952s-2.773-2.653-4.382-4.191c-.16-.153-.232-.346-.232-.535 0-.352.249-.694.651-.748 2.211-.305 6.021-.829 6.021-.829s1.677-3.442 2.65-5.44z" fill-rule="nonzero"/></svg></div>` : '';
+      const header = `<header><div><b>${e.features[0].properties.title ? e.features[0].properties.title : e.features[0].properties.name}</b></div>${favorite}</header>`;
+      const description = e.features[0].properties.description != null ? `<p class="desc">${e.features[0].properties.description}</p>` : '';
+      const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
+      const content = `${header}${description}`
+
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(coordinates).setHTML(content).addTo(map);
+    } else {
+      map.flyTo({
+        center: e.features[0].geometry.coordinates,
+        zoom: 13,
+      })
+    }
+
+  })
 }
 
 export function sidebar(map, layers) {

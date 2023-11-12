@@ -10,7 +10,6 @@ mapboxgl.accessToken = MB_TOKEN
 
 export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, locations, customQuery) {
   const map = await initializeMap(mapID)
-  await mapInteractivity(map, mapLayers, mapZoom)
 
   if (mapLayers.includes('countries')) {
     await addMapboxCountries(countries, map)
@@ -24,6 +23,8 @@ export async function orchestrate(mapID, mapLayers, mapZoom, countries, cities, 
   if (customQuery) {
     await convertMap.convertQuery(customQuery, map, mapZoom)
   }
+
+  await mapInteractivity(map, mapLayers, mapZoom)
 }
 
 export async function initializeMap(id) {
@@ -72,7 +73,8 @@ export function checkinInteractivity(map, zoom) {
 
   const layers = ['food', 'cafes-bars', 'parks-plazas', 'historic-monuments', 'transit']
   helpers.cursorChange(map, layers)
-  helpers.layerClick(map, layers)
-  helpers.placePopup(map, layers)
+  //helpers.layerClick(map, layers)
+  //helpers.placePopup(map, layers)
+  helpers.zoomAndPopup(map, layers)
   helpers.createTypeButtons(map, layers)
 }

@@ -55,7 +55,7 @@ export async function convertPlaceTypes(places, map, mapZoom) {
   }
 
   if (mapZoom == 'true') {
-    await mapAdd.addPlaceTypesAndZoom(geojson, map)
+    await mapAdd.addWithZoom(geojson, map)
   } else {
     await mapAdd.addPlaceTypes(geojson, map)
   }
@@ -89,7 +89,7 @@ export async function convertQuery(query, map, mapZoom) {
   }
 
   if (mapZoom == 'true') {
-    await mapAdd.addQueryAndZoom(geojson, map)
+    await mapAdd.addWithZoom(geojson, map)
   } else {
     await mapAdd.addQuery(geojson, map)
   }

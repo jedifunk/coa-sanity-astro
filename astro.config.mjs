@@ -1,7 +1,10 @@
-import react from "@astrojs/react"
-import sanity from '@sanity/astro'
-import partytown from "@astrojs/partytown";
 import { defineConfig } from 'astro/config'
+import react from "@astrojs/react"
+// TEMP: fix for sanity integration, switch back when bug is fixed
+//import sanity from '@sanity/astro'
+import { sanityIntegration as sanity } from "@sanity/astro"
+// END
+import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({

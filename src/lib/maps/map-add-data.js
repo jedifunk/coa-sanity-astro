@@ -81,47 +81,11 @@ export function addQuery(geojson, map) {
     });
     layers[placeType] = filteredGeojson
   });
-  helpers.layerClick(map, layers)
+  //helpers.layerClick(map, layers)
   helpers.cursorChange(map, layers)
   helpers.createTypeButtons(map, layers)
-  helpers.placePopup(map, layers)
-}
-
-export function addQueryAndZoom(geojson, map) {
-  
-  // First, create a set of unique placeTypes
-  const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
-  const layers = {}
-  // Then, for each unique placeType, create a layer
-  placeTypes.forEach(placeType => {
-    const filteredGeojson = {
-      type: 'FeatureCollection',
-      features: geojson.features.filter(feature => feature.properties.placeType === placeType)
-    };
-
-    map.addSource(placeType, {
-      type: 'geojson',
-      data: filteredGeojson
-    });
-
-    map.addLayer({
-      id: placeType,
-      type: 'circle',
-      source: placeType,
-      paint: {
-        'circle-color': 'hsla(199, 100%, 20%, 1)',
-      },
-      layout: {
-        visibility: 'visible'
-      }
-    });
-    layers[placeType] = filteredGeojson
-  });
-  helpers.setUpBBox(map, geojson)
-  helpers.layerClick(map, layers)
-  helpers.createTypeButtons(map, layers)
-  helpers.cursorChange(map, layers)
-  helpers.placePopup(map, layers)
+  //helpers.placePopup(map, layers)
+  helpers.zoomAndPopup(map, layers)
 }
 
 export function addPlaceTypes(geojson, map) {
@@ -164,11 +128,12 @@ export function addPlaceTypes(geojson, map) {
   });
   helpers.cursorChange(map, layers)
   helpers.createTypeButtons(map, layers)
-  helpers.placePopup(map, layers)
+  //helpers.placePopup(map, layers)
   //helpers.sidebar(map, layers)
+  helpers.zoomAndPopup(map, layers)
 }
 
-export function addPlaceTypesAndZoom(geojson, map) {
+export function addWithZoom(geojson, map) {
   // First, create a set of unique placeTypes
   const placeTypes = new Set(geojson.features.map(feature => feature.properties.placeType))
   const layers = {}
@@ -200,6 +165,7 @@ export function addPlaceTypesAndZoom(geojson, map) {
   helpers.setUpBBox(map, geojson)
   helpers.createTypeButtons(map, layers)
   helpers.cursorChange(map, layers)
-  helpers.placePopup(map, layers)
+  //helpers.placePopup(map, layers)
   //helpers.sidebar(map, layers)
+  helpers.zoomAndPopup(map, layers)
 }
