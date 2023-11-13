@@ -258,7 +258,7 @@ export function zoomAndPopup(map, layers) {
       const header = `<header><div><b>${e.features[0].properties.title ? e.features[0].properties.title : e.features[0].properties.name}</b></div>${favorite}</header>`;
       const description = e.features[0].properties.description != null ? `<p class="desc">${e.features[0].properties.description}</p>` : '';
       const website = e.features[0].properties.website != null ? `<p><a href="${e.features[0].properties.website}" target="_blank">Website</a></p>` : '';
-      const content = `${header}${description}`
+      const content = `${header}${description}${website}`
 
       // Ensure that if the map is zoomed out such that multiple
       // copies of the feature are visible, the popup appears
