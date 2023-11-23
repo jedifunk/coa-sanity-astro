@@ -229,7 +229,6 @@ export function placePopup(map, layers) {
       // Populate the popup and set its coordinates
       // based on the feature found.
       popup.setLngLat(coordinates).setHTML(content).addTo(map);
-      console.log('click')
     }
   });
   // map.on('mouseleave', data, () => {
