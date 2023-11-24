@@ -34,6 +34,7 @@
     "astro-sanity-picture": "^0.2.0",
     "chart.js": "^4.4.0",
     "get-video-id": "^3.6.5",
+    "lightgallery": "^2.7.2",
     "mapbox-gl": "^2.15.0",
     "osmtogeojson": "^3.0.0-beta.5",
     "sharp": "^0.32.6",

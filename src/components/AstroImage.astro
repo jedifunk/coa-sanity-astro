@@ -3,9 +3,21 @@ import { getSanityImageUrl } from "../lib/helpers"
 
 const props = Astro.props
 ---
-<figure class={`img-full`}>
-  <button >
+<figure class={`img-full`} data-src={getSanityImageUrl(props.node.asset).auto('format').quality(100).url()}>
+  <button>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 13h-4v-9h-9v-4h13v13zm-24 11h13v-4h-9v-9h-4v13z"/></svg>
     <img src={getSanityImageUrl(props.node.asset).width(725).auto('format').url()} loading="lazy" alt={props.node.alt} />
     {props.node.caption && <figcaption>{props.node.caption}</figcaption>}
   </button>
 </figure>
+<script>
+import lightGallery from 'lightgallery'
+import lgMediumZoom from 'lightgallery/plugins/mediumZoom'
+import 'lightgallery/css/lightgallery.css'
+import 'lightgallery/css/lg-medium-zoom.css'
+
+lightGallery(document.querySelector('.post'), {
+  selector: '.img-full',
+  plugins: [lgMediumZoom]
+})
+</script>
