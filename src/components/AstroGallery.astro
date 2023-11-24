@@ -1,6 +1,5 @@
 ---
 import { getSanityImageUrl } from "../lib/helpers"
-//import {GalleryBlock} from "./GalleryBlock"
 
 const props = Astro.props
 
@@ -8,7 +7,8 @@ const cols = (props.node.columns != null) ? props.node.columns : 3
 const gClass = (props.node.gClass !== undefined) ? props.node.gClass : ''
 const cssParams = props.node.cssParams
 const images = props.node.images
-let imgProps = JSON.stringify(images.map(obj => {
+
+const imgProps = JSON.stringify(images.map(obj => {
   return {
     src: getSanityImageUrl(obj).auto('format').quality(100).url(),
     alt: obj.alt,
@@ -21,7 +21,6 @@ let imgProps = JSON.stringify(images.map(obj => {
   {images.map((img, index) => 
     <figure class="blocks-gallery-item">
       <button class="gal-btn" data-index={index}>
-        {/* <BiExpandAlt className='enlarge'/> */}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 13h-4v-9h-9v-4h13v13zm-24 11h13v-4h-9v-9h-4v13z"/></svg>
         <img src={getSanityImageUrl(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
         {img.caption && <figcaption>{img.caption}</figcaption>}
@@ -29,6 +28,7 @@ let imgProps = JSON.stringify(images.map(obj => {
     </figure>
   )}
 </div>
+{cssParams !== undefined && <style>{`${cssParams}`}</style>}
 <script>
 import lightGallery from 'lightgallery'
 import lgZoom from 'lightgallery/plugins/zoom'
@@ -84,4 +84,3 @@ allGalleries.forEach((gallery) => {
   })
 })
 </script>
-<!-- <GalleryBlock value={props.node} client:visible /> -->
