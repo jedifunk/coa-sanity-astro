@@ -28,7 +28,7 @@ const imgProps = JSON.stringify(images.map(obj => {
     </figure>
   )}
 </div>
-{cssParams !== undefined && <style>{`${cssParams}`}</style>}
+{cssParams !== undefined && <style define:vars={{cssParams}}></style>}
 <script>
 import lightGallery from 'lightgallery'
 import lgZoom from 'lightgallery/plugins/zoom'
