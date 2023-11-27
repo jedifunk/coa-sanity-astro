@@ -2,8 +2,9 @@
 import { getSanityImageUrl } from "../lib/helpers"
 
 const props = Astro.props
+
 ---
-<figure class={`img-full`} data-src={getSanityImageUrl(props.node.asset).auto('format').quality(100).url()}>
+<figure class={`img-full`} data-src={getSanityImageUrl(props.node.asset).auto('format').quality(100).url()} data-sub-html={props?.node?.caption}>
   <button>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 13h-4v-9h-9v-4h13v13zm-24 11h13v-4h-9v-9h-4v13z"/></svg>
     <img src={getSanityImageUrl(props.node.asset).width(725).auto('format').url()} loading="lazy" alt={props.node.alt} />
