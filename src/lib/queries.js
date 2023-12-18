@@ -4,7 +4,7 @@ export const siteNav = `*[_type == 'siteSettings'][0]{siteNav{menuItems[]{name, 
 
 // Page & Posts
 export const allPosts = `*[_type == 'article']{..., categories[] ->, country ->, content[]{..., markDefs[]{..., _type=='internalLink'=>{..., "slug": @.reference->slug}}, asset->, images[]{..., asset->}}} | order(publishDate desc)`
-export const allPagesQuery = `*[_type == 'page']`
+export const allPagesQuery = `*[_type == 'page']{..., content[]{..., images[]{..., asset->}}}`
 export const categoryList = `*[_type == "category"] | order(title asc) {title, slug}`
 
 // Sidebar
