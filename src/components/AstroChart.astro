@@ -14,7 +14,7 @@ if (props.hasOwnProperty('cId')) {
 <script>
 import {Chart} from 'chart.js/auto'
 Chart.defaults.font.family = 'Fira Sans, sans-serif';
-Chart.defaults.font.weight = '100';;
+Chart.defaults.font.weight = '100';
 
 const MONTHS = [
   'Mar',
@@ -53,6 +53,12 @@ if (hasChart.length > 0) {
   const accomN = document.getElementById('accomN')
   const exercise = document.getElementById('exercise')
   const media = document.getElementById('media')
+
+  const dir23 = document.getElementById('direction23')
+  const transport23 = document.getElementById('transport23')
+  const transT23 = document.getElementById('transT23')
+  const accom23 = document.getElementById('accommodation23')
+
 
   const direction = new Chart (dir, {
     type: 'radar',
@@ -219,6 +225,7 @@ if (hasChart.length > 0) {
       },
     }
   })
+
   const polar = new Chart(accom, {
     type: 'pie',
     options: {
@@ -241,7 +248,6 @@ if (hasChart.length > 0) {
       }]
     },
   })
-
 
   const accomTotal = new Chart (accomN, {
     type: 'doughnut',
@@ -475,6 +481,111 @@ if (hasChart.length > 0) {
           display: false,
         }
       }
+    }
+  })
+
+  const direction23 = new Chart (dir23, {
+    type: 'radar',
+    responsive: true,
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Direction Traveled',
+        },
+        legend: {
+          display: false,
+        },
+      },
+      scales: {
+        r: {
+          ticks: {
+            display: false,
+          },
+          grid: {
+            display: false,
+          },
+        },
+      },
+    },
+    data: {
+      labels: ['N','NE','E','SE','S','SW','W','NW'],
+      datasets: [
+        {
+          label: 'Direction',
+          data: [8,4,6,4,14,3,35,4],
+          backgroundColor: CoaColors,
+        },
+      ],
+    },
+  })
+
+  const transportChart23 = new Chart(transport23, {
+    type: 'pie',
+    options: {
+      plugins: {
+        legend: {
+          //position: 'left',
+          title: {
+            display: true,
+            text: 'Modes of Transport',
+            font: {weight: 'bold'}
+          },
+        },
+      },
+    },
+    data: {
+      labels: ['Airplane', 'Train', 'Walk', 'Bus', 'Car', 'Taxi'],
+      datasets: [{
+        data: [10,11,38,9,7,3],
+        backgroundColor: CoaColors,
+      }]
+    }
+  })
+
+  const accommodations23 = new Chart(accom23, {
+    type: 'pie',
+    options: {
+      plugins: {
+        legend: {
+          // position: 'left',
+          title: {
+            display: true,
+            text: 'Accommodations Used',
+            font: {weight: 'bold'}
+          },
+        },
+      },
+    },
+    data: {
+      labels: ['Hostel', 'Hotel', 'Apartment', 'Friend', 'Guesthouse', 'Coliving', 'Camp'],
+      datasets: [{
+        data: [37,4,6,15,6,2,3],
+        backgroundColor: CoaColors,
+      }]
+    },
+  })
+
+  const transOverTime23 = new Chart (transT23, {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: transM,
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Transport Mode Per Month',
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+        },
+      },
     }
   })
 }
