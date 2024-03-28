@@ -1,10 +1,8 @@
 import { defineConfig } from 'astro/config'
 import react from "@astrojs/react"
-// TEMP: fix for sanity integration, switch back when bug is fixed
-//import sanity from '@sanity/astro'
-import { sanityIntegration as sanity } from "@sanity/astro"
-// END
-import partytown from "@astrojs/partytown";
+import sanity from '@sanity/astro'
+import icon from 'astro-icon'
+//import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
@@ -21,6 +19,7 @@ export default defineConfig({
       useCdn: false,
     }),
     react(),
+    icon(),
   ],
   image: {
     domains: ['https://graph.instagram.com/'],
