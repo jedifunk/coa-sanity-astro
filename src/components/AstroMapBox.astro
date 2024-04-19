@@ -1,5 +1,5 @@
 ---
-import { useSanityClient } from "@sanity/astro"
+import { sanityClient } from "sanity:client"
 import { countryList, citiesQuery, placesQuery } from "../lib/queries"
 import EleventyFetch from '@11ty/eleventy-fetch'
 
@@ -8,18 +8,14 @@ const props = Astro.props
 
 // get map ID & query for its details
 const mapID = props.node.map._ref
-const mapQuery = `*[_type == 'map' && _id == '${mapID}']{
-  ...,
+//const mapQuery = `*[_type == 'map' && _id == '${mapID}']{..., location[]->{name, country->{name}, city->{...}, description, website, placeType->{title, slug}, geometry}}`
+const mapQuery = `*[_type == 'map' && _id == '${mapID}']{..., 
   ...select(
-    customMap == true => {mapAttr},
-    {location[]->{name, country->{name}, city->{...}, description, geometry{...}}}
-  )
-}`
-const map = await useSanityClient().fetch(mapQuery)
+    {location[]->{name, country->{name}, city->{...}, description, website, placeType->{title, slug}, geometry{...}}}
+  )}`
+const map = await sanityClient.fetch(mapQuery)
 
-let countries
-let cities
-let locations
+let countries, cities, locations, customQueryResults
 
 // temp to get 4sq working, come back to fold into main workflow
 let foodsGeoJSON
@@ -28,23 +24,32 @@ let transitGeoJSON
 let histMonGeoJSON
 let outdoorsGeoJSON
 
-// layer ternary is temp for 4sq, fix up to make more elegant
 const layers = map[0].layers ? map[0].layers : ['']
 const mapAttr = map[0].mapAttr
 const mapZoom = JSON.stringify(map[0].zoomTo)
+const hasToggles = map[0].hasToggles
+const customQuery = map[0].customQuery
 
-if (map[0].queryAll == true) {
-  const countryQuery = await useSanityClient().fetch(countryList)
-  const cityQuery = await useSanityClient().fetch(citiesQuery)
-  const placeQuery = await useSanityClient().fetch(placesQuery)
-
+if (layers.includes('countries')) {
+  const countryQuery = await sanityClient.fetch(countryList)
   countries = JSON.stringify(countryQuery)
-  cities = JSON.stringify(cityQuery)
-  locations = JSON.stringify(placeQuery)
-} else {
-  locations = JSON.stringify(map[0].location)
 }
-
+if (layers.includes('cities')) {
+  const cityQuery = await sanityClient.fetch(citiesQuery)
+  cities = JSON.stringify(cityQuery)
+}
+if (layers.includes('places')) {
+  if (map[0].location != null) {
+    locations = JSON.stringify(map[0].location)
+  } else {
+    const placeQuery = await sanityClient.fetch(placesQuery)
+    locations = JSON.stringify(placeQuery)
+  }
+}
+if (customQuery) {
+  const theCustomQuery = await sanityClient.fetch(customQuery)
+  customQueryResults = JSON.stringify(theCustomQuery)
+}
 // temp to get 4sq working again, come back to make more elegant
 if (mapAttr == 'foursquare') {
 
@@ -184,25 +189,26 @@ if (mapAttr == 'foursquare') {
 }
 ---
 <div class="map-wrapper">
-  <nav class="map-toggles" data-attr={mapAttr}></nav>
-  {mapAttr == 'foursquare' ? 
+  {hasToggles == true && <nav class="map-toggles" data-attr={mapAttr}></nav>}
+  {mapAttr == 'foursquare' ?
     <div id={mapID} class="map" data-use data-attr={mapAttr} data-foods={foodsGeoJSON} data-shops={shopsGeoJSON} data-hist={histMonGeoJSON} data-transit={transitGeoJSON} data-outdoors={outdoorsGeoJSON}></div>
-  :  
-    <div id={mapID} class="map" data-use data-zoom={mapZoom} data-locations={locations} data-attr={mapAttr} data-layers={layers} data-countries={countries} data-cities={cities}></div>
+  : customQuery !== undefined ? 
+    <div id={mapID} class="map" data-use data-attr={mapAttr} data-zoom={mapZoom} data-query={customQueryResults} data-layers={layers} data-locations={locations} data-countries={countries} data-cities={cities}></div>
+  :
+    <div id={mapID} class="map" data-use data-attr={mapAttr} data-zoom={mapZoom} data-layers={layers} data-locations={locations} data-countries={countries} data-cities={cities}></div>
   }
   <figcaption>{map[0].name}</figcaption>
 </div>
 <script>
-import {orchestrate, orchestrateFoursquare} from '../lib/maps'
+import {orchestrate, orchestrateFoursquare} from '../lib/maps/map-setup'
 
 const allMaps = document.querySelectorAll(`[data-use]`)
-let countries
-let cities
-let locations
 
 allMaps.forEach((map) => {
   const mapId = map.getAttribute('id')
   const mapAttr = map.dataset.attr
+
+  let countries, cities, locations, customQuery
 
   // temp to get 4sq working, come back to make more elegant
   if (mapAttr == 'foursquare') {
@@ -227,7 +233,10 @@ allMaps.forEach((map) => {
     if (map.dataset.locations) {
       locations = JSON.parse(map.dataset.locations)
     }
-    orchestrate(mapId, mapLayers, mapZoom, countries, cities, locations)
+    if (map.dataset.query) {
+      customQuery = JSON.parse(map.dataset.query)
+    }
+    orchestrate(mapId, mapLayers, mapZoom, countries, cities, locations, customQuery)
   }
 })
 

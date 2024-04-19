@@ -2,14 +2,14 @@
 import Layout from '../layouts/Layout.astro'
 import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
-import { Pagination } from '@astro-bryceguy/pagination'
-import { Icon } from 'astro-icon'
+import { Pagination } from 'astro-headless-ui'
+import { Icon } from 'astro-icon/components'
 
-import { useSanityClient } from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import { allPosts } from '../lib/queries.js'
 
 export async function getStaticPaths({ paginate }) {
-  const allPostData = await useSanityClient().fetch(allPosts)
+  const allPostData = await sanityClient.fetch(allPosts)
 
   return paginate(allPostData, {pageSize: 10 })
 }
@@ -26,24 +26,13 @@ const total = Math.ceil(page.total / page.size)
 				</div>
 				<nav class="navigation post-navigation">
 					<div class="nav-previous">{page.currentPage !== '/' ? <Icon class='nav-icon' name="charm:chevron-left"/> <a href={page.currentPage !== 2 ? page.url.prev : '/'}>Newer Posts</a> : null}</div>
-					<Pagination total={total} current={page.currentPage} start="1" end="1" middle="1" index={true}
-						theme={{
-							container: {
-								tag: 'ul',
-								class: 'nav-paged',
-							},
-							active: {
-								class: 'current'
-							},
-							disabled: {
-								text: '...',
-								class: 'dots'
-							},
-							wrapper: {
-								tag: 'li'
-							},
-						}}
-					/>
+					<ul class="nav-paged">
+						<Pagination total={total} current={page.currentPage} start="1" end="1" middle="1" index={true}>
+							<active slot="active">{page => <li><a href={page.href} class="current">{page.number}</li></a>}</active>
+    					<li slot="disabled"><span class="dots">...</span></li>
+							{page => <li><a href={page.href}>{page.number}</a></li>}
+						</Pagination>
+					</ul>
 					<div class="nav-next">{page.currentPage !== page.lastPage ? <a href={page.url.next} >Older Posts</a> <Icon class="nav-icon" name="charm:chevron-right"/>  : null}</div>
 			</nav>
 			</main>

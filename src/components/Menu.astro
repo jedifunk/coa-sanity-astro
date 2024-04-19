@@ -1,13 +1,13 @@
 ---
-import { useSanityClient } from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import {siteNav} from '../lib/queries'
 
-const nav = await useSanityClient().fetch(siteNav)
+const nav = await sanityClient.fetch(siteNav)
 ---
 <nav class="main-navigation" role="navigation" aria-label="Primary Menu">
   <ul class="menu">
     {nav.siteNav.menuItems && nav.siteNav.menuItems.map((item) => (
-      <li class="menu-item menu-item-has-children">
+      <li class="menu-item">
         <a href={`/${item.page.slug.current}`}>{item.name}</a>
       </li>
     ))}

@@ -4,13 +4,13 @@ import Hero from '../components/Hero.astro'
 import FeaturedPost from '../components/FeaturedPost.astro'
 import PostEntry from '../components/PostEntry.astro'
 import Sidebar from '../components/Sidebar.astro'
-import { Pagination } from '@astro-bryceguy/pagination'
-import { Icon } from 'astro-icon'
+import { Pagination } from 'astro-headless-ui'
+import { Icon } from 'astro-icon/components'
 
-import { useSanityClient } from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import { allPosts } from '../lib/queries.js'
 
-const allPostData = await useSanityClient().fetch(allPosts)
+const allPostData = await sanityClient.fetch(allPosts)
 const totalPages = Math.ceil(allPostData.length / 10)
 ---
 <Layout title="Choosing Our Adventure" type={`home`}>
@@ -27,24 +27,12 @@ const totalPages = Math.ceil(allPostData.length / 10)
 				</div>
 				<nav class="navigation post-navigation">
 					<div class="nav-previous"></div>
-					<Pagination total={totalPages} current='/' start="5" middle='0' end="1" index={true}
-						theme={{
-							container: {
-								tag: 'ul',
-								class: 'nav-paged',
-							},
-							active: {
-								class: 'current'
-							},
-							disabled: {
-								text: '...',
-								class: 'dots'
-							},
-							wrapper: {
-								tag: 'li'
-							},
-						}}
-					/>
+					<ul class="nav-paged">
+						<Pagination total={totalPages} current='/' start="5" middle='0' end="1" index={true}>
+							
+							{page => <li><a href={page.href}>{page.number}</a></li>}
+						</Pagination>
+					</ul>
 					<div class="nav-next"><a href='/2' >Older Posts</a> <Icon class='nav-icon' name="charm:chevron-right"/></div>
 				</nav>
 			</main>

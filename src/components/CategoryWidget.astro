@@ -1,8 +1,8 @@
 ---
-import { useSanityClient } from '@sanity/astro'
+import { sanityClient } from "sanity:client"
 import { categoryList } from '../lib/queries.js'
 
-const categories = await useSanityClient().fetch(categoryList)
+const categories = await sanityClient.fetch(categoryList)
 ---
 
 <section class="widget widget-categories">

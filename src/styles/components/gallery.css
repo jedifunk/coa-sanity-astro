@@ -48,18 +48,18 @@ transition: filter var(--base-transition);
 .blocks-gallery-item:hover button img {
   filter: brightness(.75);
 }
-/* .blocks-gallery-item svg {
-position: absolute;
-top: 5px;
-right: 5px;
-width: 24px;
-height: 24px;
-z-index: 1;
-fill: var(--gold);
-background-color: rgba(0,0,0,.25);
-border-radius: 5px;
-padding: 5px;
-} */
+.blocks-gallery-item svg {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 18px;
+  height: 18px;
+  z-index: 1;
+  background-color: hsla(var(--h) var(--s) var(--l) / .5);
+	border-radius: 5px;
+  padding: 5px;
+	fill: rgba(255 255 255 / .75);
+}
 .blocks-gallery-item figcaption {
   position: absolute;
   bottom: 0;
@@ -74,6 +74,14 @@ padding: 5px;
   font-size: 13px;
   background: linear-gradient(0deg, rgba(0, 0, 0, .7), rgba(0, 0, 0, .3) 70%, transparent);
   border-radius: 5px;
+}
+.lg-sub-html {
+  font-family: var(--body-font);
+  font-size: .75rem;
+  text-align: left;
+}
+.lg-sub-html span {
+  font-family: var(--headline-font);
 }
 
 @media (min-width:600px) {

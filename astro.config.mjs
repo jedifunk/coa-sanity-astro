@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config'
-//import {loadEnv} from 'vite'
 import react from "@astrojs/react"
 import sanity from '@sanity/astro'
-import partytown from "@astrojs/partytown";
-//const {PUBLIC_ID} = loadEnv(process.env.PUBLIC_SANITY_PROJECT_ID, process.cwd(), "")
+import icon from 'astro-icon'
+//import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,12 +14,12 @@ export default defineConfig({
     // }), 
     sanity({
       projectId: "8icb2evz",
-      //projectId: PUBLIC_ID,
       dataset: 'production',
       apiVersion: '2023-08-09',
       useCdn: false,
     }),
     react(),
+    icon(),
   ],
   image: {
     domains: ['https://graph.instagram.com/'],

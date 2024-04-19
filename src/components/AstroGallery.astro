@@ -1,6 +1,86 @@
 ---
-import {GalleryBlock} from "./GalleryBlock"
+import { getSanityImageUrl } from "../lib/helpers"
 
 const props = Astro.props
+
+const cols = (props.node.columns != null) ? props.node.columns : 3
+const gClass = (props.node.gClass !== undefined) ? props.node.gClass : ''
+const cssParams = props.node.cssParams
+const images = props.node.images
+
+const imgProps = JSON.stringify(images.map(obj => {
+  return {
+    src: getSanityImageUrl(obj).auto('format').quality(100).url(),
+    alt: obj.alt,
+    caption: obj.caption,
+    metadata: obj.asset.metadata.exif
+  }
+}))
 ---
-<GalleryBlock value={props.node} client:visible />
+<div class={`blocks-gallery-grid columns-${cols} ${gClass}`} id={`gallery-${props.node._key}`} data-props={imgProps}>
+  {images.map((img, index) => 
+    <figure class="blocks-gallery-item">
+      <button class="gal-btn" data-index={index}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 13h-4v-9h-9v-4h13v13zm-24 11h13v-4h-9v-9h-4v13z"/></svg>
+        <img src={getSanityImageUrl(img).width(750).auto('format').url()} loading="lazy" alt={img.alt}/>
+        {img.caption && <figcaption>{img.caption}</figcaption>}
+      </button>
+    </figure>
+  )}
+</div>
+{cssParams !== undefined && <style define:vars={{cssParams}}></style>}
+<script>
+import lightGallery from 'lightgallery'
+import lgZoom from 'lightgallery/plugins/zoom'
+import lgFullscreen from 'lightgallery/plugins/fullscreen'
+import 'lightgallery/css/lightgallery.css'
+import 'lightgallery/css/lg-fullscreen.css'
+import 'lightgallery/css/lg-zoom.css'
+import { sSpeed } from '../lib/helpers'
+
+function trimString(str) {
+  let frontIndex = str.indexOf('front');
+  let backIndex = str.indexOf('back');
+
+  if (frontIndex !== -1) {
+    return str.substring(0, frontIndex).trim();
+  } else if (backIndex !== -1) {
+    return str.substring(0, backIndex).trim();
+  }
+
+  return str;
+}
+
+const allGalleries = document.querySelectorAll(`.blocks-gallery-grid`)
+
+allGalleries.forEach((gallery) => {
+  const galId = gallery.getAttribute('id')
+  const theGallery = document.getElementById(galId)
+  const slides = JSON.parse(gallery.dataset.props).map(slide => {
+    return {
+      src: slide.src,
+      alt: slide.alt,
+      subHtml: `<span>${slide.caption ? slide.caption + ' | ' : ''}</span>${slide.metadata.LensModel != undefined ? trimString(slide.metadata.LensModel) + ', ' : ''} ${slide.metadata.FocalLengthIn35mmFormat != undefined ? slide.metadata.FocalLengthIn35mmFormat + 'mm, ' : ''} ${slide.metadata.ISO != undefined ? slide.metadata.ISO + ' ISO, ' : ''} ${slide.metadata.ExposureTime != undefined ? sSpeed(slide?.metadata?.ExposureTime) : ''}`,
+    }
+  })
+
+  const dynamicGallery = lightGallery(theGallery, {
+    licenseKey: '0000-0000-000-0000',
+    dynamic: true,
+    dynamicEl: slides,
+    counter: false,
+    speed: 500,
+    download: false,
+    mode: 'lg-fade',
+    plugins: [lgZoom, lgFullscreen],
+  })
+  const galleryButtons = theGallery.querySelectorAll('.gal-btn')
+
+  galleryButtons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const index = parseInt(e.target.parentNode.getAttribute('data-index'), 10)
+      dynamicGallery.openGallery(index)
+    })
+  })
+})
+</script>
