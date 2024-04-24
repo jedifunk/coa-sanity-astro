@@ -1,0 +1,21 @@
+---
+// Import necessary dependencies
+import { Chart } from 'chart.js/auto';
+
+// Define props for the component
+const { chartId, data, options } = Astro.props;
+---
+
+<div class="chart">
+ <canvas id={chartId} data-chart></canvas>
+</div>
+
+<script>
+ // Initialize the chart
+ const canvas = document.getElementById(chartId);
+ new Chart(canvas, {
+    type: 'radar',
+    data: data,
+    options: options
+ });
+</script>
