@@ -9,34 +9,34 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@astrojs/react": "^3.1.0",
+    "@astrojs/react": "^3.6.0",
     "@sanity/image-url": "^1.0.2",
-    "astro": "^4.5.10",
+    "astro": "^4.11.5",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "dependencies": {
     "@11ty/eleventy-fetch": "^4.0.1",
-    "@astrojs/partytown": "^2.0.4",
-    "@fontsource/fira-sans": "^5.0.19",
-    "@fontsource/merriweather": "^5.0.12",
-    "@glidejs/glide": "^3.6.0",
+    "@astrojs/partytown": "^2.1.1",
+    "@fontsource/fira-sans": "^5.0.20",
+    "@fontsource/merriweather": "^5.0.13",
+    "@glidejs/glide": "^3.6.2",
     "@iconify-json/charm": "^1.1.12",
-    "@portabletext/react": "^3.0.15",
-    "@sanity/astro": "^3.0.0",
-    "@turf/turf": "^6.5.0",
+    "@portabletext/react": "^3.1.0",
+    "@sanity/astro": "^3.1.4",
+    "@turf/turf": "^7.0.0",
     "astro-headless-ui": "^0.0.30",
     "astro-icon": "^1.1.0",
     "astro-json-element": "^1.1.4",
-    "astro-portabletext": "^0.9.7",
+    "astro-portabletext": "^0.10.0",
     "astro-sanity-picture": "^0.2.0",
-    "chart.js": "^4.4.2",
-    "get-video-id": "^4.1.5",
+    "chart.js": "^4.4.3",
+    "get-video-id": "^4.1.7",
     "lightgallery": "^2.7.2",
-    "mapbox-gl": "^3.2.0",
+    "mapbox-gl": "^3.5.1",
     "osmtogeojson": "^3.0.0-beta.5",
-    "sharp": "^0.33.3"
+    "sharp": "^0.33.4"
   }
 }
