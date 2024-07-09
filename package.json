@@ -11,7 +11,7 @@
   "devDependencies": {
     "@astrojs/react": "^3.6.0",
     "@sanity/image-url": "^1.0.2",
-    "astro": "^4.6.0",
+    "astro": "^4.5.10",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "react": "^18.3.1",
