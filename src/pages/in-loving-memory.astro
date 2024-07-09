@@ -4,7 +4,7 @@
 const jfImg = '/IMG_7539.jpg'
 // import jfImg from './public/IMG_7539.jpg'
 // console.log(jfImg)
-import { client } from '../lib/sanityClient.js'
+import { sanityClient } from "sanity:client"
 import { siteSettings } from '../lib/queries.js'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
@@ -24,7 +24,7 @@ import '../styles/main.css'
 export interface Props {
 	title: string;
 }
-const settings = await client.fetch(siteSettings)
+const settings = await sanityClient.fetch(siteSettings)
 const canonicalUrl = new URL(Astro.url.pathname, settings[0].siteUrl)
 ---
 <!DOCTYPE html>
