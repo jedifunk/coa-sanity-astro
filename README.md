@@ -4,8 +4,8 @@ Astro frontend for COA. Connects to Sanity on the backend.
 
 ### TODO
 - [x] Correct archive builds with index as page one
-- [ ] Convert Gallery to Astro if possible
-- [ ] AstroImage with onClick to lightbox
+- [x] Convert Gallery to Astro if possible
+- [x] AstroImage with onClick to lightbox
 - [ ] Optimize Images with better srcset usage
 - [x] CLS on images
 - [x] Expand icon on images
