@@ -10,7 +10,7 @@ const { article } = Astro.props
 <article class="featured-item">
   <figure>
     <a href={`/${article.slug.current}`}>
-      {article.featuredImage && <Picture src={article.featuredImage} imageUrlBuilder={getSanityImageUrl()} widths={[568]} alt={article.featuredImage.alt}/>}
+      {article.featuredImage && <Picture src={article.featuredImage} imageUrlBuilder={getSanityImageUrl().quality(100)} widths={[700]} alt={article.featuredImage.alt}/>}
     </a>
     <figcaption>
       <h2 class="entry-title">
