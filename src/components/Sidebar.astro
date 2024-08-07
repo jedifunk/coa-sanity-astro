@@ -3,11 +3,13 @@ import CategoryWidget from "./CategoryWidget.astro"
 import CountryWidget from "./CountryWidget.astro"
 import RecentPostsWidget from "./RecentPostsWidget.astro"
 import InstagramWidget from "./InstagramWidget.astro"
+import Snippets from '../components/AstroSnippets.astro'
 
 const props = Astro.props
 ---
 
 <aside class="sidebar">
+  <Snippets />
   <CategoryWidget />
   <CountryWidget />
   {props.home === 'home' ? null : <RecentPostsWidget />}

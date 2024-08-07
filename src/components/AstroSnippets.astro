@@ -1,0 +1,53 @@
+---
+import { formatSnippetDate } from "../lib/helpers"
+---
+<section class="widget snippets">
+  <h3 class="widget-title">Musings</h3>
+  <ul>
+    <!-- {snippets && snippets.map(snippet => (
+      <li>
+        <p> {snippet.content}</p>
+        <time class="entry-date">{formatSnippetDate(snippet.datetime)}</time>
+      </li>
+    ))} -->
+  </ul>
+</section>
+<script>
+const apiUrl = 'https://sheetdb.io/api/v1/ku9cp2y8evvnb?sort_by=datetime&sort_order=desc&limit=5'
+
+document.addEventListener('DOMContentLoaded', async () => {
+  async function getSnippets() {
+    try {
+      const res = await fetch(apiUrl);
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Failed to fetch snippets:", error);
+      return []; // Return an empty array in case of failure
+    }
+  }
+
+  const snippetsListElement = document.querySelector('.snippets ul');
+  const snippets = await getSnippets();
+
+  snippets.forEach(snippet => {
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+      <p>${snippet.content}</p>
+      <time class="entry-date">${formatSnippetDate(snippet.datetime)}</time>
+    `;
+    snippetsListElement.appendChild(listItem);
+  });
+});
+// async function getSnippets() {
+//   try {
+//     const res = await fetch(apiUrl)
+//     const data = await res.json()
+//     return data
+//   }
+//   catch (error) {
+//     console.error("Failed to fetch snippets:", error);
+//   }
+// }
+// const snippets = await getSnippets()
+</script>

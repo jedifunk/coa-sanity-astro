@@ -12,3 +12,4 @@ Astro frontend for COA. Connects to Sanity on the backend.
 - [x] Review IG sidebar integration
 - [x] Add GTM
 - [x] Favicon
+- [ ] Style snippets

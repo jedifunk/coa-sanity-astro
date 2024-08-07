@@ -1,4 +1,4 @@
-import { parseISO, format, fromUnixTime } from 'date-fns'
+import { parseISO, format, fromUnixTime, formatDistanceToNow } from 'date-fns'
 import { sanityClient } from "sanity:client"
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -30,6 +30,11 @@ export function formatUnixDate(date) {
   const dateString = fromUnixTime(date)
   const notUnix = format(dateString, 'MMMM do, yyyy')
   return `${notUnix}`
+}
+
+export function formatSnippetDate(date) {
+  const distance = formatDistanceToNow(new Date(date))
+  return distance 
 }
 
 export function getSanityImageUrl(source) {
