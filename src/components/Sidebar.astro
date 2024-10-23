@@ -3,7 +3,8 @@ import CategoryWidget from "./CategoryWidget.astro"
 import CountryWidget from "./CountryWidget.astro"
 import RecentPostsWidget from "./RecentPostsWidget.astro"
 import InstagramWidget from "./InstagramWidget.astro"
-import Snippets from '../components/SnippetsWidget.astro'
+import Snippets from './SnippetsWidget.astro'
+import CoaIgFeed from './CoaIgFeed.astro'
 
 const props = Astro.props
 ---
@@ -14,4 +15,5 @@ const props = Astro.props
   <CountryWidget />
   {props.home === 'home' ? null : <RecentPostsWidget />}
   <InstagramWidget />
+  <CoaIgFeed />
 </aside>

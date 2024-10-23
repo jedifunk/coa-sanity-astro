@@ -1,18 +1,17 @@
 ---
 import EleventyFetch from '@11ty/eleventy-fetch'
+import { Image } from 'astro:assets'
 import { getUnixTime } from 'date-fns'
 import { formatBlogPostDate } from '../lib/helpers'
-import { Image } from "@astrojs/image/components"
-import { Icon } from "astro-icon"
 
-const IG_TOKEN = import.meta.env.COA_IG_TOKEN
+const COA_IG_TOKEN = import.meta.env.PUBLIC_COA_IG_TOKEN
 
 const currentDate = new Date()
 var priorDate = new Date(new Date().setDate(currentDate.getDate() - 7))
 const priorDateUnix = getUnixTime(priorDate)
 
 async function getIgPosts() {
-  const igImgs = `https://graph.instagram.com/me/media?fields=caption,media_url,permalink,timestamp&since=${priorDateUnix}&access_token=${IG_TOKEN}`
+  const igImgs = `https://graph.instagram.com/me/media?fields=caption,media_url,permalink,timestamp&since=${priorDateUnix}&access_token=${COA_IG_TOKEN}`
   return EleventyFetch(igImgs, {
     duration: '1d',
     type: 'json',
@@ -20,9 +19,10 @@ async function getIgPosts() {
 }
 
 const { data } = await getIgPosts()
+const d = data.slice(0,9)
 ---
 <section class="widget coa-ig-widget">
-  <h3 class="widget-title">Daily Camino</h3>
+  <h3 class="widget-title">Daily Te'Araroa</h3>
   <div class="grid-wrapper glide">
     <div class="glide__track" data-glide-el="track">
       <ul class="glide__slides">
@@ -41,8 +41,8 @@ const { data } = await getIgPosts()
       </ul>
     </div>
     <div class="glide__arrows" data-glide-el="controls">
-      <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><Icon class='slider-icon' name="mdi:chevron-left-circle-outline"/></button>
-      <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><Icon class="slider-icon" name="mdi:chevron-right-circle-outline"/></button>
+      <button class="glide__arrow glide__arrow--left" data-glide-dir="<"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M16.67 0l2.83 2.829-9.339 9.175 9.339 9.167-2.83 2.829-12.17-11.996z"/></svg></button>
+      <button class="glide__arrow glide__arrow--right" data-glide-dir=">"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M5 3l3.057-3 11.943 12-11.943 12-3.057-3 9-9z"/></svg></button>
     </div>
   </div>
 </section>
@@ -99,15 +99,20 @@ new Glide('.glide').mount({Controls, Swipe})
 .glide__arrows {
   -webkit-touch-callout: none;
   user-select: none;
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  display: flex;
+  gap: .5rem;
 }
 
 /* Theme */
 .glide__arrow {
-  position: absolute;
+  /* position: absolute; */
   display: block;
-  top: 50%;
+  /* top: 20px; */
   z-index: 2;
-  color: rgba(255,255,255,.5);
+  /* color: rgba(255,255,255,.5); */
   text-transform: uppercase;
   border: none;
   border-radius: 50%; 
@@ -117,6 +122,8 @@ new Glide('.glide').mount({Controls, Swipe})
   transition: opacity 150ms ease, border 300ms ease-in-out;
   transform: translateY(-50%);
   line-height: 1;
+  padding: 0;
+  margin: 0;
 }
 .glide__arrow:focus {
   outline: none;
@@ -124,16 +131,16 @@ new Glide('.glide').mount({Controls, Swipe})
 .glide__arrow:hover {
   border-color: white;
 }
-.glide__arrow--left {
+/* .glide__arrow--left {
   left: 5px;
 }
 .glide__arrow--right {
   right: 5px;
-}
-.slider-icon {
+} */
+/* .slider-icon {
   width: 1.5rem;
   height: 1.5rem;
-}
+} */
 .glide__arrow--disabled {
   opacity: 0.33;
 }
@@ -146,6 +153,14 @@ new Glide('.glide').mount({Controls, Swipe})
   cursor: grabbing;
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
+}
+.glide__arrow > svg {
+  fill: rgba(255,255,255,1);
+  background-color: hsla(var(--h) var(--s) var(--l) / .5);
+  border-radius: 5px;
+  padding: 5px;
+  width: 18px;
+  height: 18px;
 }
 /* .slide-wrapper > figcaption {
   text-align: center;

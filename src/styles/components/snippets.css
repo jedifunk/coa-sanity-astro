@@ -1,0 +1,31 @@
+.snippets {
+	line-height: 1.1rem;
+}
+.snippets time {
+	font-family: var(--headline-font);
+	font-size: .75rem;
+}
+.snippets p {
+	margin: 0;
+	font-size: 1rem;
+}
+.snippets:not(.widget) {
+  margin: 1rem 0 1.5rem;
+}
+.snippets ul {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+.snippets:not(.widget) li {
+  border-radius: 5px;
+  box-shadow: 0 0 5px -2px var(--black);
+  padding: .5rem;
+}
+.see-all {
+  display: inline-block;
+  font-family: var(--headline-font);
+  font-size: .8rem;
+  font-weight: 500;
+  margin-top: 10px;
+}

@@ -1,4 +1,4 @@
-import { parseISO, format, fromUnixTime, formatDistanceToNow } from 'date-fns'
+import { parseISO, formatISO, format, fromUnixTime, formatDistanceToNow } from 'date-fns'
 import { sanityClient } from "sanity:client"
 import imageUrlBuilder from '@sanity/image-url'
 
@@ -33,7 +33,8 @@ export function formatUnixDate(date) {
 }
 
 export function formatSnippetDate(date) {
-  const distance = formatDistanceToNow(new Date(date))
+  const cleanDate = date.replace(/^~/, '');
+  const distance = formatDistanceToNow(cleanDate)
   return distance 
 }
 

@@ -18,8 +18,7 @@
   margin: 0;
   padding: 0;
 }
-.recent-articles li + li,
-.snippets li + li {
+.recent-articles li + li {
   margin-top: .5rem;
 }
 .recent-articles a {
@@ -28,15 +27,4 @@
 .widget-ig img {
 	aspect-ratio: 1/1;
 	object-fit: cover;
-}
-.snippets {
-	line-height: 1.1rem;
-}
-.snippets time {
-	font-family: var(--headline-font);
-	font-size: .75rem;
-}
-.snippets p {
-	margin: 0;
-	font-size: 1rem;
 }

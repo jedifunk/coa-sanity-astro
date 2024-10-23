@@ -3,14 +3,8 @@
 ---
 <section class="widget snippets">
   <h3 class="widget-title">Musings</h3>
-  <ul>
-    <!-- {snippets && snippets.map(snippet => (
-      <li>
-        <p> {snippet.content}</p>
-        <time class="entry-date">{formatSnippetDate(snippet.datetime)}</time>
-      </li>
-    ))} -->
-  </ul>
+  <ul></ul>
+  <div><a class="see-all" href={`/musings`}>See all</a></div>
 </section>
 <script>
 import { formatSnippetDate } from "../lib/helpers"
@@ -28,10 +22,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  const snippetsListElement = document.querySelector('.snippets ul');
+  const snippetsListElement = document.querySelector('.snippets.widget ul');
   snippets = await getSnippets();
   snippets.forEach(snippet => {
-    console.log(snippet.datetime)
     const listItem = document.createElement('li');
     listItem.innerHTML = `
       <p>${snippet.content}</p>
@@ -40,15 +33,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     snippetsListElement.appendChild(listItem);
   });
 });
-// async function getSnippets() {
-//   try {
-//     const res = await fetch(apiUrl)
-//     const data = await res.json()
-//     return data
-//   }
-//   catch (error) {
-//     console.error("Failed to fetch snippets:", error);
-//   }
-// }
-// const snippets = await getSnippets()
 </script>
