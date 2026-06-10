@@ -1,8 +1,8 @@
 import { parseISO, format, fromUnixTime } from 'date-fns'
 import { sanityClient } from "sanity:client"
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 
-const builder = imageUrlBuilder(sanityClient)
+const builder = createImageUrlBuilder(sanityClient)
 
 // export async function getSanityContent({ query, variables = {} }) {
 //   const { data } = await fetch(

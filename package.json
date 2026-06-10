@@ -9,8 +9,8 @@
     "preview": "astro preview"
   },
   "devDependencies": {
-    "@sanity/image-url": "^1.0.2",
-    "astro": "^5.13.7",
+    "@sanity/image-url": "^2.1.1",
+    "astro": "^6.4.5",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.2",
     "react": "^19.1.1",
@@ -19,12 +19,12 @@
   "dependencies": {
     "@11ty/eleventy-fetch": "^5.1.0",
     "@astrojs/partytown": "^2.1.1",
-    "@astrojs/react": "^4.3.1",
+    "@astrojs/react": "^5.0.7",
     "@fontsource/fira-sans": "^5.2.6",
     "@fontsource/merriweather": "^5.2.10",
     "@glidejs/glide": "^3.7.1",
     "@iconify-json/charm": "^1.2.3",
-    "@portabletext/react": "^4.0.3",
+    "@portabletext/react": "^6.2.0",
     "@sanity/astro": "^3.2.10",
     "@sanity/client": "^7.11.1",
     "@turf/turf": "^7.2.0",
@@ -33,7 +33,7 @@
     "astro-headless-ui": "^0.0.30",
     "astro-icon": "^1.1.5",
     "astro-json-element": "^1.1.4",
-    "astro-portabletext": "^0.11.3",
+    "astro-portabletext": "^0.13.0",
     "astro-sanity-picture": "^0.2.0",
     "chart.js": "^4.5.0",
     "get-video-id": "^4.1.7",
@@ -41,7 +41,7 @@
     "mapbox-gl": "^3.15.0",
     "osmtogeojson": "^3.0.0-beta.5",
     "react-is": "^19.1.1",
-    "sanity": "^4.8.1",
+    "sanity": "^5.30.0",
     "sharp": "^0.34.3",
     "styled-components": "^6.1.19"
   }
