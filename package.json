@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@sanity/image-url": "^2.1.1",
-    "astro": "^6.4.5",
+    "astro": "^7.0.5",
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.2",
     "react": "^19.1.1",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@11ty/eleventy-fetch": "^5.1.0",
     "@astrojs/partytown": "^2.1.1",
-    "@astrojs/react": "^5.0.7",
+    "@astrojs/react": "^6.0.0",
     "@fontsource/fira-sans": "^5.2.6",
     "@fontsource/merriweather": "^5.2.10",
     "@glidejs/glide": "^3.7.1",
@@ -39,10 +39,9 @@
     "get-video-id": "^4.1.7",
     "lightgallery": "^2.8.3",
     "mapbox-gl": "^3.15.0",
-    "osmtogeojson": "^3.0.0-beta.5",
     "react-is": "^19.1.1",
-    "sanity": "^5.30.0",
-    "sharp": "^0.34.3",
+    "sanity": "^6.3.0",
+    "sharp": "^0.35.3",
     "styled-components": "^6.1.19"
   }
 }

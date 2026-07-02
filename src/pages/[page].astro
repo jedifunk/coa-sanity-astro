@@ -28,7 +28,7 @@ const total = Math.ceil(page.total / page.size)
 					<div class="nav-previous">{page.currentPage !== '/' ? <Icon class='nav-icon' name="charm:chevron-left"/> <a href={page.currentPage !== 2 ? page.url.prev : '/'}>Newer Posts</a> : null}</div>
 					<ul class="nav-paged">
 						<Pagination total={total} current={page.currentPage} start="1" end="1" middle="1" index={true}>
-							<active slot="active">{page => <li><a href={page.href} class="current">{page.number}</li></a>}</active>
+							<active slot="active">{page => <li><a href={page.href} class="current">{page.number}</a></li>}</active>
     					<li slot="disabled"><span class="dots">...</span></li>
 							{page => <li><a href={page.href}>{page.number}</a></li>}
 						</Pagination>
